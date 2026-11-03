@@ -1,2 +1,5 @@
 slack-bolt==1.30.0
 python-dotenv==1.2.3
+anthropic==2.4.0
+APScheduler==3.11.3
+tzdata==2026.6
