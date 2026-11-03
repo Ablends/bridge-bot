@@ -1,0 +1,10 @@
+# Secrets - never upload
+.env
+
+# The bot's database (your private logs)
+*.db
+
+# Python clutter
+__pycache__/
+*.pyc
+.venv/

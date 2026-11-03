@@ -1,0 +1,2 @@
+slack-bolt==1.30.0
+python-dotenv==1.2.3
