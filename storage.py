@@ -5,7 +5,7 @@
 # (it's listed in .gitignore, so it is never uploaded to GitHub).
 
 import sqlite3
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 DB_FILE = "bridge.db"
@@ -35,7 +35,18 @@ def setup():
             CREATE TABLE IF NOT EXISTS daily_tasks (
                 day     TEXT PRIMARY KEY,   -- '2026-11-03'
                 task    TEXT,               -- the one task the bot suggested
-                status  TEXT                -- 'sent', later: 'done' or 'skipped'
+                status  TEXT                -- 'sent', 'done' or 'skipped'
+            )
+        """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS checkins (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                logged_at TEXT,     -- date and time, Denver
+                day       TEXT,     -- '2026-11-03'
+                minutes   INTEGER,  -- how long (empty if you didn't say)
+                category  TEXT,     -- 'coursework', 'portfolio', 'template' or 'other'
+                summary   TEXT,     -- short tidy description
+                original  TEXT      -- exactly what you typed
             )
         """)
 
@@ -60,3 +71,50 @@ def recent_tasks(limit=7):
             "SELECT day, task, status FROM daily_tasks ORDER BY day DESC LIMIT ?", (limit,)
         ).fetchall()
     return [dict(r) for r in rows]
+
+
+def set_daily_status(day, status):
+    """Mark today's task 'done' or 'skipped' (creates a row if no ping was sent)."""
+    with connect() as db:
+        db.execute(
+            "INSERT INTO daily_tasks (day, task, status) VALUES (?, NULL, ?) "
+            "ON CONFLICT(day) DO UPDATE SET status = excluded.status",
+            (day, status),
+        )
+
+
+def add_checkin(minutes, category, summary, original):
+    now = now_denver()
+    with connect() as db:
+        db.execute(
+            "INSERT INTO checkins (logged_at, day, minutes, category, summary, original) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (now.isoformat(timespec="minutes"), now.date().isoformat(), minutes, category, summary, original),
+        )
+
+
+def week_start(day=None):
+    """The Monday of the week (weeks run Monday to Sunday)."""
+    d = day or now_denver().date()
+    return (d - timedelta(days=d.weekday())).isoformat()
+
+
+def week_checkins(start=None):
+    """All check-ins from Monday of this week until now (or a given week's Monday)."""
+    start = start or week_start()
+    end = (date.fromisoformat(start) + timedelta(days=7)).isoformat()
+    with connect() as db:
+        rows = db.execute(
+            "SELECT * FROM checkins WHERE day >= ? AND day < ? ORDER BY logged_at", (start, end)
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def week_minutes(start=None):
+    """Total minutes logged this week, and minutes per category."""
+    total, by_category = 0, {}
+    for c in week_checkins(start):
+        m = c["minutes"] or 0
+        total += m
+        by_category[c["category"]] = by_category.get(c["category"], 0) + m
+    return total, by_category

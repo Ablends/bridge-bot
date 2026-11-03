@@ -1,8 +1,10 @@
 # brain.py — everything that talks to Claude lives here.
 
 import os
+from typing import Literal, Optional
 
 import anthropic
+from pydantic import BaseModel
 
 # The Claude model the bot uses. Haiku is fast and very cheap.
 # To try a smarter (pricier) model later, change this one line,
@@ -12,7 +14,7 @@ MODEL = "claude-haiku-5-5"
 TONE = (
     "You are Bridge Bot, a helper for Alexander, who runs a small design-led product "
     "business from a Slack workspace called The Bridge. "
-    "Tone: friendly, short, pushes him forward without nagging. No guilt, no lectures. "
+    "Tone: friendly, short, pushes Alexander forward without nagging. No guilt, no lectures. "
     "Never suggest spending money, publishing anything publicly, posting to a marketplace, "
     "or emailing anyone. You draft and suggest; Alexander approves."
 )
@@ -44,12 +46,12 @@ def suggest_daily_task(is_shift_day, weekday_name, focus, recent):
     """Ask Claude for ONE task for today."""
     if is_shift_day:
         size = (
-            "Today is a WORK SHIFT day (he works 8am-7pm). The task must be tiny: about "
+            "Today is a WORK SHIFT day (Alexander works 8am-7pm). The task must be tiny: about "
             "5 minutes, doable on a break or phone if possible."
         )
     else:
         size = (
-            "Today is a PROGRESS day (Mon-Wed, his main work days). Suggest one real "
+            "Today is a PROGRESS day (Mon-Wed, Alexander's main work days). Suggest one real "
             "work block of 60-120 minutes with a clear finish line."
         )
 
@@ -62,7 +64,7 @@ def suggest_daily_task(is_shift_day, weekday_name, focus, recent):
 Either coursework OR portfolio/template work counts. Pick whichever moves things forward most,
 and vary it from recent days when it makes sense.
 
-What he's working on right now:
+What Alexander is working on right now:
 {focus}
 
 Recent suggested tasks (avoid repeating these exactly):
@@ -72,3 +74,58 @@ Reply with only the task: 1-2 short sentences, starting with a verb, including a
 time estimate. No greeting, no list, no extra commentary."""
 
     return ask_claude(instructions)
+
+
+# ---------- Step 3: understanding your DMs ----------
+
+class MessageMeaning(BaseModel):
+    """What Claude decides your DM means. Claude must fill in exactly these fields."""
+    is_checkin: bool                 # did you report doing some work?
+    minutes: Optional[int]           # how long, ONLY if you said (e.g. "30 min", "2 hours")
+    category: Literal["coursework", "portfolio", "template", "other"]
+    summary: str                     # short tidy version for the #helm log
+    reply: str                       # a short friendly reply to you
+
+
+def understand_message(text, todays_task):
+    """Ask Claude whether a DM is a check-in, and pull out the details."""
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        return None
+
+    instructions = f"""Alexander sent you this DM:
+"{text}"
+
+Today's suggested task was: {todays_task or "(none sent today)"}
+
+Decide if this is a CHECK-IN, meaning Alexander is reporting work they did (even small, even vague,
+e.g. "did 30 min of module 4", "finished the cover page", "done!" when a task was suggested).
+
+Fill in:
+- is_checkin: true or false.
+- minutes: how long they worked, converted to minutes, ONLY if they stated a time. Otherwise null.
+  Never guess a time.
+- category: "coursework" (Coursera course), "portfolio" (case studies: Fernly, budgeting app,
+  Command Hub Lite), "template" (the Figma portfolio template product), or "other".
+- summary: for a check-in, a short past-tense log line like "Did 30 min of Coursera module 4".
+  Otherwise an empty string.
+- reply: 1 short friendly sentence back to Alexander. For a check-in, a quick, genuine
+  well-done (no over-the-top praise). If it's not a check-in, reply naturally and briefly.
+  If they seem to be asking for something, mention they can type "help" to see what you can do."""
+
+    try:
+        client = anthropic.Anthropic()
+        response = client.messages.parse(
+            model=MODEL,
+            max_tokens=2000,
+            output_config={"effort": "low"},
+            system=TONE,
+            messages=[{"role": "user", "content": instructions}],
+            output_format=MessageMeaning,
+        )
+        return response.parsed_output
+    except anthropic.APIError as error:
+        print(f"Claude request failed: {error}")
+        return None
+    except Exception as error:  # e.g. Claude's answer didn't fit the form
+        print(f"Couldn't understand Claude's answer: {error}")
+        return None

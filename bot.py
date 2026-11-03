@@ -2,16 +2,19 @@
 #
 # STEP 1: connects to Slack and can DM you.
 # STEP 2: every day at 7:00am Denver time, DMs you ONE task for the day.
-# More features get added step by step.
+# STEP 3: understands check-ins ("did 30 min of module 4"), logs them, posts to #helm,
+#         tracks weekly hours, and answers "what's next", "hours this week", "skip today".
 
 import os
 import random
+import re
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+from slack_sdk.errors import SlackApiError
 
 import brain
 import storage
@@ -25,6 +28,20 @@ MY_USER_ID = os.environ["MY_SLACK_USER_ID"]       # your Slack member ID, starts
 
 MORNING_PING_HOUR = 7    # 7:00am Denver time
 SHIFT_DAYS = ["Thursday", "Friday", "Saturday", "Sunday"]
+
+# HARD RULE: the bot never posts here unless Alexander explicitly asks.
+OFF_LIMITS_CHANNELS = ["design-studio"]
+
+# Kinds of work that count as "done for today".
+COUNTS_AS_DONE = ["coursework", "portfolio", "template"]
+
+HELP_TEXT = """Here's what I understand:
+• Tell me what you did, in your own words: “did 30 min of module 4”, “finished the cover page”
+• *what's next*: today's task (or a bonus one if you're done)
+• *hours this week*: your logged time since Monday
+• *skip today*: take the day off, no stress
+• *ping me*: send this morning's task again
+Coming soon: *idea: ...* and *decision: ...*"""
 
 # Used only if Claude can't be reached, so you still get a task.
 BACKUP_TASKS = {
@@ -46,6 +63,61 @@ app = App(token=SLACK_BOT_TOKEN)
 def dm_me(text):
     """Send Alexander a direct message from the bot."""
     app.client.chat_postMessage(channel=MY_USER_ID, text=text)
+
+
+def post_to_channel(channel_name, text, alexander_asked=False):
+    """Post in a channel, e.g. post_to_channel("helm", "..."). Returns True if it worked.
+
+    Safety: refuses #design-studio unless Alexander explicitly asked.
+    """
+    channel_name = channel_name.lstrip("#")
+    if channel_name in OFF_LIMITS_CHANNELS and not alexander_asked:
+        print(f"Blocked: not posting in #{channel_name} (off-limits).")
+        return False
+
+    channel_id = find_channel_id(channel_name)
+    if not channel_id:
+        dm_me(f"⚠️ I couldn't find #{channel_name}. Does it exist, and am I invited? "
+              f"(In #{channel_name}, type: /invite @Bridge Bot)")
+        return False
+    try:
+        app.client.chat_postMessage(channel=channel_id, text=text)
+        return True
+    except SlackApiError as error:
+        if error.response.get("error") == "not_in_channel":
+            dm_me(f"⚠️ I'm not in #{channel_name} yet, so I couldn't post there. "
+                  f"Go to #{channel_name} and type: /invite @Bridge Bot")
+        else:
+            dm_me(f"⚠️ Couldn't post in #{channel_name}: {error.response.get('error')}")
+        return False
+
+
+_channel_ids = {}
+
+
+def find_channel_id(channel_name):
+    """Look up a channel's ID from its name (Slack needs the ID to post)."""
+    if channel_name not in _channel_ids:
+        cursor = None
+        while True:
+            result = app.client.conversations_list(
+                types="public_channel,private_channel", exclude_archived=True,
+                limit=200, cursor=cursor,
+            )
+            for ch in result["channels"]:
+                _channel_ids[ch["name"]] = ch["id"]
+            cursor = result.get("response_metadata", {}).get("next_cursor")
+            if not cursor:
+                break
+    return _channel_ids.get(channel_name)
+
+
+def nice_time(minutes):
+    """150 -> '2h 30m'."""
+    hours, mins = divmod(minutes or 0, 60)
+    if hours and mins:
+        return f"{hours}h {mins}m"
+    return f"{hours}h" if hours else f"{mins}m"
 
 
 def read_focus():
@@ -94,14 +166,93 @@ def handle_message(event, say):
         return
 
     text = event.get("text", "").strip()
+    # A simplified copy for matching commands: lowercase, no apostrophes or end punctuation.
+    command = re.sub(r"[’'?!.]", "", text.lower()).strip()
 
-    # Test command: send the morning ping right now instead of waiting for 7am.
-    if text.lower() == "ping me":
+    if command in ("help", "commands"):
+        say(HELP_TEXT)
+    elif command == "ping me":
         send_morning_ping(force=True)
+    elif command in ("whats next", "what next", "next"):
+        whats_next(say)
+    elif command in ("hours this week", "hours", "my hours"):
+        hours_this_week(say)
+    elif command in ("skip today", "skip"):
+        skip_today(say)
+    elif command.startswith(("idea:", "decision:")):
+        say("Ideas and decisions arrive in step 4, coming soon! I haven't saved this one yet.")
+    else:
+        handle_checkin_or_chat(text, say)
+
+
+def handle_checkin_or_chat(text, say):
+    """Use Claude to decide if this is a check-in. If yes, log it and post to #helm."""
+    today = storage.get_daily_task(storage.today())
+    todays_task = today["task"] if today else None
+
+    meaning = brain.understand_message(text, todays_task)
+    if meaning is None:
+        say("Hmm, I couldn't reach Claude just now, so I didn't log that. "
+            "Try again in a minute? (Type “help” to see what I can do.)")
         return
 
-    say(f"Got it 👋 You said: “{text}”. (Logging check-ins comes in step 3. "
-        f"For now, try typing “ping me”.)")
+    if not meaning.is_checkin:
+        say(meaning.reply)
+        return
+
+    storage.add_checkin(meaning.minutes, meaning.category, meaning.summary, text)
+    if meaning.category in COUNTS_AS_DONE:
+        storage.set_daily_status(storage.today(), "done")
+
+    total, _ = storage.week_minutes()
+    time_part = f" ({nice_time(meaning.minutes)})" if meaning.minutes else ""
+    post_to_channel(
+        "helm",
+        f"✅ *Check-in* _(via chat)_: {meaning.summary}{time_part} · {meaning.category}\n"
+        f"This week so far: {nice_time(total)}",
+    )
+    say(f"{meaning.reply}\n📒 Logged in #helm. This week: *{nice_time(total)}*.")
+
+
+def whats_next(say):
+    today = storage.get_daily_task(storage.today())
+    if today and today["task"] and today["status"] == "sent":
+        say(f"Today's one thing:\n👉 {today['task']}")
+        return
+
+    # Today's task is done or skipped (or none was sent): offer an optional bonus.
+    weekday = storage.now_denver().strftime("%A")
+    bonus = brain.suggest_daily_task(weekday in SHIFT_DAYS, weekday, read_focus(), storage.recent_tasks())
+    if today and today["status"] == "done":
+        intro = "You've already done today's thing 🙌 If you feel like more, here's a bonus:"
+    else:
+        intro = "Here's a good next step, only if you feel like it:"
+    say(f"{intro}\n👉 {bonus or random.choice(BACKUP_TASKS['shift'])}")
+
+
+def hours_this_week(say):
+    total, by_category = storage.week_minutes()
+    checkins = storage.week_checkins()
+    if not checkins:
+        say("Nothing logged yet this week (weeks start Monday). Tell me what you did anytime!")
+        return
+    lines = [f"⏱ *This week: {nice_time(total)}* across {len(checkins)} check-in(s)"]
+    for category, minutes in sorted(by_category.items(), key=lambda x: -x[1]):
+        if minutes:
+            lines.append(f"• {category}: {nice_time(minutes)}")
+    untimed = sum(1 for c in checkins if not c["minutes"])
+    if untimed:
+        lines.append(f"_(+ {untimed} check-in(s) with no time given)_")
+    say("\n".join(lines))
+
+
+def skip_today(say):
+    today = storage.get_daily_task(storage.today())
+    if today and today["status"] == "done":
+        say("You already did today's thing ✅ No need to skip. Enjoy the rest of the day!")
+        return
+    storage.set_daily_status(storage.today(), "skipped")
+    say("Skipped ✅ Rest is part of the plan. See you tomorrow morning.")
 
 
 def start_scheduler():
@@ -121,6 +272,6 @@ if __name__ == "__main__":
     print("Starting Bridge Bot...")
     storage.setup()
     start_scheduler()
-    dm_me("Hi Alexander! Bridge Bot is online. ✅ Type “ping me” to test the morning message.")
+    dm_me("Hi Alexander! Bridge Bot is online. ✅ Type “help” to see what I can do.")
     print("Bridge Bot is running. Leave this window open. Press Ctrl+C to stop.")
     SocketModeHandler(app, SLACK_APP_TOKEN).start()

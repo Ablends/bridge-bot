@@ -3,7 +3,7 @@
 A Slack helper for **The Bridge**. It DMs Alexander one task a day, logs check-ins,
 tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Alexander approves.
 
-**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅
+**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅
 
 ---
 
@@ -61,7 +61,16 @@ Keep the window open. The bot only runs while it's open (until it's moved to a s
 
 | Type this to the bot | What happens |
 |---|---|
+| *anything you did*, e.g. `did 30 min of module 4` | Logs a check-in, posts it to #helm "via chat", adds to weekly hours. |
+| `what's next` | Today's task, or an optional bonus if you're done. |
+| `hours this week` | Time logged since Monday, by category. |
+| `skip today` | Marks today skipped. No guilt. |
+| `help` | Lists these commands. |
 | `ping me` | Sends today's morning task right now (for testing). |
+
+**Channels:** the bot must be invited to a channel before it can post there.
+In #helm (and later #ideas and #ship-log) type `/invite @Bridge Bot`.
+Never invite it to #design-studio. The code also blocks posting there.
 
 ## First-time setup (already done, here for reference)
 
