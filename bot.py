@@ -26,6 +26,9 @@ def dm_me(text):
 
 @app.event("message")
 def handle_message(event, say):
+    # Show in the PowerShell window that a message arrived (handy for spotting problems).
+    print(f"Message received: type={event.get('channel_type')} from={event.get('user')}")
+
     # Only listen to direct messages...
     if event.get("channel_type") != "im":
         return
