@@ -12,13 +12,14 @@ tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Al
 | File | What it is |
 |---|---|
 | `bot.py` | The main program. Start this to run the bot. |
-| `brain.py` | The part that talks to Claude (writes tasks). The model name is at the top. |
+| `brain.py` | The part that talks to Claude (tasks, check-ins, ideas, defaults, recaps). The model name is at the top. |
 | `storage.py` | Saves records to `bridge.db`, a small database file on your computer. |
 | `my-focus.txt` | **You edit this.** What you're working on now; the bot reads it every morning. |
 | `start-bot.bat` | Double-click to start the bot on Windows. |
 | `.env` | **Your secret keys.** Only on your computer, never uploaded. |
 | `.env.example` | A blank template for `.env`. |
 | `slack-app-manifest.yml` | The Slack app's settings, in case you ever need to recreate the app. |
+| `deploy/` | Scripts for running the bot on the Google Cloud server (step 6). |
 
 ---
 
@@ -73,6 +74,7 @@ Keep the window open. The bot only runs while it's open (until it's moved to a s
 | `goal: ...` | Sets your own main goal for the week (`goal` shows it). Morning tasks lean toward it. |
 | `recap preview` | DMs you a recap of this week so far. Not posted anywhere. |
 | `post recap` | Posts last week's recap to #ship-log right now. |
+| `ping me` | Sends today's morning task right now (for testing). |
 | `help` | Lists these commands. |
 
 **Schedule (Denver time):** 7:00am daily task · 9:00am check for 3-day-old decisions ·
@@ -82,7 +84,6 @@ one suggested main goal).
 **How decision defaults work:** every day at 9am, any decision open for 3+ days gets a
 suggested default in your DMs. It only becomes final if **you** react ✅ (❌ keeps it open,
 or reply in the thread with a different answer). The bot never decides on its own.
-| `ping me` | Sends today's morning task right now (for testing). |
 
 **Channels:** the bot must be invited to a channel before it can post there.
 In #helm, #ideas and #ship-log type `/invite @Bridge Bot`.
@@ -91,6 +92,8 @@ Never invite it to #design-studio. The code also blocks posting there.
 ## First-time setup (already done, here for reference)
 
 1. **Slack app:** api.slack.com/apps → Create New App → From a manifest → The Bridge → paste `slack-app-manifest.yml`.
+   Then check: Event Subscriptions has `message.im` + `reaction_added`, App Home → Messages Tab is on,
+   and OAuth & Permissions lists all 8 scopes from the manifest.
 2. **App token (`xapp-`):** Basic Information → App-Level Tokens → Generate, scope `connections:write`.
 3. **Bot token (`xoxb-`):** Install App → Install to The Bridge → copy Bot User OAuth Token.
 4. **Member ID (`U...`):** Slack → your profile → ⋮ → Copy member ID.
@@ -102,10 +105,12 @@ Never invite it to #design-studio. The code also blocks posting there.
 
 - Slack app: free.
 - Claude (Haiku model): roughly $0.30/month at this usage. Set a monthly limit at platform.claude.com → Settings → Limits.
-- Hosting: free (step 6 will use Google Cloud's free tier).
+- Hosting (Google Cloud e2-micro): the server and standard disk are free; the internet address is about
+  $3.65/month. The $300 new-account trial covers the first 90 days. A budget alert emails you if costs go up.
 
 ## Safety rules built into the bot
 
 - Never posts in #design-studio unless asked.
 - Never spends money, publishes publicly, posts to marketplaces, or emails anyone.
+- A suggested default for a decision is never final until Alexander reacts ✅.
 - Keys live only in `.env`, which is in `.gitignore` and never uploaded.
