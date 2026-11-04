@@ -75,7 +75,13 @@ def post_to_channel(channel_name, text, alexander_asked=False):
         print(f"Blocked: not posting in #{channel_name} (off-limits).")
         return False
 
-    channel_id = find_channel_id(channel_name)
+    try:
+        channel_id = find_channel_id(channel_name)
+    except SlackApiError as error:
+        problem = error.response.get("error")
+        dm_me(f"⚠️ I couldn't look up #{channel_name} (Slack said: `{problem}`).")
+        print(f"Channel lookup failed: {problem} {error.response.data}")
+        return False
     if not channel_id:
         dm_me(f"⚠️ I couldn't find #{channel_name}. Does it exist, and am I invited? "
               f"(In #{channel_name}, type: /invite @Bridge Bot)")
@@ -155,6 +161,16 @@ def send_morning_ping(force=False):
 
 @app.event("message")
 def handle_message(event, say):
+    try:
+        respond_to_message(event, say)
+    except Exception as error:
+        # If anything breaks, tell Alexander in Slack instead of failing silently.
+        print(f"Error while handling a message: {error!r}")
+        say(f"⚠️ Something went wrong on my side: `{error}`\n"
+            "Copy this message to Claude (your coding helper) and we'll fix it.")
+
+
+def respond_to_message(event, say):
     # Show in the PowerShell window that a message arrived (handy for spotting problems).
     print(f"Message received: type={event.get('channel_type')} from={event.get('user')}")
 
@@ -206,12 +222,13 @@ def handle_checkin_or_chat(text, say):
 
     total, _ = storage.week_minutes()
     time_part = f" ({nice_time(meaning.minutes)})" if meaning.minutes else ""
-    post_to_channel(
+    posted = post_to_channel(
         "helm",
         f"✅ *Check-in* _(via chat)_: {meaning.summary}{time_part} · {meaning.category}\n"
         f"This week so far: {nice_time(total)}",
     )
-    say(f"{meaning.reply}\n📒 Logged in #helm. This week: *{nice_time(total)}*.")
+    where = "Logged in #helm" if posted else "Saved (but not posted to #helm, see the warning above)"
+    say(f"{meaning.reply}\n📒 {where}. This week: *{nice_time(total)}*.")
 
 
 def whats_next(say):
