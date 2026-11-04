@@ -46,6 +46,7 @@ NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
 COUNTS_AS_DONE = ["coursework", "portfolio", "template"]
 
 HELP_TEXT = """Here's what I understand:
+• Tap ✅ on the morning task when it's done, or ❌ to skip. No typing needed.
 • Tell me what you did, in your own words: “did 30 min of module 4”, “finished the cover page”
 • *what's next*: today's task (or a bonus one if you're done)
 • *hours this week*: your logged time since Monday
@@ -174,8 +175,48 @@ def send_morning_ping(force=False):
         header = f"☀️ Morning! It's {weekday}, a shift day, so just one tiny thing:"
     else:
         header = f"☀️ Morning! It's {weekday}, a progress day. Today's one thing:"
-    dm_me(f"{header}\n\n👉 {task}\n\nReply here when you've done it (or say “skip today”, no stress).")
+    ping_ts = dm_me(
+        f"{header}\n\n👉 {task}\n\n"
+        "Tap ✅ below when it's done, or ❌ to skip today (no stress). "
+        "Want to log how long it took? Just type it, e.g. “did 30 min”."
+    )
+    storage.save_ping_ts(day, ping_ts)
+    # Add ✅ and ❌ under the message so checking in is one tap.
+    for emoji in ("white_check_mark", "x"):
+        try:
+            app.client.reactions_add(channel=dm_channel_id(), timestamp=ping_ts, name=emoji)
+        except SlackApiError as error:
+            print(f"Couldn't add the {emoji} button: {error.response.get('error')}")
     print(f"Sent morning ping for {day}: {task}")
+
+
+_dm_channel = {}
+
+
+def dm_channel_id():
+    """The ID of the DM conversation with Alexander (Slack needs it to add reactions)."""
+    if "id" not in _dm_channel:
+        _dm_channel["id"] = app.client.conversations_open(users=MY_USER_ID)["channel"]["id"]
+    return _dm_channel["id"]
+
+
+def tap_checkin(daily, reaction):
+    """Alexander tapped ✅ or ❌ on a morning ping."""
+    if reaction in YES_REACTIONS:
+        if daily["status"] == "done":
+            return  # already counted, ignore a second tap
+        storage.set_daily_status(daily["day"], "done")
+        summary = f"Did the daily task: {daily['task']}"
+        storage.add_checkin(None, "other", summary, "(tapped ✅)")
+        total, _ = storage.week_minutes()
+        posted = post_to_channel("helm", f"✅ *Check-in* _(one tap)_: {summary}\nThis week so far: {nice_time(total)}")
+        where = "Logged in #helm" if posted else "Saved (but not posted to #helm, see the warning above)"
+        dm_me(f"🙌 Nice, marked done. {where}.", thread_ts=daily["ping_ts"])
+    elif reaction in NO_REACTIONS:
+        if daily["status"] != "sent":
+            return  # already done or skipped
+        storage.set_daily_status(daily["day"], "skipped")
+        dm_me("Skipped ✅ Rest is part of the plan. See you tomorrow.", thread_ts=daily["ping_ts"])
 
 
 @app.event("message")
@@ -420,13 +461,21 @@ def check_old_decisions():
 
 @app.event("reaction_added")
 def handle_reaction(event):
-    """✅ on a suggestion confirms it; ❌ keeps the decision open."""
+    """✅/❌ on a morning ping is a one-tap check-in.
+    ✅ on a decision suggestion confirms it; ❌ keeps the decision open."""
     if event.get("user") != MY_USER_ID:
         return
-    decision = storage.find_decision_by_message(event.get("item", {}).get("ts"))
+    message_ts = event.get("item", {}).get("ts")
+    reaction = event.get("reaction", "").split("::")[0]  # ignore skin-tone variations
+
+    daily = storage.find_daily_task_by_ping(message_ts)
+    if daily:
+        tap_checkin(daily, reaction)
+        return
+
+    decision = storage.find_decision_by_message(message_ts)
     if not decision or decision["status"] != "suggested":
         return
-    reaction = event.get("reaction", "").split("::")[0]  # ignore skin-tone variations
     if reaction in YES_REACTIONS:
         record_answer(decision, decision["suggested_pick"], via="suggested default, confirmed by you")
     elif reaction in NO_REACTIONS:

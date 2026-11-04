@@ -79,6 +79,24 @@ def setup():
                 original   TEXT
             )
         """)
+        # Added later: remembers which Slack message was the morning ping,
+        # so tapping ✅ or ❌ on it counts as a check-in.
+        columns = [row["name"] for row in db.execute("PRAGMA table_info(daily_tasks)")]
+        if "ping_ts" not in columns:
+            db.execute("ALTER TABLE daily_tasks ADD COLUMN ping_ts TEXT")
+
+
+def save_ping_ts(day, ping_ts):
+    """Remember the Slack ID of the morning ping message."""
+    with connect() as db:
+        db.execute("UPDATE daily_tasks SET ping_ts = ? WHERE day = ?", (ping_ts, day))
+
+
+def find_daily_task_by_ping(ping_ts):
+    """Find the day whose morning ping has this Slack message ID."""
+    with connect() as db:
+        row = db.execute("SELECT * FROM daily_tasks WHERE ping_ts = ?", (ping_ts,)).fetchone()
+    return dict(row) if row else None
 
 
 def save_daily_task(day, task):
