@@ -2,12 +2,12 @@ What I'm working on right now.
 The bot reads this file every morning to pick my task. Update it whenever things change.
 
 COURSEWORK
-- Coursera UX/UI course. Currently on: module ? (fill in)
+- Coursera: Google UX Design Certificate. Currently on: Course 2, past Module 2 as of mid-October (confirm current module)
 
 PORTFOLIO CASE STUDIES
-- Fernly. Status: ? (fill in)
-- Budgeting app. Status: ? (fill in)
-- Command Hub Lite. Status: ? (fill in)
+- Fernly (houseplant diagnosis app + responsive site). Status: Research protocol done (plan, screener, interview script). Competitive audit done at desk level. Practice versions of empathy maps, personas, user stories, journey maps and problem statements are built from simulated sessions. Real interviews NOT started. Next task: post the screener, then run one pilot interview. This is the Stage 1 case study, targeted to publish 30 Nov 2026.
+- Budgeting app. Status: Idea only. The starting point is the YNAB fund-reconciliation pain point. Parked until Fernly ships. (confirm)
+- Command Hub Lite. Status: Planned as case study two, the write-up of the Command Hub. Not started. (confirm)
 
 PRODUCT
 - Figma portfolio template for job-hunting junior UX designers and bootcamp grads. Status: ? (fill in)
