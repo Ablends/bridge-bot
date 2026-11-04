@@ -42,7 +42,7 @@ def ask_claude(instructions, max_tokens=2000):
     return text or None
 
 
-def suggest_daily_task(is_shift_day, weekday_name, focus, recent):
+def suggest_daily_task(is_shift_day, weekday_name, focus, recent, weekly_goal=None):
     """Ask Claude for ONE task for today."""
     if is_shift_day:
         size = (
@@ -66,6 +66,8 @@ and vary it from recent days when it makes sense.
 
 What Alexander is working on right now:
 {focus}
+
+This week's suggested main goal (lean toward it when it fits): {weekly_goal or "(none set)"}
 
 Recent suggested tasks (avoid repeating these exactly):
 {recent_text}
@@ -191,4 +193,37 @@ things moving. It must not involve spending money, publishing anything publicly,
 posting to a marketplace, or emailing anyone. This is only a suggestion; Alexander confirms.
 Give the pick (short, a few words to one sentence) and one short sentence on why.""",
         DefaultPick,
+    )
+
+
+
+# ---------- Step 5: weekly recap ----------
+
+class WeeklyRecap(BaseModel):
+    highlights: list[str]   # up to 5 short bullets of what got done
+    stuck: list[str]        # up to 3 short bullets of what's stuck or slipping (can be empty)
+    main_goal: str          # ONE suggested main goal for the coming week
+    note: str               # one short, encouraging closing line
+
+
+def write_weekly_recap(facts, focus):
+    return ask_claude_form(
+        f"""Write Alexander's weekly recap for the #ship-log channel.
+
+Facts from last week (these numbers are correct; don't change or recalculate them):
+{facts}
+
+What Alexander is working on right now:
+{focus}
+
+Fill in:
+- highlights: up to 5 short bullets of what actually got done, based on the check-ins.
+  Group small related items. If nothing was logged, return an empty list.
+- stuck: up to 3 short bullets on what's stuck or slipping (open decisions, projects with
+  no progress, deadlines coming up). Be matter-of-fact, never guilt-trippy. Skipped shift
+  days are NOT a problem; don't mention them as one.
+- main_goal: ONE concrete main goal for this coming week, that Alexander could finish on the
+  Mon-Wed progress days. Prefer whatever unblocks the nearest deadline.
+- note: one short, warm closing line that pushes forward without nagging.""",
+        WeeklyRecap,
     )

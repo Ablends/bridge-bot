@@ -3,7 +3,7 @@
 A Slack helper for **The Bridge**. It DMs Alexander one task a day, logs check-ins,
 tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Alexander approves.
 
-**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅ · step 4 (ideas & decisions) ✅
+**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅ · step 4 (ideas & decisions) ✅ · step 5 (weekly recap) ✅
 
 ---
 
@@ -70,7 +70,14 @@ Keep the window open. The bot only runs while it's open (until it's moved to a s
 | `decisions` | Lists open decisions. |
 | `decide 3: your answer` | Answers decision #3 without using the thread. |
 | `suggest default 3` | Testing: asks for decision #3's default now instead of waiting 3 days. |
+| `goal: ...` | Sets your own main goal for the week (`goal` shows it). Morning tasks lean toward it. |
+| `recap preview` | DMs you a recap of this week so far. Not posted anywhere. |
+| `post recap` | Posts last week's recap to #ship-log right now. |
 | `help` | Lists these commands. |
+
+**Schedule (Denver time):** 7:00am daily task · 9:00am check for 3-day-old decisions ·
+Monday 7:05am weekly recap in #ship-log (last week's hours, what got done, what's stuck,
+one suggested main goal).
 
 **How decision defaults work:** every day at 9am, any decision open for 3+ days gets a
 suggested default in your DMs. It only becomes final if **you** react ✅ (❌ keeps it open,
@@ -78,7 +85,7 @@ or reply in the thread with a different answer). The bot never decides on its ow
 | `ping me` | Sends today's morning task right now (for testing). |
 
 **Channels:** the bot must be invited to a channel before it can post there.
-In #helm and #ideas (and later #ship-log) type `/invite @Bridge Bot`.
+In #helm, #ideas and #ship-log type `/invite @Bridge Bot`.
 Never invite it to #design-studio. The code also blocks posting there.
 
 ## First-time setup (already done, here for reference)

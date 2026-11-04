@@ -64,6 +64,13 @@ def setup():
             )
         """)
         db.execute("""
+            CREATE TABLE IF NOT EXISTS recaps (
+                week_start TEXT PRIMARY KEY,  -- Monday of the week the recap covers
+                posted_at  TEXT,
+                main_goal  TEXT              -- the suggested goal for the following week
+            )
+        """)
+        db.execute("""
             CREATE TABLE IF NOT EXISTS ideas (
                 id         INTEGER PRIMARY KEY AUTOINCREMENT,
                 created_at TEXT,
@@ -201,4 +208,80 @@ def add_idea(title, body, original):
         db.execute(
             "INSERT INTO ideas (created_at, title, body, original) VALUES (?, ?, ?, ?)",
             (now_denver().isoformat(timespec="minutes"), title, body, original),
+        )
+
+
+
+# ---------- Step 5: weekly recap ----------
+
+def last_week_start():
+    """Monday of LAST week."""
+    return week_start(now_denver().date() - timedelta(days=7))
+
+
+def _week_range(start):
+    end = (date.fromisoformat(start) + timedelta(days=7)).isoformat()
+    return start, end
+
+
+def week_daily_tasks(start):
+    start, end = _week_range(start)
+    with connect() as db:
+        rows = db.execute(
+            "SELECT * FROM daily_tasks WHERE day >= ? AND day < ? ORDER BY day", (start, end)
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def week_decided(start):
+    """Decisions that were made during that week."""
+    start, end = _week_range(start)
+    with connect() as db:
+        rows = db.execute(
+            "SELECT * FROM decisions WHERE status = 'decided' AND decided_at >= ? AND decided_at < ?",
+            (start, end),
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def week_ideas(start):
+    start, end = _week_range(start)
+    with connect() as db:
+        rows = db.execute(
+            "SELECT * FROM ideas WHERE created_at >= ? AND created_at < ?", (start, end)
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_recap(week):
+    with connect() as db:
+        row = db.execute("SELECT * FROM recaps WHERE week_start = ?", (week,)).fetchone()
+    return dict(row) if row else None
+
+
+def save_recap(week, main_goal):
+    with connect() as db:
+        db.execute(
+            "INSERT OR REPLACE INTO recaps (week_start, posted_at, main_goal) VALUES (?, ?, ?)",
+            (week, now_denver().isoformat(timespec="minutes"), main_goal),
+        )
+
+
+def current_goal():
+    """The main goal suggested in the most recent recap (or None)."""
+    with connect() as db:
+        row = db.execute(
+            "SELECT main_goal FROM recaps WHERE week_start >= ? ORDER BY week_start DESC LIMIT 1",
+            (last_week_start(),),
+        ).fetchone()
+    return row["main_goal"] if row else None
+
+
+def set_goal(goal):
+    """Alexander chose their own main goal for this week."""
+    with connect() as db:
+        db.execute(
+            "INSERT INTO recaps (week_start, posted_at, main_goal) VALUES (?, NULL, ?) "
+            "ON CONFLICT(week_start) DO UPDATE SET main_goal = excluded.main_goal",
+            (last_week_start(), goal),
         )

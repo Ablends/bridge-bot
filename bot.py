@@ -6,10 +6,12 @@
 #         tracks weekly hours, and answers "what's next", "hours this week", "skip today".
 # STEP 4: "idea: ..." goes to #ideas, tidied. "decision: ..." is logged in #helm; after 3 days
 #         with no answer, the bot suggests a default, which only counts once you react ✅.
+# STEP 5: every Monday at 7:05am, posts last week's recap in #ship-log with one suggested goal.
 
 import os
 import random
 import re
+from datetime import date, timedelta
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -36,6 +38,7 @@ OFF_LIMITS_CHANNELS = ["design-studio"]
 
 DECISION_CHECK_HOUR = 9  # each morning at 9am, look for decisions open 3+ days
 DEFAULT_AFTER_DAYS = 3
+RECAP_DAY, RECAP_HOUR, RECAP_MINUTE = "mon", 7, 5  # Monday 7:05am, right after the morning task
 YES_REACTIONS = ["white_check_mark", "heavy_check_mark", "ballot_box_with_check", "+1", "thumbsup"]
 NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
 
@@ -51,6 +54,9 @@ HELP_TEXT = """Here's what I understand:
 • *decision: ...*: logged in #helm. Answer by replying in the thread I start
 • *decisions*: list the ones still open
 • *decide 3: your answer*: answer decision #3 without using the thread
+• *goal: ...*: set your own main goal for the week (or *goal* to see it)
+• *recap preview*: DM me a recap of this week so far (not posted anywhere)
+• *post recap*: post last week's recap to #ship-log now
 • *ping me*: send this morning's task again"""
 
 # Used only if Claude can't be reached, so you still get a task.
@@ -156,7 +162,9 @@ def send_morning_ping(force=False):
     weekday = storage.now_denver().strftime("%A")
     is_shift_day = weekday in SHIFT_DAYS
 
-    task = brain.suggest_daily_task(is_shift_day, weekday, read_focus(), storage.recent_tasks())
+    task = brain.suggest_daily_task(
+        is_shift_day, weekday, read_focus(), storage.recent_tasks(), storage.current_goal()
+    )
     if not task:
         task = random.choice(BACKUP_TASKS["shift" if is_shift_day else "progress"])
 
@@ -230,6 +238,18 @@ def respond_to_message(event, say):
             say(f"What's your answer for #{number}? e.g. “decide {number}: go with option A”")
         else:
             record_answer(decision, answer.strip())
+    elif command.startswith("goal:"):
+        goal = text.split(":", 1)[1].strip()
+        storage.set_goal(goal)
+        say(f"🎯 Got it. This week's main goal: *{goal}*. I'll lean the morning tasks toward it.")
+    elif command in ("goal", "my goal"):
+        goal = storage.current_goal()
+        say(f"🎯 This week's main goal: *{goal}*" if goal else "No goal set yet. Type “goal: ...” to set one.")
+    elif command == "recap preview":
+        text, _ = build_recap(storage.week_start())
+        say("👀 *Preview only, not posted:*\n\n" + text)
+    elif command == "post recap":
+        post_weekly_recap(force=True)
     elif re.match(r"suggest default #?\d+", command):
         # Testing shortcut: don't wait 3 days.
         decision = storage.get_decision(int(re.search(r"\d+", command).group()))
@@ -415,8 +435,91 @@ def handle_reaction(event):
               thread_ts=decision["suggestion_ts"])
 
 
+# ---------- Step 5: weekly recap ----------
+
+def short_date(iso_day):
+    d = date.fromisoformat(iso_day)
+    return f"{d:%b} {d.day}"  # e.g. "Nov 3" (works on Windows too)
+
+
+def build_recap(week):
+    """Put together the recap for the week starting on Monday `week`. Returns (text, goal)."""
+    week_end = (date.fromisoformat(week) + timedelta(days=6)).isoformat()
+    total, by_category = storage.week_minutes(week)
+    checkins = storage.week_checkins(week)
+    days = storage.week_daily_tasks(week)
+    decided = storage.week_decided(week)
+    still_open = storage.open_decisions()
+    ideas = storage.week_ideas(week)
+
+    done = sum(1 for d in days if d["status"] == "done")
+    skipped = sum(1 for d in days if d["status"] == "skipped")
+    no_checkin = sum(1 for d in days if d["status"] == "sent")
+    category_text = ", ".join(f"{c} {nice_time(m)}" for c, m in by_category.items() if m)
+
+    # Plain facts. Counted by the code, so the numbers are always right.
+    facts = "\n".join([
+        f"Week: {short_date(week)} to {short_date(week_end)}",
+        f"Hours logged: {nice_time(total)} ({category_text or 'none'}) across {len(checkins)} check-ins",
+        f"Daily tasks: {done} done, {skipped} skipped, {no_checkin} with no check-in",
+        "Check-ins:",
+        *[f"- {c['day']}: {c['summary']}" + (f" ({nice_time(c['minutes'])})" if c["minutes"] else "")
+          for c in checkins],
+        "Decisions made: " + ("; ".join(f"#{d['id']} {d['question']} -> {d['answer']}" for d in decided) or "none"),
+        "Decisions still open: " + ("; ".join(f"#{d['id']} {d['question']} (opened {d['opened_at'][:10]})"
+                                               for d in still_open) or "none"),
+        "New ideas: " + (", ".join(i["title"] for i in ideas) or "none"),
+    ])
+
+    recap = brain.write_weekly_recap(facts, read_focus())
+
+    lines = [
+        f"📦 *Weekly recap: {short_date(week)} – {short_date(week_end)}*",
+        f"⏱ *Hours:* {nice_time(total)}" + (f" ({category_text})" if category_text else "")
+        + f" · {len(checkins)} check-in(s)",
+        f"📅 *Daily tasks:* {done} done · {skipped} skipped · {no_checkin} no check-in",
+    ]
+    if recap:
+        if recap.highlights:
+            lines.append("\n✅ *Got done:*")
+            lines += [f"• {h}" for h in recap.highlights]
+        if decided:
+            lines.append("\n🧭 *Decided:*")
+            lines += [f"• #{d['id']} {d['question']} → {d['answer']}" for d in decided]
+        if recap.stuck:
+            lines.append("\n🚧 *Stuck / slipping:*")
+            lines += [f"• {s}" for s in recap.stuck]
+        if ideas:
+            lines.append(f"\n💡 {len(ideas)} new idea(s) in #ideas")
+        lines.append(f"\n🎯 *Suggested main goal this week:* {recap.main_goal}")
+        lines.append(f"_{recap.note}_")
+        goal = recap.main_goal
+    else:
+        # Claude unavailable: still post the facts.
+        lines.append("\n✅ *Check-ins:*")
+        lines += [f"• {c['summary']}" for c in checkins] or ["• (none logged)"]
+        if still_open:
+            lines.append("\n🧭 *Open decisions:* " + ", ".join(f"#{d['id']}" for d in still_open))
+        goal = None
+    return "\n".join(lines), goal
+
+
+def post_weekly_recap(force=False):
+    """Post LAST week's recap to #ship-log. Runs Mondays at 7:05am, or on 'post recap'."""
+    week = storage.last_week_start()
+    if storage.get_recap(week) and not force:
+        print(f"Recap for week of {week} already posted, skipping.")
+        return
+    text, goal = build_recap(week)
+    if post_to_channel("ship-log", text):
+        storage.save_recap(week, goal)
+        dm_me("📦 Last week's recap is up in #ship-log." +
+              (f"\n🎯 Suggested main goal: *{goal}*. I'll lean the morning tasks toward it. "
+               f"(Just a suggestion. To pick your own, type “goal: ...”)" if goal else ""))
+
+
 def start_scheduler():
-    """Set up the daily timers (Denver time): 7am task, 9am decision check."""
+    """Set up the timers (Denver time): 7am task, 9am decision check, Monday 7:05am recap."""
     scheduler = BackgroundScheduler(timezone=storage.DENVER)
     scheduler.add_job(
         send_morning_ping,
@@ -428,6 +531,12 @@ def start_scheduler():
         check_old_decisions,
         CronTrigger(hour=DECISION_CHECK_HOUR, minute=0, timezone=storage.DENVER),
         misfire_grace_time=3 * 60 * 60,
+        coalesce=True,
+    )
+    scheduler.add_job(
+        post_weekly_recap,
+        CronTrigger(day_of_week=RECAP_DAY, hour=RECAP_HOUR, minute=RECAP_MINUTE, timezone=storage.DENVER),
+        misfire_grace_time=6 * 60 * 60,
         coalesce=True,
     )
     scheduler.start()
