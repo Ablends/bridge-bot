@@ -129,3 +129,66 @@ Fill in:
     except Exception as error:  # e.g. Claude's answer didn't fit the form
         print(f"Couldn't understand Claude's answer: {error}")
         return None
+
+
+
+# ---------- Step 4: ideas and decision defaults ----------
+
+class TidyIdea(BaseModel):
+    title: str   # short headline, max ~8 words
+    body: str    # 1-3 tidy sentences
+
+
+class DefaultPick(BaseModel):
+    pick: str    # the suggested answer
+    why: str     # one short sentence explaining why
+
+
+def ask_claude_form(instructions, form):
+    """Like ask_claude, but Claude must answer by filling in a form (a Pydantic model)."""
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        return None
+    try:
+        client = anthropic.Anthropic()
+        response = client.messages.parse(
+            model=MODEL,
+            max_tokens=2000,
+            output_config={"effort": "low"},
+            system=TONE,
+            messages=[{"role": "user", "content": instructions}],
+            output_format=form,
+        )
+        return response.parsed_output
+    except anthropic.APIError as error:
+        print(f"Claude request failed: {error}")
+        return None
+    except Exception as error:
+        print(f"Couldn't understand Claude's answer: {error}")
+        return None
+
+
+def tidy_idea(text):
+    return ask_claude_form(
+        f"""Alexander jotted down this idea for the business:
+"{text}"
+
+Tidy it up for the #ideas channel. Keep Alexander's meaning and voice; don't add new
+ideas or plans of your own. Give a short title (max 8 words) and a body of 1-3 clear sentences.""",
+        TidyIdea,
+    )
+
+
+def suggest_default(question, focus):
+    return ask_claude_form(
+        f"""Alexander logged this decision 3 days ago and hasn't answered it yet:
+"{question}"
+
+What Alexander is working on right now:
+{focus}
+
+Suggest a sensible DEFAULT answer: the simplest, lowest-risk, cheapest option that keeps
+things moving. It must not involve spending money, publishing anything publicly,
+posting to a marketplace, or emailing anyone. This is only a suggestion; Alexander confirms.
+Give the pick (short, a few words to one sentence) and one short sentence on why.""",
+        DefaultPick,
+    )

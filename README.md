@@ -3,7 +3,7 @@
 A Slack helper for **The Bridge**. It DMs Alexander one task a day, logs check-ins,
 tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Alexander approves.
 
-**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅
+**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅ · step 4 (ideas & decisions) ✅
 
 ---
 
@@ -65,11 +65,20 @@ Keep the window open. The bot only runs while it's open (until it's moved to a s
 | `what's next` | Today's task, or an optional bonus if you're done. |
 | `hours this week` | Time logged since Monday, by category. |
 | `skip today` | Marks today skipped. No guilt. |
+| `idea: ...` | Tidies the idea and posts it to #ideas. |
+| `decision: ...` | Logs it in #helm and starts a DM thread. **Reply in that thread** to answer. |
+| `decisions` | Lists open decisions. |
+| `decide 3: your answer` | Answers decision #3 without using the thread. |
+| `suggest default 3` | Testing: asks for decision #3's default now instead of waiting 3 days. |
 | `help` | Lists these commands. |
+
+**How decision defaults work:** every day at 9am, any decision open for 3+ days gets a
+suggested default in your DMs. It only becomes final if **you** react ✅ (❌ keeps it open,
+or reply in the thread with a different answer). The bot never decides on its own.
 | `ping me` | Sends today's morning task right now (for testing). |
 
 **Channels:** the bot must be invited to a channel before it can post there.
-In #helm (and later #ideas and #ship-log) type `/invite @Bridge Bot`.
+In #helm and #ideas (and later #ship-log) type `/invite @Bridge Bot`.
 Never invite it to #design-studio. The code also blocks posting there.
 
 ## First-time setup (already done, here for reference)

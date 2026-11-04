@@ -49,6 +49,29 @@ def setup():
                 original  TEXT      -- exactly what you typed
             )
         """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS decisions (
+                id             INTEGER PRIMARY KEY AUTOINCREMENT,
+                question       TEXT,
+                opened_at      TEXT,    -- when you asked
+                dm_ts          TEXT,    -- Slack ID of the bot's DM about it (its thread)
+                status         TEXT,    -- 'open', 'suggested' or 'decided'
+                suggested_pick TEXT,    -- the bot's default suggestion (never final on its own)
+                suggested_at   TEXT,
+                suggestion_ts  TEXT,    -- Slack ID of the suggestion DM (you react ✅ to it)
+                answer         TEXT,    -- YOUR final answer
+                decided_at     TEXT
+            )
+        """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS ideas (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                created_at TEXT,
+                title      TEXT,
+                body       TEXT,
+                original   TEXT
+            )
+        """)
 
 
 def save_daily_task(day, task):
@@ -118,3 +141,64 @@ def week_minutes(start=None):
         total += m
         by_category[c["category"]] = by_category.get(c["category"], 0) + m
     return total, by_category
+
+
+# ---------- Step 4: decisions and ideas ----------
+
+def add_decision(question):
+    with connect() as db:
+        cur = db.execute(
+            "INSERT INTO decisions (question, opened_at, status) VALUES (?, ?, 'open')",
+            (question, now_denver().isoformat(timespec="minutes")),
+        )
+        return cur.lastrowid
+
+
+def update_decision(decision_id, **fields):
+    """Change some fields of a decision, e.g. update_decision(3, status='decided')."""
+    columns = ", ".join(f"{name} = ?" for name in fields)
+    with connect() as db:
+        db.execute(f"UPDATE decisions SET {columns} WHERE id = ?", (*fields.values(), decision_id))
+
+
+def get_decision(decision_id):
+    with connect() as db:
+        row = db.execute("SELECT * FROM decisions WHERE id = ?", (decision_id,)).fetchone()
+    return dict(row) if row else None
+
+
+def find_decision_by_message(ts):
+    """Find the decision whose DM (or suggestion DM) has this Slack message ID."""
+    with connect() as db:
+        row = db.execute(
+            "SELECT * FROM decisions WHERE dm_ts = ? OR suggestion_ts = ?", (ts, ts)
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def open_decisions():
+    """Decisions you haven't answered yet (including ones with a suggested default)."""
+    with connect() as db:
+        rows = db.execute(
+            "SELECT * FROM decisions WHERE status != 'decided' ORDER BY id"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def decisions_needing_default(days=3):
+    """Open decisions older than `days` that haven't had a suggested default yet."""
+    cutoff = (now_denver() - timedelta(days=days)).isoformat(timespec="minutes")
+    with connect() as db:
+        rows = db.execute(
+            "SELECT * FROM decisions WHERE status = 'open' AND suggested_at IS NULL AND opened_at <= ?",
+            (cutoff,),
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def add_idea(title, body, original):
+    with connect() as db:
+        db.execute(
+            "INSERT INTO ideas (created_at, title, body, original) VALUES (?, ?, ?, ?)",
+            (now_denver().isoformat(timespec="minutes"), title, body, original),
+        )

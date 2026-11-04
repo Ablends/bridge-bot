@@ -4,6 +4,8 @@
 # STEP 2: every day at 7:00am Denver time, DMs you ONE task for the day.
 # STEP 3: understands check-ins ("did 30 min of module 4"), logs them, posts to #helm,
 #         tracks weekly hours, and answers "what's next", "hours this week", "skip today".
+# STEP 4: "idea: ..." goes to #ideas, tidied. "decision: ..." is logged in #helm; after 3 days
+#         with no answer, the bot suggests a default, which only counts once you react ✅.
 
 import os
 import random
@@ -32,6 +34,11 @@ SHIFT_DAYS = ["Thursday", "Friday", "Saturday", "Sunday"]
 # HARD RULE: the bot never posts here unless Alexander explicitly asks.
 OFF_LIMITS_CHANNELS = ["design-studio"]
 
+DECISION_CHECK_HOUR = 9  # each morning at 9am, look for decisions open 3+ days
+DEFAULT_AFTER_DAYS = 3
+YES_REACTIONS = ["white_check_mark", "heavy_check_mark", "ballot_box_with_check", "+1", "thumbsup"]
+NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
+
 # Kinds of work that count as "done for today".
 COUNTS_AS_DONE = ["coursework", "portfolio", "template"]
 
@@ -40,8 +47,11 @@ HELP_TEXT = """Here's what I understand:
 • *what's next*: today's task (or a bonus one if you're done)
 • *hours this week*: your logged time since Monday
 • *skip today*: take the day off, no stress
-• *ping me*: send this morning's task again
-Coming soon: *idea: ...* and *decision: ...*"""
+• *idea: ...*: tidied up and posted to #ideas
+• *decision: ...*: logged in #helm. Answer by replying in the thread I start
+• *decisions*: list the ones still open
+• *decide 3: your answer*: answer decision #3 without using the thread
+• *ping me*: send this morning's task again"""
 
 # Used only if Claude can't be reached, so you still get a task.
 BACKUP_TASKS = {
@@ -60,9 +70,10 @@ BACKUP_TASKS = {
 app = App(token=SLACK_BOT_TOKEN)
 
 
-def dm_me(text):
-    """Send Alexander a direct message from the bot."""
-    app.client.chat_postMessage(channel=MY_USER_ID, text=text)
+def dm_me(text, thread_ts=None):
+    """Send Alexander a direct message from the bot. Returns the message's Slack ID."""
+    result = app.client.chat_postMessage(channel=MY_USER_ID, text=text, thread_ts=thread_ts)
+    return result["ts"]
 
 
 def post_to_channel(channel_name, text, alexander_asked=False):
@@ -182,6 +193,15 @@ def respond_to_message(event, say):
         return
 
     text = event.get("text", "").strip()
+
+    # A reply inside the thread of a decision DM is your answer to that decision.
+    thread_ts = event.get("thread_ts")
+    if thread_ts and thread_ts != event.get("ts"):
+        decision = storage.find_decision_by_message(thread_ts)
+        if decision:
+            record_answer(decision, text)
+            return
+
     # A simplified copy for matching commands: lowercase, no apostrophes or end punctuation.
     command = re.sub(r"[’'?!.]", "", text.lower()).strip()
 
@@ -195,8 +215,28 @@ def respond_to_message(event, say):
         hours_this_week(say)
     elif command in ("skip today", "skip"):
         skip_today(say)
-    elif command.startswith(("idea:", "decision:")):
-        say("Ideas and decisions arrive in step 4, coming soon! I haven't saved this one yet.")
+    elif command.startswith("idea:"):
+        handle_idea(text.split(":", 1)[1].strip(), say)
+    elif command.startswith("decision:"):
+        open_decision(text.split(":", 1)[1].strip(), say)
+    elif command in ("decisions", "open decisions"):
+        list_decisions(say)
+    elif re.match(r"decide #?\d+", command):
+        number, answer = re.match(r"decide #?(\d+)\s*:?\s*(.*)", text, re.IGNORECASE | re.DOTALL).groups()
+        decision = storage.get_decision(int(number))
+        if not decision:
+            say(f"I can't find decision #{number}. Type “decisions” to see the open ones.")
+        elif not answer.strip():
+            say(f"What's your answer for #{number}? e.g. “decide {number}: go with option A”")
+        else:
+            record_answer(decision, answer.strip())
+    elif re.match(r"suggest default #?\d+", command):
+        # Testing shortcut: don't wait 3 days.
+        decision = storage.get_decision(int(re.search(r"\d+", command).group()))
+        if decision and decision["status"] != "decided":
+            suggest_default_for(decision)
+        else:
+            say("That decision doesn't exist or is already decided.")
     else:
         handle_checkin_or_chat(text, say)
 
@@ -272,13 +312,122 @@ def skip_today(say):
     say("Skipped ✅ Rest is part of the plan. See you tomorrow morning.")
 
 
+# ---------- Step 4: ideas ----------
+
+def handle_idea(idea_text, say):
+    if not idea_text:
+        say("What's the idea? e.g. “idea: a free checklist to go with the template”")
+        return
+    tidy = brain.tidy_idea(idea_text)
+    title = tidy.title if tidy else idea_text[:60]
+    body = tidy.body if tidy else idea_text
+    storage.add_idea(title, body, idea_text)
+    posted = post_to_channel("ideas", f"💡 *{title}*\n{body}\n_via chat_")
+    where = "Posted to #ideas" if posted else "Saved (but not posted to #ideas, see the warning above)"
+    say(f"💡 {where}: *{title}*")
+
+
+# ---------- Step 4: decisions ----------
+
+def open_decision(question, say):
+    if not question:
+        say("What's the decision? e.g. “decision: should the template come in light and dark mode?”")
+        return
+    number = storage.add_decision(question)
+    post_to_channel("helm", f"🧭 *Decision #{number} (open)* _(via chat)_: {question}")
+    dm_ts = dm_me(
+        f"🧭 *Decision #{number}* logged in #helm: {question}\n"
+        f"Reply *in this thread* with your answer whenever you're ready. If it's still open in "
+        f"{DEFAULT_AFTER_DAYS} days, I'll suggest a default. Nothing is final until you say yes."
+    )
+    storage.update_decision(number, dm_ts=dm_ts)
+
+
+def list_decisions(say):
+    decisions = storage.open_decisions()
+    if not decisions:
+        say("No open decisions 🎉 Start one with “decision: ...”")
+        return
+    lines = ["🧭 *Open decisions:*"]
+    for d in decisions:
+        opened = d["opened_at"][:10]
+        extra = f" (suggested: _{d['suggested_pick']}_, waiting for your ✅)" if d["status"] == "suggested" else ""
+        lines.append(f"• *#{d['id']}* {d['question']} · opened {opened}{extra}")
+    lines.append("Answer with “decide 3: your answer”, or reply in the decision's thread.")
+    say("\n".join(lines))
+
+
+def record_answer(decision, answer, via="your answer"):
+    """Alexander answered: this is the ONLY way a decision becomes final."""
+    if decision["status"] == "decided":
+        dm_me(f"Decision #{decision['id']} is already decided: *{decision['answer']}*. "
+              f"Start a new one with “decision: ...” if you want to change it.",
+              thread_ts=decision["dm_ts"])
+        return
+    storage.update_decision(
+        decision["id"], status="decided", answer=answer,
+        decided_at=storage.now_denver().isoformat(timespec="minutes"),
+    )
+    post_to_channel("helm", f"✅ *Decided #{decision['id']}*: {decision['question']}\n→ *{answer}* _({via})_")
+    dm_me(f"✅ Decision #{decision['id']} is final: *{answer}*. Logged in #helm.",
+          thread_ts=decision["dm_ts"])
+
+
+def suggest_default_for(decision):
+    """Suggest a default answer. It is NOT final until Alexander reacts ✅."""
+    pick = brain.suggest_default(decision["question"], read_focus())
+    if not pick:
+        print(f"Couldn't get a default for decision #{decision['id']}, will try again tomorrow.")
+        return
+    suggestion_ts = dm_me(
+        f"⏰ *Decision #{decision['id']}* has been open a few days: {decision['question']}\n\n"
+        f"Suggested default: *{pick.pick}*\n_{pick.why}_\n\n"
+        f"React ✅ to go with it, or ❌ to keep it open. Or reply in this thread with a "
+        f"different answer. Nothing is final until you say yes."
+    )
+    storage.update_decision(
+        decision["id"], status="suggested", suggested_pick=pick.pick,
+        suggested_at=storage.now_denver().isoformat(timespec="minutes"),
+        suggestion_ts=suggestion_ts,
+    )
+
+
+def check_old_decisions():
+    """Runs every morning: suggest defaults for decisions open 3+ days."""
+    for decision in storage.decisions_needing_default(DEFAULT_AFTER_DAYS):
+        suggest_default_for(decision)
+
+
+@app.event("reaction_added")
+def handle_reaction(event):
+    """✅ on a suggestion confirms it; ❌ keeps the decision open."""
+    if event.get("user") != MY_USER_ID:
+        return
+    decision = storage.find_decision_by_message(event.get("item", {}).get("ts"))
+    if not decision or decision["status"] != "suggested":
+        return
+    reaction = event.get("reaction", "").split("::")[0]  # ignore skin-tone variations
+    if reaction in YES_REACTIONS:
+        record_answer(decision, decision["suggested_pick"], via="suggested default, confirmed by you")
+    elif reaction in NO_REACTIONS:
+        storage.update_decision(decision["id"], status="open")
+        dm_me("👍 Kept open. Reply in this thread with your answer whenever you're ready.",
+              thread_ts=decision["suggestion_ts"])
+
+
 def start_scheduler():
-    """Set up the daily 7am timer (Denver time)."""
+    """Set up the daily timers (Denver time): 7am task, 9am decision check."""
     scheduler = BackgroundScheduler(timezone=storage.DENVER)
     scheduler.add_job(
         send_morning_ping,
         CronTrigger(hour=MORNING_PING_HOUR, minute=0, timezone=storage.DENVER),
         misfire_grace_time=3 * 60 * 60,  # if the computer was asleep at 7am, still send it within 3 hours
+        coalesce=True,
+    )
+    scheduler.add_job(
+        check_old_decisions,
+        CronTrigger(hour=DECISION_CHECK_HOUR, minute=0, timezone=storage.DENVER),
+        misfire_grace_time=3 * 60 * 60,
         coalesce=True,
     )
     scheduler.start()
