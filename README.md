@@ -3,7 +3,7 @@
 A Slack helper for **The Bridge**. It DMs Alexander one task a day, logs check-ins,
 tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Alexander approves.
 
-**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅ · step 4 (ideas & decisions) ✅ · step 5 (weekly recap) ✅
+**Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅ · step 4 (ideas & decisions) ✅ · step 5 (weekly recap) ✅ · step 6 (runs 24/7 on Google Cloud) ✅
 
 ---
 
@@ -23,7 +23,35 @@ tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Al
 
 ---
 
-## Starting the bot (Windows)
+## Where the bot runs
+
+The bot runs **24/7 on a Google Cloud server** called `bridge-bot` (e2-micro, us-central1).
+It restarts itself if it crashes or the server reboots. **Don't run it on your PC too**,
+or you'll get double messages.
+
+To use the server's terminal: console.cloud.google.com → **VM instances** → `bridge-bot` → **SSH**.
+Paste with Ctrl+V. Closing the SSH window does NOT stop the bot.
+
+| I want to... | Do this |
+|---|---|
+| Update `my-focus.txt` | Edit it on your PC → GitHub Desktop → **Commit** → **Push**. The server downloads it every day at 6:45am, before the 7am task. To apply it right away: SSH → `cd ~/bridge-bot && git pull` |
+| Get a new code update from Claude | SSH → `cd ~/bridge-bot && bash deploy/update.sh` |
+| Restart the bot | SSH → `sudo systemctl restart bridge-bot` |
+| Check it's running | SSH → `sudo systemctl status bridge-bot --no-pager` (look for `active (running)`) |
+| See what it's been doing / errors | SSH → `sudo journalctl -u bridge-bot -n 50 --no-pager` |
+| Change a key in `.env` | Edit `.env` on your PC → SSH window → **UPLOAD FILE** → then `mv ~/.env ~/bridge-bot/ && chmod 600 ~/bridge-bot/.env && sudo systemctl restart bridge-bot` |
+| Stop the bot completely | SSH → `sudo systemctl stop bridge-bot` (start again: `sudo systemctl start bridge-bot`) |
+
+**If the SSH window won't connect:** wait 2 minutes and try again. Still stuck? VM instances →
+tick `bridge-bot` → **Reset** (like restarting a computer; files are kept). The bot starts by itself.
+
+**Google Cloud free trial ends about 2 Feb 2027.** Before then, Google will email you. To keep the
+server, click **Upgrade** / **Activate full account** (about $3.65/month for the internet address;
+the server and disk stay free). If you don't upgrade, the server pauses and the bot stops.
+
+## Running the bot on your PC instead (backup option)
+
+Only if the server is off. Never run both at once.
 
 **Easy way:** open the `bridge-bot` folder and double-click **`start-bot.bat`**.
 
@@ -33,12 +61,14 @@ py bot.py
 ```
 
 It's working when you see `Bolt app is running!` and Slack DMs you "Bridge Bot is online ✅".
-Keep the window open. The bot only runs while it's open (until it's moved to a server in step 6).
+Keep the window open. On your PC, the bot only runs while that window is open.
 
 ## If the bot stops or isn't answering
 
-1. Look at the PowerShell window. If it shows red error text, copy it (it never contains your keys).
-2. Close the window, then double-click **`start-bot.bat`** again.
+1. **On the server:** SSH → `sudo journalctl -u bridge-bot -n 50 --no-pager` to see recent errors,
+   then `sudo systemctl restart bridge-bot`.
+   **On your PC:** look at the PowerShell window for red text, then double-click `start-bot.bat` again.
+2. Error text never contains your keys, so it's safe to copy.
 3. Still broken? Check the table below, or paste the error to Claude.
 
 | Error contains | Fix |
@@ -53,6 +83,9 @@ Keep the window open. The bot only runs while it's open (until it's moved to a s
 
 ## Getting new code updates
 
+**Server:** SSH → `cd ~/bridge-bot && bash deploy/update.sh`. That's it.
+
+**PC (backup option only):**
 1. Stop the bot (Ctrl+C or close its window).
 2. In **GitHub Desktop**: click **Fetch origin**, then **Pull origin**.
 3. If the update says new add-ons are needed, run: `py -m pip install -r requirements.txt`
@@ -106,7 +139,8 @@ Never invite it to #design-studio. The code also blocks posting there.
 - Slack app: free.
 - Claude (Haiku model): roughly $0.30/month at this usage. Set a monthly limit at platform.claude.com → Settings → Limits.
 - Hosting (Google Cloud e2-micro): the server and standard disk are free; the internet address is about
-  $3.65/month. The $300 new-account trial covers the first 90 days. A budget alert emails you if costs go up.
+  $3.65/month. The $300 new-account trial covers the first 90 days (until about 2 Feb 2027).
+  A $5/month budget alert emails you if costs go up. Check actual costs: console → Billing → Reports.
 
 ## Safety rules built into the bot
 
