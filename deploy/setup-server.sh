@@ -5,6 +5,15 @@ set -e
 cd "$(dirname "$0")/.."
 BOT_DIR="$(pwd)"
 
+echo "== 0/4 Adding 1 GB of overflow memory (swap) so the small server doesn't freeze =="
+if [ ! -f /swapfile ]; then
+  sudo fallocate -l 1G /swapfile
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
+  echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null
+fi
+
 echo "== 1/4 Installing Python tools =="
 sudo apt-get update -y
 sudo apt-get install -y python3 python3-venv git
@@ -12,7 +21,7 @@ sudo apt-get install -y python3 python3-venv git
 echo "== 2/4 Installing the bot's add-ons =="
 python3 -m venv .venv
 .venv/bin/pip install --upgrade pip -q
-.venv/bin/pip install -r requirements.txt -q
+.venv/bin/pip install --no-cache-dir -r requirements.txt -q
 
 if [ ! -f .env ]; then
   echo "!! No .env file found. Upload your .env file into $BOT_DIR, then run this script again."
