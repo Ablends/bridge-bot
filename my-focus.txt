@@ -1,13 +1,31 @@
 What I'm working on right now.
 The bot reads this file every morning to pick my task. Update it whenever things change.
+Last updated: 4 Nov 2026
 
-COURSEWORK
-- Coursera: Google UX Design Certificate. Currently on: Course 2, past Module 2 as of mid-October (confirm current module)
+RULES FOR PICKING MY TASK
+- Finish things before starting new ones. Never suggest starting something marked PARKED.
+- Shift days (Thu-Sun): one tiny ~5 min task only.
+- Order of priority: 1) Course 2 project, 2) Fernly case study, 3) portfolio template.
 
-PORTFOLIO CASE STUDIES
-- Fernly (houseplant diagnosis app + responsive site). Status: Research protocol done (plan, screener, interview script). Competitive audit done at desk level. Practice versions of empathy maps, personas, user stories, journey maps and problem statements are built from simulated sessions. Real interviews NOT started. Next task: post the screener, then run one pilot interview. This is the Stage 1 case study, targeted to publish 30 Nov 2026.
-- Budgeting app. Status: Idea only. The starting point is the YNAB fund-reconciliation pain point. Parked until Fernly ships. (confirm)
-- Command Hub Lite. Status: Planned as case study two, the write-up of the Command Hub. Not started. (confirm)
+1. COURSEWORK (top priority)
+- Coursera: Google UX Design Certificate.
+- Now: finishing the Course 2 project: personas, journey map, value proposition, competitive audit.
+- Next: Course 3, but ONLY after the Course 2 project is submitted.
 
-PRODUCT
-- Figma portfolio template for job-hunting junior UX designers and bootcamp grads. Status: ? (fill in)
+2. PORTFOLIO CASE STUDY: FERNLY
+- Houseplant diagnosis app + responsive site. Most of it gets filled in by the coursework.
+- Done: research plan, screener, interview script, desk-level competitive audit, practice
+  empathy maps, personas, user stories, journey maps and problem statements.
+- Not started: real interviews. Next step: post the screener, then run one pilot interview.
+- Target: publish 30 Nov 2026.
+
+3. PRODUCT: FIGMA PORTFOLIO TEMPLATE
+- For job-hunting junior UX designers and bootcamp grads.
+- Status: Step 1 of a fixed 9-step build. Only suggest work on the current step, never later steps.
+
+PARKED (do not suggest tasks for these)
+- Budgeting app case study (idea: YNAB fund-reconciliation pain point). Waits until Fernly ships.
+- Command Hub Lite case study. Waits until Fernly ships.
+
+DONE
+- Bridge Bot is built and running. Don't suggest bot work.
