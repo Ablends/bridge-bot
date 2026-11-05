@@ -18,6 +18,8 @@ Give the item planned for today, using its exact name. If an earlier item has no
 check-in yet (no "done" / ✅), give the EARLIEST unfinished item instead. Never skip ahead.
 The activities are ungraded practice: "good enough" is done. Remind him to start from his
 Fernly practice versions instead of starting from scratch.
+SHIFT-DAY RULE: on Thu-Sun, readings are READ ONLY. If a guide asks him to do project work,
+he notes it down and it moves to the next Mon-Wed session. Never assign the "doing" on a shift day.
 - Thu 5 Nov:  Read "Portfolio project guide for empathizing with users" (10 min, half is fine)
 - Fri 6 Nov:  Read "Exemplars: Create personas for your portfolio project" (10 min)
 - Sat 7 Nov:  Read "Portfolio project guide for defining user needs" (10 min)
