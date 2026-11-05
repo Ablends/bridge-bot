@@ -1,6 +1,7 @@
 What I'm working on right now.
 The bot reads this file every morning to pick my task. Update it whenever things change.
-Last updated: 4 Nov 2026
+Last updated: 5 Nov 2026
+Tip: you can also DM the bot "class: ..." and "step done" instead of editing this file.
 
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
@@ -16,12 +17,19 @@ RULES FOR PICKING MY TASK
 - Houseplant diagnosis app + responsive site. Most of it gets filled in by the coursework.
 - Done: research plan, screener, interview script, desk-level competitive audit, practice
   empathy maps, personas, user stories, journey maps and problem statements.
-- Not started: real interviews. Next step: post the screener, then run one pilot interview.
-- Target: publish 30 Nov 2026.
+- Fernly moves at the CLASS'S pace. Never suggest Fernly work the class hasn't reached yet.
+  Class tasks are simply "the next lesson / module step".
+- Target: publish 30 Nov 2026 (a time frame; it can move with the class).
 
 3. PRODUCT: FIGMA PORTFOLIO TEMPLATE
 - For job-hunting junior UX designers and bootcamp grads.
-- Status: Step 1 of a fixed 9-step build. Only suggest work on the current step, never later steps.
+- Fixed 9-step build path. The bot tracks the current step (DM "step" to see it).
+  Only suggest work on the current step, never later steps. If the pace slips, only the dates move.
+
+4. YOUTUBE SHORTS (on, but low-pressure)
+- "Record the build": on Mon-Wed template tasks, add "hit record first (Figma window only)".
+- No face, no voice needed (AI voiceover). Recordings are private; posting is always optional.
+- Never make recording or posting the task itself, and never nag about it.
 
 PARKED (do not suggest tasks for these)
 - Budgeting app case study (idea: YNAB fund-reconciliation pain point). Waits until Fernly ships.

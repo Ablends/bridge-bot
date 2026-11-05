@@ -79,11 +79,44 @@ def setup():
                 original   TEXT
             )
         """)
+        # Added later: small saved values, e.g. where Alexander is in class.
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS settings (
+                name       TEXT PRIMARY KEY,  -- e.g. 'class_status', 'template_step'
+                value      TEXT,
+                updated_at TEXT
+            )
+        """)
         # Added later: remembers which Slack message was the morning ping,
         # so tapping ✅ or ❌ on it counts as a check-in.
         columns = [row["name"] for row in db.execute("PRAGMA table_info(daily_tasks)")]
         if "ping_ts" not in columns:
             db.execute("ALTER TABLE daily_tasks ADD COLUMN ping_ts TEXT")
+
+
+def get_setting(name, default=None):
+    """Read a saved value. Returns (value, updated_at), or (default, None) if never set."""
+    with connect() as db:
+        row = db.execute("SELECT value, updated_at FROM settings WHERE name = ?", (name,)).fetchone()
+    return (row["value"], row["updated_at"]) if row else (default, None)
+
+
+def set_setting(name, value):
+    with connect() as db:
+        db.execute(
+            "INSERT OR REPLACE INTO settings (name, value, updated_at) VALUES (?, ?, ?)",
+            (name, str(value), now_denver().date().isoformat()),
+        )
+
+
+def recent_checkins(days=7):
+    """Check-ins from the last few days, oldest first (so the bot knows where you are)."""
+    since = (now_denver().date() - timedelta(days=days)).isoformat()
+    with connect() as db:
+        rows = db.execute(
+            "SELECT day, summary FROM checkins WHERE day >= ? ORDER BY logged_at", (since,)
+        ).fetchall()
+    return [dict(r) for r in rows]
 
 
 def save_ping_ts(day, ping_ts):

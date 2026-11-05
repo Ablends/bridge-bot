@@ -24,4 +24,7 @@
 - `bot.py` (Slack + schedule), `brain.py` (Claude calls), `storage.py` (SQLite `bridge.db`).
 - Updates reach the server when Alexander runs `bash deploy/update.sh` over SSH (README has the steps).
 - The server also runs `git pull` daily at 6:45am Denver time, but that does NOT restart the bot.
+- Bridge Bot is the ONLY source of the daily task. A separate Claude scheduled task
+  ("Bridge daily check", 6:30am) only answers "Claude:" requests in Slack. Don't give it the task job back.
+- Alexander tells the bot where he is with `class: ...` and `step done` (portfolio template's 9 fixed steps, in `bot.py`).
 - Safety rules: never post in #design-studio, never spend money/publish/email. Decisions are only final when Alexander confirms.

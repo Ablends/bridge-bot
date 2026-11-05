@@ -42,11 +42,27 @@ RECAP_DAY, RECAP_HOUR, RECAP_MINUTE = "mon", 7, 5  # Monday 7:05am, right after 
 YES_REACTIONS = ["white_check_mark", "heavy_check_mark", "ballot_box_with_check", "+1", "thumbsup"]
 NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
 
+# The fixed build path for the Figma portfolio template. Never reorder or skip.
+# "step done" moves to the next one.
+TEMPLATE_STEPS = [
+    "Set up the pages (Cover, Foundations, Components, Desktop, Mobile, Archive) and move the Oct 17 home wireframe onto Desktop",
+    "Foundations: colors, fonts, text styles, spacing",
+    "Components: buttons, cards, nav, footer, with auto layout",
+    "Desktop: home page (finish the Oct 17 wireframe with the components)",
+    "Desktop: work overview page",
+    "Desktop: one case study page (problem → research → process → solution → outcome)",
+    "Desktop: about and contact",
+    "Mobile: adapt each screen to phone width",
+    "Tidy the file and name layers, ready for Framer",
+]
+
 # Kinds of work that count as "done for today".
 COUNTS_AS_DONE = ["coursework", "portfolio", "template"]
 
 HELP_TEXT = """Here's what I understand:
 • Tap ✅ on the morning task when it's done, or ❌ to skip. No typing needed.
+• *class: ...*: tell me where you are in class, e.g. “class: on module 4 quiz” (*class* shows it)
+• *step done*: you finished the current portfolio template step, move to the next (*step* shows it)
 • Tell me what you did, in your own words: “did 30 min of module 4”, “finished the cover page”
 • *what's next*: today's task (or a bonus one if you're done)
 • *hours this week*: your logged time since Monday
@@ -145,12 +161,58 @@ def nice_time(minutes):
 
 
 def read_focus():
-    """Read my-focus.txt (what Alexander is working on right now)."""
+    """What Alexander is working on: my-focus.txt, plus what he's told the bot lately."""
     try:
         with open("my-focus.txt", encoding="utf-8") as f:
-            return f.read()
+            focus = f.read()
     except FileNotFoundError:
-        return "(no focus file found)"
+        focus = "(no focus file found)"
+
+    class_status, class_date = storage.get_setting("class_status")
+    step = current_step()
+    recent = storage.recent_checkins()
+    lines = ["", "LATEST FROM ALEXANDER (newer than the file above, so trust this first)"]
+    if class_status:
+        lines.append(f"- Where I am in class (told the bot on {class_date}): {class_status}")
+    if step <= len(TEMPLATE_STEPS):
+        lines.append(f"- Portfolio template: CURRENT STEP {step} of {len(TEMPLATE_STEPS)}: "
+                     f"{TEMPLATE_STEPS[step - 1]}. Only suggest work on this step.")
+    else:
+        lines.append("- Portfolio template: all 9 build steps are done.")
+    lines.append("- Recent check-ins (what I actually did):")
+    lines += [f"  - {c['day']}: {c['summary']}" for c in recent] or ["  - none in the last week"]
+    return focus + "\n".join(lines)
+
+
+def current_step():
+    """The portfolio template step Alexander is on (1-9; 10 means all done)."""
+    value, _ = storage.get_setting("template_step", "1")
+    return int(value)
+
+
+def step_done(say):
+    step = current_step()
+    if step > len(TEMPLATE_STEPS):
+        say("All 9 template steps are already done 🎉")
+        return
+    finished = TEMPLATE_STEPS[step - 1]
+    storage.set_setting("template_step", step + 1)
+    storage.add_checkin(None, "template", f"Finished template step {step}: {finished}", "step done")
+    storage.set_daily_status(storage.today(), "done")
+    post_to_channel("helm", f"🧱 *Template step {step} of {len(TEMPLATE_STEPS)} done* _(via chat)_: {finished}")
+    if step < len(TEMPLATE_STEPS):
+        say(f"🧱 Step {step} done! Logged in #helm.\nNext up, *step {step + 1}*: {TEMPLATE_STEPS[step]}")
+    else:
+        say("🎉 That was the last step. The template build is DONE. Logged in #helm.")
+
+
+def show_step(say):
+    step = current_step()
+    if step > len(TEMPLATE_STEPS):
+        say("All 9 template steps are done 🎉")
+    else:
+        say(f"🧱 You're on *step {step} of {len(TEMPLATE_STEPS)}*: {TEMPLATE_STEPS[step - 1]}\n"
+            "Type “step done” when it's finished.")
 
 
 def send_morning_ping(force=False):
@@ -286,6 +348,29 @@ def respond_to_message(event, say):
     elif command in ("goal", "my goal"):
         goal = storage.current_goal()
         say(f"🎯 This week's main goal: *{goal}*" if goal else "No goal set yet. Type “goal: ...” to set one.")
+    elif command.startswith("class:"):
+        status = text.split(":", 1)[1].strip()
+        if not status:
+            say("Where are you in class? e.g. “class: on module 4 quiz”")
+        else:
+            storage.set_setting("class_status", status)
+            say(f"📚 Got it, you're at: *{status}*. I'll pick tasks from there.")
+    elif command in ("class", "my class"):
+        status, when = storage.get_setting("class_status")
+        say(f"📚 Last you told me ({when}): *{status}*" if status
+            else "You haven't told me yet. Type “class: ...”, e.g. “class: on module 4 quiz”")
+    elif command in ("step done", "step finished", "done with step"):
+        step_done(say)
+    elif command in ("step", "my step", "what step"):
+        show_step(say)
+    elif re.fullmatch(r"step \d+", command):
+        # Fix a mistake, e.g. "step 2" puts you back on step 2.
+        number = int(command.split()[1])
+        if 1 <= number <= len(TEMPLATE_STEPS):
+            storage.set_setting("template_step", number)
+            show_step(say)
+        else:
+            say(f"Steps go from 1 to {len(TEMPLATE_STEPS)}.")
     elif command == "recap preview":
         text, _ = build_recap(storage.week_start())
         say("👀 *Preview only, not posted:*\n\n" + text)

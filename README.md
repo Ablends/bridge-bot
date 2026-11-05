@@ -97,6 +97,8 @@ Keep the window open. On your PC, the bot only runs while that window is open.
 |---|---|
 | *(no typing)* tap ✅ or ❌ under the morning task | ✅ marks it done, logs a check-in and posts to #helm. ❌ skips today. |
 | *anything you did*, e.g. `did 30 min of module 4` | Logs a check-in, posts it to #helm "via chat", adds to weekly hours. |
+| `class: on module 4 quiz` | Saves where you are in class. The morning task starts from there. (`class` shows it.) |
+| `step done` | You finished the current portfolio template step. Logs it in #helm and shows the next step. (`step` shows it, `step 3` fixes a mistake.) |
 | `what's next` | Today's task, or an optional bonus if you're done. |
 | `hours this week` | Time logged since Monday, by category. |
 | `skip today` | Marks today skipped. No guilt. |
