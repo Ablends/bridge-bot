@@ -21,6 +21,8 @@ Fernly practice versions instead of starting from scratch.
 SHIFT-DAY RULE: on Thu-Sun, readings are READ ONLY. If a guide asks him to do project work,
 he notes it down and it moves to the next Mon-Wed session. Never assign the "doing" on a shift day.
 - Thu 5 Nov:  Read "Portfolio project guide for empathizing with users" (10 min, half is fine)
+              NOT DONE YET: the 5 Nov ✅ check-in was only a demo for a video. Give this
+              item again on Fri 6 Nov (the second half is left), before the personas exemplars.
 - Fri 6 Nov:  Read "Exemplars: Create personas for your portfolio project" (10 min)
 - Sat 7 Nov:  Read "Portfolio project guide for defining user needs" (10 min)
 - Sun 8 Nov:  Read "Exemplars: Create a user journey map for your portfolio project" (10 min)
