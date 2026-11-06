@@ -3,6 +3,16 @@ The bot reads this file every morning to pick my task. Update it whenever things
 Last updated: 5 Nov 2026
 Tip: you can also DM the bot "class: ..." and "step done" instead of editing this file.
 
+THURSDAY EVENING 5 NOV (after work, Alexander's own choice)
+1. Survey form: add an optional last question: "Open to a quick 15-minute follow-up chat?
+   If so, leave your email or phone number." Short answer, not required.
+2. Survey form description: change "Your answers are anonymous" to
+   "Your answers are anonymous unless you choose to leave contact details."
+3. Post the Fernly survey recruiting post on LinkedIn with the form link.
+4. Post the Bridge Bot LinkedIn post (text in drafts/linkedin-bot-post.md, attach the video).
+If check-ins don't show all four done, make the unfinished ones (in this order) the FIRST
+task on the next day, before the Course 2 plan. Each one is ~5 min, so it's fine on a shift day.
+
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
 - Shift days (Thu-Sun): one tiny ~5 min task only.
@@ -30,8 +40,6 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
               + Activity: Create a user journey map (30 min, start from Fernly journey map)
 - Tue 10 Nov: Self-reflection: Create a value proposition (30 min)
               + Read "Portfolio project guide for ideating design solutions" (10 min)
-              + ONE-OFF (5 min): post the Bridge Bot LinkedIn post. Text is ready in
-                drafts/linkedin-bot-post.md on GitHub; attach the Slack screen recording.
 - Wed 11 Nov: Activity: Create a competitive audit (1 hour, start from the Fernly desk audit)
 - Thu 12 Nov: Read "Reflect and connect with your peers" (10 min)
 - Fri 13 Nov: Skim "Course 2 Glossary" (5 min)
