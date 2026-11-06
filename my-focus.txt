@@ -30,6 +30,8 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
               + Activity: Create a user journey map (30 min, start from Fernly journey map)
 - Tue 10 Nov: Self-reflection: Create a value proposition (30 min)
               + Read "Portfolio project guide for ideating design solutions" (10 min)
+              + ONE-OFF (5 min): post the Bridge Bot LinkedIn post. Text is ready in
+                drafts/linkedin-bot-post.md on GitHub; attach the Slack screen recording.
 - Wed 11 Nov: Activity: Create a competitive audit (1 hour, start from the Fernly desk audit)
 - Thu 12 Nov: Read "Reflect and connect with your peers" (10 min)
 - Fri 13 Nov: Skim "Course 2 Glossary" (5 min)
