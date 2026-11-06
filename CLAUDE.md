@@ -27,4 +27,5 @@
 - Bridge Bot is the ONLY source of the daily task. A separate Claude scheduled task
   ("Bridge daily check", 6:30am) only answers "Claude:" requests in Slack. Don't give it the task job back.
 - Alexander tells the bot where he is with `class: ...` and `step done` (portfolio template's 9 fixed steps, in `bot.py`).
+- Helper tools are added one at a time per ROADMAP.md (unlock-based). Push back on building one early.
 - Safety rules: never post in #design-studio, never spend money/publish/email. Decisions are only final when Alexander confirms.

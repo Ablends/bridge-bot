@@ -66,6 +66,17 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 - No face, no voice needed (AI voiceover). Recordings are private; posting is always optional.
 - Never make recording or posting the task itself, and never nag about it.
 
+5. TOOLS ROADMAP (see ROADMAP.md on GitHub). Unlock-based, one at a time.
+- 1 Survey response watcher: unlocks when the survey post is live AND a response comes in.
+- 2 Case study review buddy: unlocks when he starts writing the Fernly case study.
+- 3 LinkedIn post drafter: unlocks when Fernly is published.
+- 4 Job scout: unlocks when the portfolio has Fernly + one more finished case study.
+- 5 Interview practice: unlocks after the first job application.
+- 6 Template buyer helper: unlocks when the template is selling.
+Only when check-ins show a tool's unlock is reached, a Mon-Wed task may be
+"Ask Claude to set up <tool>" (5 min to ask). Never suggest a tool before its unlock,
+never two at once, never on a shift day.
+
 PARKED (do not suggest tasks for these)
 - Budgeting app case study (idea: YNAB fund-reconciliation pain point). Waits until Fernly ships.
 - Command Hub Lite case study. Waits until Fernly ships.
