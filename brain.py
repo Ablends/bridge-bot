@@ -69,8 +69,11 @@ What Alexander is working on right now:
 
 This week's suggested main goal (lean toward it when it fits): {weekly_goal or "(none set)"}
 
-Recent suggested tasks (avoid repeating these exactly):
+Recent suggested tasks, newest first. Status "done" = finished; "skipped" or "sent" = NOT done:
 {recent_text}
+
+If the newest task above was NOT done, give that same task again today (make it smaller if
+today is a shift day). Otherwise, don't repeat recent tasks.
 
 Reply with only the task: 1-2 short sentences, starting with a verb, including a rough
 time estimate. No greeting, no list, no extra commentary."""

@@ -31,6 +31,7 @@ SLACK_APP_TOKEN = os.environ["SLACK_APP_TOKEN"]   # starts with xapp-
 MY_USER_ID = os.environ["MY_SLACK_USER_ID"]       # your Slack member ID, starts with U
 
 MORNING_PING_HOUR = 7    # 7:00am Denver time
+EVENING_CHECKIN_HOUR = 20  # 8:00pm Denver time: "did today's task happen?" (only if no check-in yet)
 SHIFT_DAYS = ["Thursday", "Friday", "Saturday", "Sunday"]
 
 # HARD RULE: the bot never posts here unless Alexander explicitly asks.
@@ -61,6 +62,7 @@ COUNTS_AS_DONE = ["coursework", "portfolio", "template"]
 
 HELP_TEXT = """Here's what I understand:
 • Tap ✅ on the morning task when it's done, or ❌ to skip. No typing needed.
+  If you haven't checked in by 8pm, I'll ask once. Anything not done is first up the next day.
 • *class: ...*: tell me where you are in class, e.g. “class: on module 4 quiz” (*class* shows it)
 • *step done*: you finished the current portfolio template step, move to the next (*step* shows it)
 • Tell me what you did, in your own words: “did 30 min of module 4”, “finished the cover page”
@@ -243,13 +245,33 @@ def send_morning_ping(force=False):
         "Want to log how long it took? Just type it, e.g. “did 30 min”."
     )
     storage.save_ping_ts(day, ping_ts)
-    # Add ✅ and ❌ under the message so checking in is one tap.
+    add_buttons(ping_ts)
+    print(f"Sent morning ping for {day}: {task}")
+
+
+def add_buttons(message_ts):
+    """Add ✅ and ❌ under a message so checking in is one tap."""
     for emoji in ("white_check_mark", "x"):
         try:
-            app.client.reactions_add(channel=dm_channel_id(), timestamp=ping_ts, name=emoji)
+            app.client.reactions_add(channel=dm_channel_id(), timestamp=message_ts, name=emoji)
         except SlackApiError as error:
             print(f"Couldn't add the {emoji} button: {error.response.get('error')}")
-    print(f"Sent morning ping for {day}: {task}")
+
+
+def send_evening_checkin():
+    """8pm: if today's task has no check-in yet, ask (one tap) whether it happened."""
+    day = storage.today()
+    daily = storage.get_daily_task(day)
+    if not daily or not daily["task"] or daily["status"] != "sent":
+        print(f"Evening check-in not needed for {day}.")
+        return
+    nudge_ts = dm_me(
+        f"🌙 Did today's task happen?\n\n👉 {daily['task']}\n\n"
+        "Tap ✅ if it's done, ❌ if not. No stress either way."
+    )
+    storage.save_nudge_ts(day, nudge_ts)
+    add_buttons(nudge_ts)
+    print(f"Sent evening check-in for {day}.")
 
 
 _dm_channel = {}
@@ -262,8 +284,9 @@ def dm_channel_id():
     return _dm_channel["id"]
 
 
-def tap_checkin(daily, reaction):
-    """Alexander tapped ✅ or ❌ on a morning ping."""
+def tap_checkin(daily, reaction, message_ts):
+    """Alexander tapped ✅ or ❌ on a morning ping or evening check-in."""
+    evening = message_ts == daily.get("nudge_ts")
     if reaction in YES_REACTIONS:
         if daily["status"] == "done":
             return  # already counted, ignore a second tap
@@ -273,12 +296,15 @@ def tap_checkin(daily, reaction):
         total, _ = storage.week_minutes()
         posted = post_to_channel("helm", f"✅ *Check-in* _(one tap)_: {summary}\nThis week so far: {nice_time(total)}")
         where = "Logged in #helm" if posted else "Saved (but not posted to #helm, see the warning above)"
-        dm_me(f"🙌 Nice, marked done. {where}.", thread_ts=daily["ping_ts"])
+        dm_me(f"🙌 Nice, marked done. {where}.", thread_ts=message_ts)
     elif reaction in NO_REACTIONS:
         if daily["status"] != "sent":
             return  # already done or skipped
         storage.set_daily_status(daily["day"], "skipped")
-        dm_me("Skipped ✅ Rest is part of the plan. See you tomorrow.", thread_ts=daily["ping_ts"])
+        if evening:
+            dm_me("No problem 👍 It'll be first up tomorrow morning.", thread_ts=message_ts)
+        else:
+            dm_me("Skipped ✅ Rest is part of the plan. It'll be first up tomorrow.", thread_ts=message_ts)
 
 
 @app.event("message")
@@ -555,7 +581,7 @@ def handle_reaction(event):
 
     daily = storage.find_daily_task_by_ping(message_ts)
     if daily:
-        tap_checkin(daily, reaction)
+        tap_checkin(daily, reaction, message_ts)
         return
 
     decision = storage.find_decision_by_message(message_ts)
@@ -659,6 +685,12 @@ def start_scheduler():
         send_morning_ping,
         CronTrigger(hour=MORNING_PING_HOUR, minute=0, timezone=storage.DENVER),
         misfire_grace_time=3 * 60 * 60,  # if the computer was asleep at 7am, still send it within 3 hours
+        coalesce=True,
+    )
+    scheduler.add_job(
+        send_evening_checkin,
+        CronTrigger(hour=EVENING_CHECKIN_HOUR, minute=0, timezone=storage.DENVER),
+        misfire_grace_time=60 * 60,
         coalesce=True,
     )
     scheduler.add_job(

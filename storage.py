@@ -92,6 +92,9 @@ def setup():
         columns = [row["name"] for row in db.execute("PRAGMA table_info(daily_tasks)")]
         if "ping_ts" not in columns:
             db.execute("ALTER TABLE daily_tasks ADD COLUMN ping_ts TEXT")
+        # Added later: the 8pm "did it happen?" message, which also takes ✅ / ❌.
+        if "nudge_ts" not in columns:
+            db.execute("ALTER TABLE daily_tasks ADD COLUMN nudge_ts TEXT")
 
 
 def get_setting(name, default=None):
@@ -125,10 +128,18 @@ def save_ping_ts(day, ping_ts):
         db.execute("UPDATE daily_tasks SET ping_ts = ? WHERE day = ?", (ping_ts, day))
 
 
-def find_daily_task_by_ping(ping_ts):
-    """Find the day whose morning ping has this Slack message ID."""
+def save_nudge_ts(day, nudge_ts):
+    """Remember the Slack ID of the evening check-in message."""
     with connect() as db:
-        row = db.execute("SELECT * FROM daily_tasks WHERE ping_ts = ?", (ping_ts,)).fetchone()
+        db.execute("UPDATE daily_tasks SET nudge_ts = ? WHERE day = ?", (nudge_ts, day))
+
+
+def find_daily_task_by_ping(ts):
+    """Find the day whose morning ping (or evening check-in) has this Slack message ID."""
+    with connect() as db:
+        row = db.execute(
+            "SELECT * FROM daily_tasks WHERE ping_ts = ? OR nudge_ts = ?", (ts, ts)
+        ).fetchone()
     return dict(row) if row else None
 
 

@@ -113,7 +113,8 @@ Keep the window open. On your PC, the bot only runs while that window is open.
 | `ping me` | Sends today's morning task right now (for testing). |
 | `help` | Lists these commands. |
 
-**Schedule (Denver time):** 7:00am daily task · 9:00am check for 3-day-old decisions ·
+**Schedule (Denver time):** 7:00am daily task · 8:00pm one-tap "did it happen?" check-in
+(only if you haven't tapped ✅/❌ yet; anything not done is first up the next morning) · 9:00am check for 3-day-old decisions ·
 Monday 7:05am weekly recap in #ship-log (last week's hours, what got done, what's stuck,
 one suggested main goal).
 
