@@ -17,6 +17,7 @@ each only after its **unlock** is reached. Dates are targets; unlocks are what m
 | 4 | **Job & opportunity scout** | Weekly top 3 junior UX/UI roles, apprenticeships, internships and portfolio reviews (incl. internal Walmart UX roles), with links. | Portfolio has Fernly + one more finished case study | Scheduled task |
 | 5 | **Interview practice partner** | Mock UX interviews: "walk me through your case study", whiteboard prompts, feedback. | First job application sent | None (chat with Claude) |
 | 6 | **Template buyer helper** | Agent that answers buyer questions about the Figma portfolio template (maybe Claude Managed Agents). | Template is selling | Bigger build, check cost first |
+| 7 | **Jarvis coordinator** | Connects the Command Hub and Bridge Bot directly, then coordinates all the helper tools as one assistant (the long-term "Jarvis" goal). | The template is selling AND 3+ helper tools are running | Bigger build, check cost first |
 
 **Parked on purpose:** Claude Duet (revisit after Fernly ships; would replace the 6:30am "Claude:" check,
 not Bridge Bot). "Daily UX tip" style bots (noise, no portfolio progress).
@@ -28,3 +29,4 @@ not Bridge Bot). "Daily UX tip" style bots (noise, no portfolio progress).
 - [ ] 4 Job & opportunity scout
 - [ ] 5 Interview practice partner
 - [ ] 6 Template buyer helper
+- [ ] 7 Jarvis coordinator

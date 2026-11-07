@@ -80,6 +80,7 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 - 4 Job scout: unlocks when the portfolio has Fernly + one more finished case study.
 - 5 Interview practice: unlocks after the first job application.
 - 6 Template buyer helper: unlocks when the template is selling.
+- 7 Jarvis coordinator (Hub + bot + tools as one assistant): unlocks when the template is selling AND 3+ tools run.
 Only when check-ins show a tool's unlock is reached, a Mon-Wed task may be
 "Ask Claude to set up <tool>" (5 min to ask). Never suggest a tool before its unlock,
 never two at once, never on a shift day.
