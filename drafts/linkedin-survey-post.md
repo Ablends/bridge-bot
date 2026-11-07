@@ -15,7 +15,7 @@ I'm working on a project about what happens when a houseplant starts struggling,
 💀 What happened the last time a plant didn't make it?
 
 If you have even one houseplant, a short survey (about 10 minutes, no expertise needed) would help a lot:
-👉 [FORM LINK]
+👉 https://forms.gle/imywAMaeBzHXZFzSA
 
 Your answers are anonymous. At the end there's an optional spot to leave your contact details if you'd be open to a quick 15-minute follow-up chat.
 
