@@ -16,7 +16,7 @@ Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
 The Course 2 plan below simply slides back by the days these take. Never skip ahead.
 
 WEEKLY RHYTHM (Option C, chosen 7 Nov; overrides older rules below)
-- Mon-Wed: TWO small blocks: (1) the current portfolio template step, 15-20 min,
+- Mon-Wed: TWO small blocks (business block = TEMPLATE, chosen 7 Nov): (1) the current portfolio template step, 15-20 min,
   "hit record first"; then (2) the next Course 2 item from the finish plan.
 - Thu-Sun (shift days): ONE ~5 min class item only.
 - Nov 30 goal is now: portfolio file through Step 6 with Fernly's Problem, Research
@@ -85,6 +85,9 @@ Only when check-ins show a tool's unlock is reached, a Mon-Wed task may be
 never two at once, never on a shift day.
 
 PARKED (do not suggest tasks for these)
+- Night Wild art store (Etsy + Printify). Parked 7 Nov: template comes first. Tablet art files may
+  be lost; low-res copies are in Google Drive > My-Art. Don't suggest store tasks until the
+  template is selling.
 - Budgeting app case study (idea: YNAB fund-reconciliation pain point). Waits until Fernly ships.
 - Command Hub Lite case study. Waits until Fernly ships.
 
