@@ -8,7 +8,7 @@ where it says [FORM LINK].
 
 **Plant people, I need your help. 🌿**
 
-I'm designing **Fernly**, an app to help people figure out what's wrong when a houseplant starts struggling, and I want to get it right by learning from real plant owners first.
+I'm working on a project about what happens when a houseplant starts struggling, and I want to learn from real plant owners.
 
 🪴 How do you notice something's wrong?
 🔍 Where do you go for answers?
