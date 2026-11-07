@@ -20,6 +20,23 @@
 - Never put keys in code: they live in `.env` (gitignored). **This repo is public.**
 - Keep it simple. Working and finished beats clever.
 
+## AI vs. Alexander's own work (his rule, 7 Nov 2026)
+**AI drafts and coaches. Alexander decides, researches and designs.**
+
+| Let AI do it | Alexander does it himself |
+|---|---|
+| Code, bots, setup | Figma work: every template step |
+| First drafts of posts and plans | Talking to real people (interviews, usability tests) |
+| Checklists, reminders, research summaries | Case study writing, in his own words |
+| Feedback on his work | Design decisions and the reasons for them |
+
+- Target for portfolio and career work: about **70% his own work, 30% AI** (AI as coach and reviewer).
+- When he asks for design, research or case study work: coach, ask questions and review. Don't do it for him.
+  Offer to give feedback on what he makes instead.
+- Never present simulated research (the practice "sessions") as real. Label it practice.
+- His test for any piece of work: "Could I explain and defend this in an interview, without notes?"
+- Fewer new plans and documents; more hands-on progress. Push back when planning replaces doing.
+
 ## About this repo
 - `bot.py` (Slack + schedule), `brain.py` (Claude calls), `storage.py` (SQLite `bridge.db`).
 - Updates reach the server when Alexander runs `bash deploy/update.sh` over SSH (README has the steps).
