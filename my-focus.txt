@@ -15,6 +15,13 @@ Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
   attach the Slack screen recording). ~5 min, on top of that day's Course 2 work.
 The Course 2 plan below simply slides back by the days these take. Never skip ahead.
 
+WEEKLY RHYTHM (Option C, chosen 7 Nov; overrides older rules below)
+- Mon-Wed: TWO small blocks: (1) the current portfolio template step, 15-20 min,
+  "hit record first"; then (2) the next Course 2 item from the finish plan.
+- Thu-Sun (shift days): ONE ~5 min class item only.
+- Nov 30 goal is now: portfolio file through Step 6 with Fernly's Problem, Research
+  and Process filled in. Full Fernly publish waits for later courses (prototype/test).
+
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
 - Shift days (Thu-Sun): one tiny ~5 min task only.
@@ -54,7 +61,7 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
   empathy maps, personas, user stories, journey maps and problem statements.
 - Fernly moves at the CLASS'S pace. Never suggest Fernly work the class hasn't reached yet.
   Class tasks are simply "the next lesson / module step".
-- Target: publish 30 Nov 2026 (a time frame; it can move with the class).
+- Nov 30: Problem, Research, Process sections done. Full publish after later courses.
 
 3. PRODUCT: FIGMA PORTFOLIO TEMPLATE
 - For job-hunting junior UX designers and bootcamp grads.
@@ -69,7 +76,7 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 5. TOOLS ROADMAP (see ROADMAP.md on GitHub). Unlock-based, one at a time.
 - 1 Survey response watcher: unlocks when the survey post is live AND a response comes in.
 - 2 Case study review buddy: unlocks when he starts writing the Fernly case study.
-- 3 LinkedIn post drafter: unlocks when Fernly is published.
+- 3 LinkedIn post drafter: unlocks when the portfolio file reaches Step 6 (target Nov 30).
 - 4 Job scout: unlocks when the portfolio has Fernly + one more finished case study.
 - 5 Interview practice: unlocks after the first job application.
 - 6 Template buyer helper: unlocks when the template is selling.
