@@ -5,12 +5,15 @@
 - New to design and new to programming: explain things in plain language, and say exactly what to click or type.
 - Works long shifts Thu–Sun (only ~5-minute tasks those days). Mon–Wed are the main work days.
 
-## Current priorities (in order)
+## Current priorities (in order, updated 7 Nov 2026)
 1. Keep this bot running (it's live on a Google Cloud e2-micro server, see README).
-2. Finish the Coursera UX course project (Course 2) before starting Course 3.
-3. Fernly case study (target: publish 30 Nov 2026).
-4. Figma portfolio template product, one step at a time (fixed 9-step plan).
-5. Budgeting app + Command Hub Lite case studies are **parked**.
+2. Weekly rhythm (Option C): Mon-Wed = one portfolio template step (15-20 min) + one Course 2 item; Thu-Sun = one ~5 min class item.
+3. Figma portfolio template = first income bet (fixed 9-step plan). Nov 30 goal: through Step 6.
+4. Coursera Course 2 done (~Nov 17), then Course 3. Fernly moves at the class's pace:
+   Problem, Research and Process by Nov 30; full publish after later courses.
+5. Parked: art store (tablet files may be lost), budgeting app + Command Hub Lite case studies, Jarvis (see ROADMAP.md).
+- The big-picture plan: "The Bridge — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
+  and the Command Hub (https://claude.ai/artifact/5bf2WRi8FG1SwNzsGgvx99). my-focus.txt drives the daily task.
 
 ## How to work with Alexander
 - Tends to start lots of things and not finish them: help finish, and push back on new scope.
