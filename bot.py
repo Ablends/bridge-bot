@@ -40,6 +40,9 @@ OFF_LIMITS_CHANNELS = ["design-studio"]
 DECISION_CHECK_HOUR = 9  # each morning at 9am, look for decisions open 3+ days
 DEFAULT_AFTER_DAYS = 3
 RECAP_DAY, RECAP_HOUR, RECAP_MINUTE = "mon", 7, 5  # Monday 7:05am, right after the morning task
+# One-tap time after ✅: these number buttons go under the "how long?" question.
+TIME_REACTIONS = {"one": 15, "two": 30, "three": 60, "four": 120}
+
 YES_REACTIONS = ["white_check_mark", "heavy_check_mark", "ballot_box_with_check", "+1", "thumbsup"]
 NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
 
@@ -67,6 +70,7 @@ HELP_TEXT = """Here's what I understand:
 • *step done*: you finished the current portfolio template step, move to the next (*step* shows it)
 • Tell me what you did, in your own words: “did 30 min of module 4”, “finished the cover page”
 • *what's next*: today's task (or a bonus one if you're done)
+• *log*: everything you did this week, with times
 • *hours this week*: your logged time since Monday
 • *skip today*: take the day off, no stress
 • *idea: ...*: tidied up and posted to #ideas
@@ -292,11 +296,20 @@ def tap_checkin(daily, reaction, message_ts):
             return  # already counted, ignore a second tap
         storage.set_daily_status(daily["day"], "done")
         summary = f"Did the daily task: {daily['task']}"
-        storage.add_checkin(None, "other", summary, "(tapped ✅)")
-        total, _ = storage.week_minutes()
-        posted = post_to_channel("helm", f"✅ *Check-in* _(one tap)_: {summary}\nThis week so far: {nice_time(total)}")
+        checkin_id = storage.add_checkin(None, guess_category(daily["task"]), summary, "(tapped ✅)")
+        posted = post_to_channel("helm", f"✅ *Check-in* _(one tap)_: {summary}")
         where = "Logged in #helm" if posted else "Saved (but not posted to #helm, see the warning above)"
-        dm_me(f"🙌 Nice, marked done. {where}.", thread_ts=message_ts)
+        ask_ts = dm_me(
+            f"🙌 Nice, marked done. {where}.\n⏱️ How long did it take? Tap one: "
+            "1️⃣ 15 min · 2️⃣ 30 min · 3️⃣ 1 hour · 4️⃣ 2 hours",
+            thread_ts=message_ts,
+        )
+        storage.save_checkin_time_ts(checkin_id, ask_ts)
+        for emoji in TIME_REACTIONS:
+            try:
+                app.client.reactions_add(channel=dm_channel_id(), timestamp=ask_ts, name=emoji)
+            except SlackApiError as error:
+                print(f"Couldn't add the {emoji} button: {error.response.get('error')}")
     elif reaction in NO_REACTIONS:
         if daily["status"] != "sent":
             return  # already done or skipped
@@ -348,6 +361,8 @@ def respond_to_message(event, say):
         send_morning_ping(force=True)
     elif command in ("whats next", "what next", "next"):
         whats_next(say)
+    elif command in ("log", "my log", "what did i do", "this week", "week log"):
+        show_log(say)
     elif command in ("hours this week", "hours", "my hours"):
         hours_this_week(say)
     elif command in ("skip today", "skip"):
@@ -475,6 +490,34 @@ def hours_this_week(say):
     say("\n".join(lines))
 
 
+def guess_category(task):
+    """Best guess of a daily task's category from its words."""
+    t = (task or "").lower()
+    if "template" in t or "figma" in t or "step " in t:
+        return "template"
+    if any(w in t for w in ("course", "module", "coursera", "read", "activity", "persona", "journey", "audit", "lesson")):
+        return "coursework"
+    if any(w in t for w in ("gig", "flyer", "client")):
+        return "gig"
+    return "other"
+
+
+def show_log(say):
+    """Everything logged since Monday: day, what, category, time."""
+    checkins = storage.week_checkins()
+    if not checkins:
+        say("Nothing logged yet this week (weeks start Monday). Tap ✅ on a task or tell me what you did!")
+        return
+    lines = ["📒 *This week*"]
+    for c in checkins:
+        day = date.fromisoformat(c["day"]).strftime("%a")
+        time_part = f" · {nice_time(c['minutes'])}" if c["minutes"] else " · no time"
+        lines.append(f"• {day}: {c['summary']} _({c['category']})_{time_part}")
+    total, _ = storage.week_minutes()
+    lines.append(f"*Total: {nice_time(total)}* across {len(checkins)} check-in(s)")
+    say("\n".join(lines))
+
+
 def skip_today(say):
     today = storage.get_daily_task(storage.today())
     if today and today["status"] == "done":
@@ -582,6 +625,15 @@ def handle_reaction(event):
     daily = storage.find_daily_task_by_ping(message_ts)
     if daily:
         tap_checkin(daily, reaction, message_ts)
+        return
+
+    checkin = storage.find_checkin_by_time_ts(message_ts)
+    if checkin:
+        if reaction in TIME_REACTIONS:
+            minutes = TIME_REACTIONS[reaction]
+            storage.set_checkin_minutes(checkin["id"], minutes)
+            total, _ = storage.week_minutes()
+            dm_me(f"⏱️ Logged {nice_time(minutes)}. This week: *{nice_time(total)}*.", thread_ts=message_ts)
         return
 
     decision = storage.find_decision_by_message(message_ts)

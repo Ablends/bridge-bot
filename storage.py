@@ -95,6 +95,10 @@ def setup():
         # Added later: the 8pm "did it happen?" message, which also takes ✅ / ❌.
         if "nudge_ts" not in columns:
             db.execute("ALTER TABLE daily_tasks ADD COLUMN nudge_ts TEXT")
+        # Added later: the "how long?" question after a ✅ tap, so a time tap can find its check-in.
+        checkin_columns = [row["name"] for row in db.execute("PRAGMA table_info(checkins)")]
+        if "time_ts" not in checkin_columns:
+            db.execute("ALTER TABLE checkins ADD COLUMN time_ts TEXT")
 
 
 def get_setting(name, default=None):
@@ -176,13 +180,32 @@ def set_daily_status(day, status):
 
 
 def add_checkin(minutes, category, summary, original):
+    """Save a check-in. Returns its id."""
     now = now_denver()
     with connect() as db:
-        db.execute(
+        cur = db.execute(
             "INSERT INTO checkins (logged_at, day, minutes, category, summary, original) "
             "VALUES (?, ?, ?, ?, ?, ?)",
             (now.isoformat(timespec="minutes"), now.date().isoformat(), minutes, category, summary, original),
         )
+        return cur.lastrowid
+
+
+def save_checkin_time_ts(checkin_id, ts):
+    """Remember which Slack message asks "how long?" for this check-in."""
+    with connect() as db:
+        db.execute("UPDATE checkins SET time_ts = ? WHERE id = ?", (ts, checkin_id))
+
+
+def find_checkin_by_time_ts(ts):
+    with connect() as db:
+        row = db.execute("SELECT * FROM checkins WHERE time_ts = ?", (ts,)).fetchone()
+    return dict(row) if row else None
+
+
+def set_checkin_minutes(checkin_id, minutes):
+    with connect() as db:
+        db.execute("UPDATE checkins SET minutes = ? WHERE id = ?", (minutes, checkin_id))
 
 
 def week_start(day=None):

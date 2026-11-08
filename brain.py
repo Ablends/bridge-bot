@@ -87,7 +87,7 @@ class MessageMeaning(BaseModel):
     """What Claude decides your DM means. Claude must fill in exactly these fields."""
     is_checkin: bool                 # did you report doing some work?
     minutes: Optional[int]           # how long, ONLY if you said (e.g. "30 min", "2 hours")
-    category: Literal["coursework", "portfolio", "template", "other"]
+    category: Literal["coursework", "portfolio", "template", "gig", "other"]
     summary: str                     # short tidy version for the #helm log
     reply: str                       # a short friendly reply to you
 
@@ -110,7 +110,8 @@ Fill in:
 - minutes: how long they worked, converted to minutes, ONLY if they stated a time. Otherwise null.
   Never guess a time.
 - category: "coursework" (Coursera course), "portfolio" (case studies: Fernly, budgeting app,
-  Command Hub Lite), "template" (the Figma portfolio template product), or "other".
+  Command Hub Lite), "template" (the Figma portfolio template product), "gig" (a paid design job
+  for a client: flyers, social posts, menus), or "other" (planning, business admin, anything else).
 - summary: for a check-in, a short past-tense log line like "Did 30 min of Coursera module 4".
   Otherwise an empty string.
 - reply: 1 short friendly sentence back to Alexander. For a check-in, a quick, genuine
