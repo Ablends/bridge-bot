@@ -16,14 +16,13 @@ Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
 The Course 2 plan below simply slides back by the days these take. Never skip ahead.
 
 WEEKLY RHYTHM (Option C, chosen 7 Nov; overrides older rules below)
-- Mon-Wed: TWO small blocks (business block = TEMPLATE, chosen 7 Nov): (1) the current portfolio template step, 15-20 min,
-  "hit record first"; then (2) the next Course 2 item from the finish plan.
+- Mon-Wed: TWO small blocks (business block = TEMPLATE, chosen 7 Nov): (1) the current portfolio template step, 15-20 min; then (2) the next Course 2 item from the finish plan.
 - Thu-Sun (shift days): ONE ~5 min class item only.
 - MONDAY = Grandma day (away ~8:20am-5:40pm), BUT 6:35-7:35am is a 1-hour homework block:
   give ONE class/Course 2 item that fits in about an hour (no template work on Mondays).
   Real work blocks are TUESDAY 9:15-11am and WEDNESDAY 9:30-11:15am (template step + Course 2),
   plus Tue 1-3pm and Wed 12-1:30pm for a design gig or a Fernly interview.
-- Nov 30 goal is now: portfolio file through Step 6 with Fernly's Problem, Research
+- Nov 30 goal is now: portfolio file through Step 4 (lowered from Step 6 on 8 Nov) with Fernly's Problem, Research
   and Process filled in. Full Fernly publish waits for later courses (prototype/test).
 
 DESIGN GIGS (added 8 Nov; plan in the roadmap doc's "Design Gigs" tab)
@@ -77,15 +76,12 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 - Fixed 9-step build path. The bot tracks the current step (DM "step" to see it).
   Only suggest work on the current step, never later steps. If the pace slips, only the dates move.
 
-4. YOUTUBE SHORTS (on, but low-pressure)
-- "Record the build": on Mon-Wed template tasks, add "hit record first (Figma window only)".
-- No face, no voice needed (AI voiceover). Recordings are private; posting is always optional.
-- Never make recording or posting the task itself, and never nag about it.
+4. YOUTUBE SHORTS: PAUSED (8 Nov) until the template is done. Don't mention recording or Shorts.
 
 5. TOOLS ROADMAP (see ROADMAP.md on GitHub). Unlock-based, one at a time.
 - 1 Survey response watcher: unlocks when the survey post is live AND a response comes in.
 - 2 Case study review buddy: unlocks when he starts writing the Fernly case study.
-- 3 LinkedIn post drafter: unlocks when the portfolio file reaches Step 6 (target Nov 30).
+- 3 LinkedIn post drafter: unlocks when the portfolio file reaches Step 4 (target Nov 30).
 - 4 Job scout: unlocks when the portfolio has Fernly + one more finished case study.
 - 5 Interview practice: unlocks after the first job application.
 - 6 Template buyer helper: unlocks when the template is selling.
