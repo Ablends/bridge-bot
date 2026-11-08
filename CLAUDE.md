@@ -51,5 +51,9 @@
 - Alexander tells the bot where he is with `class: ...` and `step done` (portfolio template's 9 fixed steps, in `bot.py`).
 - Logging: everything goes in the bot (`log` shows the week). After a work session with Claude, if Alexander asks,
   DM the bot from his Slack account: "did: <what we did> · <time>" so it lands in his log.
+- Timestamps (his request, 8 Nov): start every reply with the current Denver time, e.g. "🕐 Sun Nov 8, 2:45pm".
+  Get it by running `TZ=America/Denver date "+%a %b %-d, %-I:%M%p"` (never guess the time).
+  When he wraps up a session, add up the time from the first to the last timestamp, skipping any gap
+  over 30 minutes as a break, and offer to log it to the bot as a check-in.
 - Helper tools are added one at a time per ROADMAP.md (unlock-based). Push back on building one early.
 - Safety rules: never post in #design-studio, never spend money/publish/email. Decisions are only final when Alexander confirms.
