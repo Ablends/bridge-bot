@@ -7,7 +7,9 @@
 
 ## Current priorities (in order, updated 7 Nov 2026)
 1. Keep this bot running (it's live on a Google Cloud e2-micro server, see README).
-2. Weekly rhythm (Option C): Mon-Wed = one portfolio template step (15-20 min) + one Course 2 item; Thu-Sun = one ~5 min class item.
+2. Weekly rhythm: Mon 6:35-7:35am Course 2 homework (then Grandma's all day); Tue/Wed mornings = template step + Course 2;
+   Tue 1-3pm / Wed 12-1:30pm = design gig or Fernly interview; Thu-Sun shifts = one ~5 min class item.
+   Side income: small design gigs (one at a time), see the roadmap doc's Design Gigs tab.
 3. Figma portfolio template = first income bet (fixed 9-step plan). Nov 30 goal: through Step 6.
 4. Coursera Course 2 done (~Nov 17), then Course 3. Fernly moves at the class's pace:
    Problem, Research and Process by Nov 30; full publish after later courses.

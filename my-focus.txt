@@ -5,11 +5,11 @@ Tip: you can also DM the bot "class: ..." and "step done" instead of editing thi
 
 LEFTOVERS FROM THURSDAY 5 NOV (he was tired; server update IS done)
 Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
-- Fri 6 Nov: Survey form edits (~5 min): add the optional last question "Open to a quick
+- DONE 6 Nov: Survey form edits (~5 min): add the optional last question "Open to a quick
   15-minute follow-up chat? If so, leave your email or phone number." (short answer, not
   required) AND change the description to "Your answers are anonymous unless you choose to
   leave contact details." Form: HOUSEPLANT CARE SURVEY in Google Drive.
-- Sat 7 Nov: Post the Fernly survey recruiting post on LinkedIn with the form link
+- DONE 7 Nov: Post the Fernly survey recruiting post on LinkedIn with the form link
   (Send → link tab → Copy). ~5 min.
 - Tue 10 Nov: also post the Bridge Bot LinkedIn post (text in drafts/linkedin-bot-post.md,
   attach the Slack screen recording). ~5 min, on top of that day's Course 2 work.
