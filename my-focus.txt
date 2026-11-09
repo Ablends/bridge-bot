@@ -30,10 +30,13 @@ DESIGN GIGS (added 8 Nov; plan in the roadmap doc's "Design Gigs" tab)
   offering a friends-rate flyer/social post ($25-50). Message is in the roadmap doc.
 - If someone says yes, the gig becomes a Mon-Wed task (one gig at a time), alongside the template step.
 
-TIKTOK SURVEY POST (later; interviews come first)
-- Wed 11 Nov, 12-1:30pm block, ONLY if there's no interview or gig that day: make the TikTok photo
-  carousel for the survey (~15 min). Everything is in drafts/tiktok-survey-post.md on GitHub.
-- If an interview or gig takes that block, move this to the next free Tue/Wed afternoon.
+SURVEY RECRUITING PUSH (moved up 9 Nov: interviews need volunteers first)
+- Tue 10 Nov, 1-3pm block: post the survey in 3 more places (~45 min total):
+  1) TikTok photo carousel (drafts/tiktok-survey-post.md)
+  2) Instagram Story with a link sticker (new graphic)
+  3) Text/DM 5 friends or family who have plants, asking them to take it and share it
+- Optional later: r/SampleSize on Reddit (allows surveys), local plant Facebook groups (ask the admin first).
+- Each time a response with contact details arrives: DM the bot "got a survey response".
 
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
