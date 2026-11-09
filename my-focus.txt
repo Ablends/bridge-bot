@@ -30,6 +30,11 @@ DESIGN GIGS (added 8 Nov; plan in the roadmap doc's "Design Gigs" tab)
   offering a friends-rate flyer/social post ($25-50). Message is in the roadmap doc.
 - If someone says yes, the gig becomes a Mon-Wed task (one gig at a time), alongside the template step.
 
+TIKTOK SURVEY POST (later; interviews come first)
+- Wed 11 Nov, 12-1:30pm block, ONLY if there's no interview or gig that day: make the TikTok photo
+  carousel for the survey (~15 min). Everything is in drafts/tiktok-survey-post.md on GitHub.
+- If an interview or gig takes that block, move this to the next free Tue/Wed afternoon.
+
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
 - Shift days (Thu-Sun): one tiny ~5 min task only.

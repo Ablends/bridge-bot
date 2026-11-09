@@ -1,7 +1,8 @@
 # Notes for Claude (read before helping)
 
 ## Who this is for
-- Alexander, who runs a small design-led product business from a Slack workspace called **The Bridge**.
+- Alexander, who runs a small design-led product business called **Orbital Roots** (renamed from "The Bridge" on 9 Nov 2026;
+  the Slack workspace may still show the old name). Public-facing work goes under his own name.
 - New to design and new to programming: explain things in plain language, and say exactly what to click or type.
 - Works long shifts Thu–Sun (only ~5-minute tasks those days). Mon–Wed are the main work days.
 
