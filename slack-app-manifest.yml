@@ -1,6 +1,6 @@
 display_information:
-  name: Bridge Bot
-  description: Alexander's helper for The Bridge
+  name: Orbital Bot
+  description: Alexander's helper for Orbital Roots
   background_color: "#1d3557"
 features:
   app_home:
@@ -8,7 +8,7 @@ features:
     messages_tab_enabled: true
     messages_tab_read_only_enabled: false
   bot_user:
-    display_name: Bridge Bot
+    display_name: Orbital Bot
     always_online: true
 oauth_config:
   scopes:

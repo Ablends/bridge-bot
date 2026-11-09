@@ -1,4 +1,4 @@
-# Bridge Bot
+# Orbital Bot
 
 A Slack helper for **The Bridge**. It DMs Alexander one task a day, logs check-ins,
 tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Alexander approves.
@@ -60,7 +60,7 @@ Only if the server is off. Never run both at once.
 py bot.py
 ```
 
-It's working when you see `Bolt app is running!` and Slack DMs you "Bridge Bot is online ✅".
+It's working when you see `Bolt app is running!` and Slack DMs you "Orbital Bot is online ✅".
 Keep the window open. On your PC, the bot only runs while that window is open.
 
 ## If the bot stops or isn't answering
@@ -124,7 +124,7 @@ suggested default in your DMs. It only becomes final if **you** react ✅ (❌ k
 or reply in the thread with a different answer). The bot never decides on its own.
 
 **Channels:** the bot must be invited to a channel before it can post there.
-In #helm, #ideas and #ship-log type `/invite @Bridge Bot`.
+In #helm, #ideas and #ship-log type `/invite @Orbital Bot`.
 Never invite it to #design-studio. The code also blocks posting there.
 
 ## First-time setup (already done, here for reference)

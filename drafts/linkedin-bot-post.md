@@ -1,4 +1,4 @@
-# LinkedIn post: Bridge Bot (ready to post)
+# LinkedIn post: Orbital Bot (ready to post)
 
 Attach: the Slack screen recording (trim the first few seconds of the help list).
 
@@ -8,7 +8,7 @@ Attach: the Slack screen recording (trim the first few seconds of the help list)
 
 I'm a UX/UI design student, and I have a habit of starting projects and not finishing them. So I built a tool to help me finish things.
 
-**Bridge Bot** is a Slack bot that keeps me accountable:
+**Orbital Bot** is a Slack bot that keeps me accountable:
 ☀️ Every morning it sends me ONE task, tiny on my work days and bigger on my free days
 ✅ One tap to check in when it's done, no typing
 📦 Every Monday it posts a recap of what I got done

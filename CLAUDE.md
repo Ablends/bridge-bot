@@ -15,7 +15,7 @@
 4. Coursera Course 2 done (~Nov 17), then Course 3. Fernly moves at the class's pace:
    Problem, Research and Process by Nov 30; full publish after later courses.
 5. Parked: art store (tablet files may be lost), budgeting app + Command Hub Lite case studies, Jarvis (see ROADMAP.md).
-- The big-picture plan: "The Bridge — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
+- The big-picture plan: "Orbital Roots — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
   and the Command Hub (https://claude.ai/artifact/5bf2WRi8FG1SwNzsGgvx99). my-focus.txt drives the daily task.
 
 ## How to work with Alexander
@@ -47,7 +47,7 @@
 - `bot.py` (Slack + schedule), `brain.py` (Claude calls), `storage.py` (SQLite `bridge.db`).
 - Updates reach the server when Alexander runs `bash deploy/update.sh` over SSH (README has the steps).
 - The server also runs `git pull` daily at 6:45am Denver time, but that does NOT restart the bot.
-- Bridge Bot is the ONLY source of the daily task. A separate Claude scheduled task
+- Orbital Bot is the ONLY source of the daily task. A separate Claude scheduled task
   ("Bridge daily check", 6:30am) only answers "Claude:" requests in Slack. Don't give it the task job back.
 - Alexander tells the bot where he is with `class: ...` and `step done` (portfolio template's 9 fixed steps, in `bot.py`).
 - Logging: everything goes in the bot (`log` shows the week). After a work session with Claude, if Alexander asks,

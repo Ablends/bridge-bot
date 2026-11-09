@@ -1,4 +1,4 @@
-# Bridge Bot — Alexander's helper for The Bridge Slack workspace.
+# Orbital Bot — Alexander's helper for The Bridge Slack workspace.
 #
 # STEP 1: connects to Slack and can DM you.
 # STEP 2: every day at 7:00am Denver time, DMs you ONE task for the day.
@@ -124,7 +124,7 @@ def post_to_channel(channel_name, text, alexander_asked=False):
         return False
     if not channel_id:
         dm_me(f"⚠️ I couldn't find #{channel_name}. Does it exist, and am I invited? "
-              f"(In #{channel_name}, type: /invite @Bridge Bot)")
+              f"(In #{channel_name}, type: /invite @Orbital Bot)")
         return False
     try:
         app.client.chat_postMessage(channel=channel_id, text=text)
@@ -132,7 +132,7 @@ def post_to_channel(channel_name, text, alexander_asked=False):
     except SlackApiError as error:
         if error.response.get("error") == "not_in_channel":
             dm_me(f"⚠️ I'm not in #{channel_name} yet, so I couldn't post there. "
-                  f"Go to #{channel_name} and type: /invite @Bridge Bot")
+                  f"Go to #{channel_name} and type: /invite @Orbital Bot")
         else:
             dm_me(f"⚠️ Couldn't post in #{channel_name}: {error.response.get('error')}")
         return False
@@ -762,9 +762,9 @@ def start_scheduler():
 
 
 if __name__ == "__main__":
-    print("Starting Bridge Bot...")
+    print("Starting Orbital Bot...")
     storage.setup()
     start_scheduler()
-    dm_me("Hi Alexander! Bridge Bot is online. ✅ Type “help” to see what I can do.")
-    print("Bridge Bot is running. Leave this window open. Press Ctrl+C to stop.")
+    dm_me("Hi Alexander! Orbital Bot is online. ✅ Type “help” to see what I can do.")
+    print("Orbital Bot is running. Leave this window open. Press Ctrl+C to stop.")
     SocketModeHandler(app, SLACK_APP_TOKEN).start()

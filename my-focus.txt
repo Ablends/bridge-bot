@@ -11,7 +11,7 @@ Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
   leave contact details." Form: HOUSEPLANT CARE SURVEY in Google Drive.
 - DONE 7 Nov: Post the Fernly survey recruiting post on LinkedIn with the form link
   (Send → link tab → Copy). ~5 min.
-- Tue 10 Nov: also post the Bridge Bot LinkedIn post (text in drafts/linkedin-bot-post.md,
+- Tue 10 Nov: also post the Orbital Bot LinkedIn post (text in drafts/linkedin-bot-post.md,
   attach the Slack screen recording). ~5 min, on top of that day's Course 2 work.
 The Course 2 plan below simply slides back by the days these take. Never skip ahead.
 
@@ -103,4 +103,4 @@ PARKED (do not suggest tasks for these)
 - Command Hub Lite case study. Waits until Fernly ships.
 
 DONE
-- Bridge Bot is built and running. Don't suggest bot work.
+- Orbital Bot is built and running. Don't suggest bot work.
