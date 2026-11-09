@@ -18,6 +18,18 @@
 - The big-picture plan: "Orbital Roots — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
   and the Command Hub (https://claude.ai/artifact/5bf2WRi8FG1SwNzsGgvx99). my-focus.txt drives the daily task.
 
+## Where we left off (handoff, 9 Nov 2026)
+- Done: bot upgrades live on the server (one-tap ✅/❌, 8pm check-in, `log`, time buttons, gig category, class:/step done).
+  Survey posted on LinkedIn (7 Nov). Calendar matches the weekly rhythm. Roadmap doc has 8 tabs + a timeline.
+- Not yet done by Alexander: Slack app rename to "Orbital Bot" (api.slack.com) + one server update for the new name;
+  Slack workspace rename to "Orbital Roots"; Google Cloud bill check; reply + DM to the plant-app person who
+  commented on the LinkedIn survey post (drafts were given in chat; keep Fernly/app ideas private).
+- Next up: Tue 10 Nov 9:15am template Step 1; Tue 1-3pm survey recruiting push (TikTok, Instagram Story, texts to 5
+  friends); Tue: Orbital Bot LinkedIn post (drafts/linkedin-bot-post.md); Thu: message 3 people about design gigs.
+- Drafts: drafts/ (LinkedIn bot post, LinkedIn survey post with link, TikTok survey post).
+- Docs: Houseplant Follow-up Interview (15 min) https://claude.ai/artifact/GJZdEprt7jeesouKenBUqg
+- Waiting on: survey responses (unlocks the survey response watcher, ROADMAP.md #1); team lead role decision.
+
 ## How to work with Alexander
 - Tends to start lots of things and not finish them: help finish, and push back on new scope.
 - Checking in must be as easy as possible (one tap, no typing).
