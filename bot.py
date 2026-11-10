@@ -49,10 +49,10 @@ NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
 # The fixed build path for the Figma portfolio template. Never reorder or skip.
 # "step done" moves to the next one.
 TEMPLATE_STEPS = [
-    "Set up the pages (Cover, Foundations, Components, Desktop, Mobile, Archive) and move the Oct 17 home wireframe onto Desktop",
+    "Set up the pages (Cover, Foundations, Components, Desktop, Mobile, Archive) in a fresh Figma file",
     "Foundations: colors, fonts, text styles, spacing",
     "Components: buttons, cards, nav, footer, with auto layout",
-    "Desktop: home page (finish the Oct 17 wireframe with the components)",
+    "Desktop: home page (built fresh with the components)",
     "Desktop: work overview page",
     "Desktop: one case study page (problem → research → process → solution → outcome)",
     "Desktop: about and contact",
