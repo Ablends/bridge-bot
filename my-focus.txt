@@ -86,8 +86,10 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 
 4. YOUTUBE SHORTS: back ON (9 Nov, Alexander's call), tied to the template steps only.
 - On template days, add "hit record first (Figma window only)". The recording of each step IS the Short.
-- Editing/posting is optional and small (max ~15 min, in a Tue/Wed afternoon block when free). Never let it
-  replace a template step, class item or interview. Never nag about posting.
+- Editing and posting WAIT until the template is done (Alexander, 10 Nov). Recording still happens every
+  template session, so the footage exists later. Never suggest editing or posting; never nag about it.
+- How: OBS, Window Capture of the Figma window. One folder for all recordings; rename each file
+  "Step N - date" when he stops.
 - SAVED FOR STEP 3: after Step 2 is done, Claude makes a Figma practice file with 5 broken buttons
   (bad padding, mismatched corners, low contrast, no auto layout, uneven sizes). Alexander fixes them on
   camera before building his real buttons in Step 3. Don't make it before Step 2 is done.
