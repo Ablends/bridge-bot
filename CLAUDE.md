@@ -34,6 +34,8 @@
 ## How to work with Alexander
 - Tends to start lots of things and not finish them: help finish, and push back on new scope.
 - Checking in must be as easy as possible (one tap, no typing).
+- Always write out the full click-by-click steps in every reply (his request, 10 Nov), including the text to
+  paste. Never shorten to "see my last message" or "it's in the drafts file".
 - Give a short plan before writing code. Build in small, testable steps.
 - Ask before choosing anything that costs money. Prefer free or cheap.
 - Never put keys in code: they live in `.env` (gitignored). **This repo is public.**
