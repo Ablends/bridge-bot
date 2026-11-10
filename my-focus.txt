@@ -1,6 +1,6 @@
 What I'm working on right now.
 The bot reads this file every morning to pick my task. Update it whenever things change.
-Last updated: 5 Nov 2026
+Last updated: 10 Nov 2026
 Tip: you can also DM the bot "class: ..." and "step done" instead of editing this file.
 
 LEFTOVERS FROM THURSDAY 5 NOV (he was tired; server update IS done)
@@ -61,15 +61,32 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 - Fri 6 Nov:  Read "Exemplars: Create personas for your portfolio project" (10 min)
 - Sat 7 Nov:  Read "Portfolio project guide for defining user needs" (10 min)
 - Sun 8 Nov:  Read "Exemplars: Create a user journey map for your portfolio project" (10 min)
-- Mon 9 Nov:  Activity: Create personas (30 min, start from Fernly personas)
-              + Activity: Create a user journey map (30 min, start from Fernly journey map)
-- Tue 10 Nov: Self-reflection: Create a value proposition (30 min)
-              + Read "Portfolio project guide for ideating design solutions" (10 min)
-- Wed 11 Nov: Activity: Create a competitive audit (1 hour, start from the Fernly desk audit)
-- Thu 12 Nov: Read "Reflect and connect with your peers" (10 min)
-- Fri 13 Nov: Skim "Course 2 Glossary" (5 min)
-- Sat 14 Nov: Watch "Congratulations on completing Course 2" (1 min video)
-- Sun 15 Nov: Read "Start the next course" (15 min, half is fine). Course 2 DONE 🎉
+PAUSED HERE (Alexander, 10 Nov): the rest of Course 2 waits for REAL research. The class checklist
+says personas, user stories and journey maps must be based on real interviews, and his current ones are
+practice versions. Do NOT assign the value proposition or anything after it until the list below is done.
+
+REAL RESEARCH FIRST (in this order; no dates, it moves as fast as people reply; never skip ahead)
+ R1. Recruit: ask plant owners for a 15-minute chat by phone or video (not in person) and share the survey.
+     Start with the 5 friends/family texts. Goal: 3 to 5 people say yes.
+ R2. Do the chats (Tue 1-3pm / Wed 12-1:30pm blocks), using his interview script. One per block is fine.
+ R3. One empathy map per chat (and per detailed survey response).
+ R4. Group the people into user groups.
+ R5. One persona per group, each with a one-sentence user story (redo the practice ones from real data).
+ R6. One journey map per persona.
+ R7. Bias check: reread stories, personas and maps; everything must trace back to a real answer.
+Shift days (Thu-Sun): ONE ~5 min item only, e.g. "text one more person to ask for a 15-minute chat"
+or "read one survey response and note 3 things". Never a chat or a map on a shift day.
+OPEN QUESTION (not decided yet): Alexander is weighing whether a better survey could replace the chats.
+Until he decides, keep recruiting for both.
+
+THEN RESUME COURSE 2 (same order as before, dates to be set when R7 is done)
+- Self-reflection: Create a value proposition (30 min)
+- Read "Portfolio project guide for ideating design solutions" (10 min)
+- Activity: Create a competitive audit (1 hour, start from the Fernly desk audit)
+- Read "Reflect and connect with your peers" (10 min)
+- Skim "Course 2 Glossary" (5 min)
+- Watch "Congratulations on completing Course 2" (1 min video)
+- Read "Start the next course" (15 min, half is fine). Course 2 DONE
 
 2. PORTFOLIO CASE STUDY: FERNLY
 - Houseplant diagnosis app + responsive site. Most of it gets filled in by the coursework.

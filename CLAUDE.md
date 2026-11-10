@@ -12,7 +12,8 @@
    Tue 1-3pm / Wed 12-1:30pm = design gig or Fernly interview; Thu-Sun shifts = one ~5 min class item.
    Side income: small design gigs (one at a time), see the roadmap doc's Design Gigs tab.
 3. Figma portfolio template = first income bet (fixed 9-step plan). Nov 30 goal: through Step 4 (realistic pace). YouTube Shorts (updated 10 Nov): record every template session in OBS (Figma window only); editing and posting wait until the template is done. Broken-buttons practice file saved for Step 3.
-4. Coursera Course 2 done (~Nov 17), then Course 3. Fernly moves at the class's pace:
+4. Coursera Course 2: PAUSED at the value proposition (10 Nov) until real research is done (recruit, 15-min chats,
+   empathy maps, personas, journey maps; see my-focus.txt). The ~Nov 17 finish date will slip. Then Course 3. Fernly moves at the class's pace:
    Problem, Research and Process by Nov 30; full publish after later courses.
 5. Parked: art store (tablet files may be lost), budgeting app + Command Hub Lite case studies, Jarvis (see ROADMAP.md).
 - The big-picture plan: "Orbital Roots — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
