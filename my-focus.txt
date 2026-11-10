@@ -84,7 +84,13 @@ he notes it down and it moves to the next Mon-Wed session. Never assign the "doi
 - Fixed 9-step build path. The bot tracks the current step (DM "step" to see it).
   Only suggest work on the current step, never later steps. If the pace slips, only the dates move.
 
-4. YOUTUBE SHORTS: PAUSED (8 Nov) until the template is done. Don't mention recording or Shorts.
+4. YOUTUBE SHORTS: back ON (9 Nov, Alexander's call), tied to the template steps only.
+- On template days, add "hit record first (Figma window only)". The recording of each step IS the Short.
+- Editing/posting is optional and small (max ~15 min, in a Tue/Wed afternoon block when free). Never let it
+  replace a template step, class item or interview. Never nag about posting.
+- SAVED FOR STEP 3: after Step 2 is done, Claude makes a Figma practice file with 5 broken buttons
+  (bad padding, mismatched corners, low contrast, no auto layout, uneven sizes). Alexander fixes them on
+  camera before building his real buttons in Step 3. Don't make it before Step 2 is done.
 
 5. TOOLS ROADMAP (see ROADMAP.md on GitHub). Unlock-based, one at a time.
 - 1 Survey response watcher: unlocks when the survey post is live AND a response comes in.

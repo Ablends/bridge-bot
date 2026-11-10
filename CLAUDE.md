@@ -11,7 +11,7 @@
 2. Weekly rhythm: Mon 6:35-7:35am Course 2 homework (then Grandma's all day); Tue/Wed mornings = template step + Course 2;
    Tue 1-3pm / Wed 12-1:30pm = design gig or Fernly interview; Thu-Sun shifts = one ~5 min class item.
    Side income: small design gigs (one at a time), see the roadmap doc's Design Gigs tab.
-3. Figma portfolio template = first income bet (fixed 9-step plan). Nov 30 goal: through Step 4 (realistic pace). YouTube Shorts paused until the template is done.
+3. Figma portfolio template = first income bet (fixed 9-step plan). Nov 30 goal: through Step 4 (realistic pace). YouTube Shorts back on (9 Nov): record each template step; editing optional, never replaces work. Broken-buttons practice file saved for Step 3.
 4. Coursera Course 2 done (~Nov 17), then Course 3. Fernly moves at the class's pace:
    Problem, Research and Process by Nov 30; full publish after later courses.
 5. Parked: art store (tablet files may be lost), budgeting app + Command Hub Lite case studies, Jarvis (see ROADMAP.md).
