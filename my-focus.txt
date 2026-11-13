@@ -8,11 +8,12 @@ He needs extra income this month. He CAN'T add extra work shifts (school, kids, 
 for his grandma), so never suggest more shifts.
 
 THIS WEEK, ONLY THREE THINGS MATTER (give these as the daily task, in this order, until done):
-1. Thu 12 Nov, tonight: photograph the model stickers on his old hardware (flight sim controllers,
+1. DONE 12 Nov: photograph the model stickers on his old hardware (flight sim controllers,
    graphics card, RAM) so it can be priced and listed on eBay and Craigslist. No Facebook.
 2. Fri 13 Nov, on his work break around 2pm: phone Red Rooster Cafe (406-839-2884) to offer a
    $100 website audit and mention he also does flyers. Then send the written pitch.
-3. When he can: check his bills for payment extensions (a good shift-day item for Sat or Sun).
+3. Sat 14 Nov (shift-day item): check his bills for payment extensions. This is the one that helps with
+   the nearest deadlines, because nothing sold online pays out within a few days.
 Nothing else is a task this week except the Monday homework hour and any Fernly interview.
 
 TEAM LEAD ROLE (12 Nov): he's going for it.
@@ -46,12 +47,28 @@ LOCAL BUSINESS GIGS (12 Nov; replaces the 8 Nov "text 3 people" friends-rate pla
 - The offer: a $100 website audit for a local business, plus flyers and posters.
 - Fri 13 Nov ~2pm (work break): phone Red Rooster Cafe (406-839-2884) with the audit offer, mention
   flyers, then send the written pitch.
-- Tue 17 Nov: make 2-3 sample flyers in Canva (save them in a Canva folder called "Samples").
+- Tue 17 Nov: make 2-3 sample flyers in Canva (save them in a Canva folder called "Samples"). Do this
+  while the Huion reset runs (see SELLING OLD HARDWARE); selling comes first that morning.
 - Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person with the audit + flyer offer.
 - Set up a free Behance profile as a temporary portfolio for the samples (until the Framer site is live).
   Do this after the samples exist, in a Tue/Wed block.
 - If a business says yes, that job becomes the Tue/Wed task (one job at a time) until it's delivered.
-- Selling old hardware: eBay and Craigslist only. No Facebook.
+- Selling old hardware: eBay and Craigslist only. No Facebook. Plan is in SELLING OLD HARDWARE below.
+
+SELLING OLD HARDWARE (added 12 Nov; money first, so this goes AHEAD of the sample flyers)
+Items, biggest first: Huion Kamvas Studio 22 pen computer; ASUS ROG Strix RX 580 8GB graphics card; Saitek X52
+flight stick + throttle; ASUS M5A97 LE R2.0 motherboard + Corsair 8GB DDR3 memory (sell as a bundle);
+Sapphire HD 7950 graphics card; Cooler Master MasterLiquid Lite 240 cooler (new, never used).
+Listing titles and descriptions were drafted with Claude on 12 Nov (ask Claude for them again if needed).
+- Sun 15 Nov (shift-day item, ~5 min): on eBay, look up SOLD prices for the Huion, the RX 580 and the X52.
+- Tue 17 Nov, 9:15-11am: the Huion. In this order, never skip ahead: (1) copy his art off it to
+  Google Drive > My-Art, (2) write down the specs, (3) reset Windows with "Remove everything".
+  The reset runs by itself for up to an hour: make the 2-3 sample flyers in Canva WHILE it runs.
+- Tue 17 Nov, 1-3pm: photograph and list the Huion (eBay, boxed and insured, plus Craigslist), then the
+  RX 580 and the X52 on eBay.
+- After that, one listing per shift day (~5 min each, photos already taken on a Tue/Wed): motherboard + memory
+  bundle, HD 7950, cooler.
+- When something sells: packing and posting it is that day's task.
 
 SURVEY RECRUITING PUSH (moved up 9 Nov: interviews need volunteers first)
 - Tue 10 Nov, 1-3pm block: post the survey in 3 more places (~45 min total):

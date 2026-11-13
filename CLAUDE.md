@@ -56,6 +56,9 @@
   His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
   last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
   Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
+- Selling plan (12 Nov, his call: whatever makes money quickest): Sat 14 bills extension check; Sun 15 eBay
+  sold-price check; Tue 17 morning Huion art rescue + specs + wipe (flyers made while the wipe runs); Tue 17
+  afternoon list the Huion, RX 580 and X52. Details in my-focus.txt ("SELLING OLD HARDWARE").
 - Next up: Fri 13 Nov ~2pm break:
   phone Red Rooster Cafe with the audit offer, then send the written pitch. Check bills for payment extensions.
   Tue 17 Nov: 2-3 sample flyers in Canva (folder "Samples"), then a free Behance profile for them.
