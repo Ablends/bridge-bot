@@ -19,14 +19,12 @@ Written Thu 12 Nov 2026. A plain-language summary of what Alexander and Claude h
 - Monday recap posted to #ship-log
 - Runs 24/7 on a Google Cloud server and restarts itself if it crashes
 
-**Half-done**
-- The template step wording was changed on 10 Nov (start fresh, no old wireframe). The change is on GitHub but **not yet live on the server**.
-- The bot was renamed from "Bridge Bot" to "Orbital Bot" in the code. The Slack app itself still shows the old name.
+**Updated 12 Nov (evening)**
+- Slack app renamed to "Orbital Bot" and workspace renamed to "Orbital Roots": done
+- Server update, so the bot shows the new "start fresh" step wording: run on 12 Nov
 
 **Left to do**
-- Run one server update so the bot picks up the new step wording and name
-- Rename the Slack app to "Orbital Bot" at api.slack.com
-- Rename the Slack workspace to "Orbital Roots"
+- Nothing right now
 
 ---
 
@@ -113,9 +111,9 @@ Seven helper tools are planned, one at a time, each only when its unlock is reac
 
 | Item | Where it stands |
 |---|---|
-| Bot server (Google Cloud) | Running *(from notes)*. One update is waiting: sign in to the server and run the update script. |
-| Google Cloud cost | Free trial ends about 2 Feb 2027. After that, roughly $3.65 a month to keep it. The bill check is still not done. |
-| Slack app and workspace names | Still to be renamed by Alexander |
+| Bot server (Google Cloud) | Running. Updated on 12 Nov. |
+| Google Cloud cost | Free trial ends about 2 Feb 2027. After that, roughly $3.65 a month to keep it. Bill checked on 12 Nov. |
+| Slack app and workspace names | Renamed on 12 Nov |
 | Claude's access to the survey | `docs.google.com` was allowed on 10 Nov so Claude can read the live form. It stays allowed in the "Life Vison" environment. |
 | Canva | One free trial resize was used for the TikTok draft; one is left. Nothing was charged. |
 | OBS (screen recording) | Installed and set up on Alexander's computer. Free. |
@@ -148,7 +146,6 @@ Seven helper tools are planned, one at a time, each only when its unlock is reac
 ## Next steps, in order
 
 1. Prepare for the team lead conversation: know the per-hour raise needed before hearing their number.
-2. Run the server update so the bot shows the new step wording.
 3. Check the survey's Responses tab and report the count.
 4. Template Step 2 in the next Tue/Wed morning block.
 5. Shift days (Thu–Sun): one 5-minute item only.
