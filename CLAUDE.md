@@ -50,6 +50,9 @@
   be wiped before sale). Also selling the Huion Kamvas Studio 22 (model KS2201), which is a full Windows pen computer, not just a
   tablet: likely the most valuable item, and it stores files. BEFORE it is sold: look on it for the "lost" tablet
   art files (art store), copy off anything he wants, sign out of accounts, then reset Windows with "Remove everything".
+  Confirmed 12 Nov: it powers on, the pen works, he has the pen, power adapter, stand and original box, and some of
+  his art WAS made on it. He's selling because it's too heavy and bulky to use. Order: (1) copy art to Google Drive >
+  My-Art, (2) note the specs, (3) wipe, (4) photos, (5) list on eBay (boxed, insured) and Craigslist.
   His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
   last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
   Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
