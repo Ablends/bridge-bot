@@ -29,47 +29,71 @@
 - The big-picture plan: "Orbital Roots — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
   and the Command Hub (https://claude.ai/artifact/5bf2WRi8FG1SwNzsGgvx99). my-focus.txt drives the daily task.
 
-## Where we left off (handoff, 12 Nov 2026)
-- Done 10-12 Nov: template Step 1. Survey improved (14 questions now: added feelings, motivation and tools
-  questions; typos fixed). my-focus.txt rewritten twice (research first; then money first). build-status.md
-  written (plain-language summary of everything built). A rough TikTok carousel draft exists in his Canva
-  ("TikTok plant research carousel") for him to rework; his own 4-slide file is separate.
-- Done 12 Nov (Alexander): Slack app renamed to "Orbital Bot" and workspace renamed to "Orbital Roots";
-  Google Cloud bill checked; server update run (`bash deploy/update.sh`) so the bot has the "start fresh" step
-  wording (confirmed finished, bot online). Nothing is left on the old "not yet done" list.
-- LinkedIn reply to the plant-app person on the survey post: SENT (confirmed 12 Nov). Don't raise it again.
-  If they answer, keep Fernly and app ideas private.
-- Handoffs between chats: a new chat sees ONLY what is saved in this repo. When he asks to carry something over,
-  write it into this section and push it, then tell him exactly what was saved.
-  This section IS the handoff. Don't create a separate handoff document (his call, 12 Nov): one less file to maintain.
-- Unknown (ask him): whether the TikTok, Instagram Story, Discord and Orbital Bot LinkedIn posts went out; how many
-  survey responses are in; whether he DM'd the bot `step done` for Step 1.
-- Hardware to sell (sticker photos done 12 Nov; identified by Claude from the photos): Saitek X52 flight stick +
-  throttle (model PS28); ASUS ROG Strix RX 580 8GB graphics card (ROG-STRIX-RX580-O8G-GAMING); Sapphire HD 7950 3GB
-  graphics card (SKU 11196-16); ASUS M5A97 LE R2.0 motherboard (AM3+); Corsair Vengeance DDR3 8GB kit, 2x4GB 1600MHz
-  (CMZ8GX3M2A1600C9B); Cooler Master MasterLiquid Lite 240 cooler (boxed); WD Blue 640GB hard drive (WD6400AAKS; must
-  be wiped before sale). Also selling the Huion Kamvas Studio 22 (model KS2201), which is a full Windows pen computer, not just a
-  tablet: likely the most valuable item, and it stores files. BEFORE it is sold: look on it for the "lost" tablet
-  art files (art store), copy off anything he wants, sign out of accounts, then reset Windows with "Remove everything".
-  Confirmed 12 Nov: it powers on, the pen works, he has the pen, power adapter, stand and original box, and some of
-  his art WAS made on it. He's selling because it's too heavy and bulky to use. Order: (1) copy art to Google Drive >
-  My-Art, (2) note the specs, (3) wipe, (4) photos, (5) list on eBay (boxed, insured) and Craigslist.
-  His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
-  last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
-  Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
-- Server updated again late 12 Nov, so the bot's 15-minute shift-day wording is live. No update is waiting.
-- Selling plan (12 Nov, his call: whatever makes money quickest): Fri 13/Sat 14 bills extension check; Sat 14
-  photograph + list the RX 580; Sun 15 photograph + list the X52; Tue 17 morning Huion art rescue + specs + wipe
-  (flyers made while the wipe runs); Tue 17 afternoon list the Huion. Details in my-focus.txt ("SELLING OLD HARDWARE").
-- Next up: Fri 13 Nov ~2pm break:
-  phone Red Rooster Cafe with the audit offer, then send the written pitch. Check bills for payment extensions.
-  Tue 17 Nov: 2-3 sample flyers in Canva (folder "Samples"), then a free Behance profile for them.
-  Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person.
-- Open question: survey only, or survey plus three 15-minute calls? Claude recommended both; not decided.
+## Where we left off (handoff, saved Thu 12 Nov 2026, ~9:55pm)
+**How handoffs work:** a new chat sees ONLY what is saved in this repo. This section IS the handoff; don't create a
+separate handoff document (his call, 12 Nov). When he says "save the handoff", rewrite this section, push it, and
+tell him exactly what was saved.
+
+**Next up, in order (shift days = ONE item of up to ~15 min)**
+- Fri 13 Nov, ~2pm work break: phone Red Rooster Cafe (406-839-2884) with the $100 website audit offer, mention
+  flyers, then send the written pitch. The pitch was written in another chat; Claude here has not seen it.
+- Fri 13 or Sat 14 Nov: check his bills for payment extensions (the only thing that helps with the nearest deadlines;
+  nothing sold online pays out within a few days).
+- Sat 14 Nov: photograph the RX 580, check eBay SOLD prices, list it on eBay.
+- Sun 15 Nov: the same for the Saitek X52.
+- Mon 16 Nov: 6:35-7:35am homework hour (next real-research item), then Grandma's.
+- Tue 17 Nov, 9:15-11am: Huion: (1) copy his art to Google Drive > My-Art, (2) note the specs, (3) reset Windows
+  with "Remove everything". Make 2-3 sample flyers in Canva (folder "Samples") while the reset runs.
+- Tue 17 Nov, 1-3pm: photograph and list the Huion (eBay, boxed and insured, plus Craigslist); photograph the
+  smaller items. Then a free Behance profile for the flyer samples when there's a block for it.
+- Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person with the audit + flyer offer.
+- After that: one listing per shift day (motherboard + memory bundle, HD 7950, cooler).
+
+**Hardware being sold (eBay and Craigslist only; never Facebook)**
+- Huion Kamvas Studio 22 (KS2201): a full Windows pen computer, likely the most valuable item. Powers on, pen works;
+  has pen, power adapter, stand and original box. Some of his art was made on it, so the art rescue MUST come before
+  the wipe. He's selling because it's too heavy and bulky to use.
+- ASUS ROG Strix RX 580 8GB (ROG-STRIX-RX580-O8G-GAMING); Saitek X52 stick + throttle (PS28), complete;
+  ASUS M5A97 LE R2.0 motherboard (AM3+, no processor) + Corsair Vengeance DDR3 8GB kit, 2x4GB 1600MHz
+  (CMZ8GX3M2A1600C9B), to sell as a bundle; Sapphire HD 7950 3GB (SKU 11196-16); Cooler Master MasterLiquid Lite 240
+  (new, never used, boxed).
+- WD Blue 640GB hard drive (WD6400AAKS): Claude advised not selling it (low value, needs a proper wipe). Not decided.
+- Everything works "as far as he knows" and is not recently tested: listings say "working when last used", never
+  "tested". Listing titles and descriptions were drafted in chat on 12 Nov and are NOT saved in the repo; write them
+  out again in full when he's ready to list. Prices: check eBay sold listings first; keep amounts out of this repo.
+
+**Done this week**
+- 10 Nov: template Step 1 (fresh Figma file, six pages). Survey improved to 14 questions (feelings, motivation and
+  tools questions added; typos fixed). Course 2 paused until real research is done.
+- 11 Nov: rough TikTok carousel draft made in his Canva ("TikTok plant research carousel") for him to rework; his own
+  4-slide file is separate.
+- 12 Nov: my-focus.txt rewritten for money first; build-status.md written; Slack app renamed "Orbital Bot" and
+  workspace renamed "Orbital Roots"; Google Cloud bill checked; LinkedIn reply to the plant-app person SENT (don't
+  raise it again; if they answer, keep Fernly and app ideas private); sticker photos of all hardware taken;
+  shift-day limit raised from 5 to ~15 minutes (in my-focus.txt and in the bot's code); server updated twice, bot
+  online, no update waiting.
+
+**Unknown (ask him once, don't nag)**
+- Whether the TikTok, Instagram Story, Discord and Orbital Bot LinkedIn posts went out.
+- How many survey responses are in.
+- Whether he DM'd the bot `step done` for Step 1.
+
+**Open questions**
+- Survey only, or survey plus three 15-minute calls? Claude recommended both; not decided.
+- Sell or keep the WD hard drive?
+
+**Waiting on**
+- Team lead role: he's going for it; answer expected soon.
+- Survey responses (unlocks the survey response watcher, ROADMAP.md #1).
+
+**How he's doing (12 Nov)**
+- Felt stalled on 11 Nov and under money pressure; on 12 Nov he cut the plan down himself and asked whether he was
+  "crazy for trying to do all of this at once". He isn't; he's overloaded and fixing it. Keep each day to its one
+  item, push back when new things get added, and don't keep him up late on shift days.
+
+**Reference**
 - Drafts: drafts/ (LinkedIn bot post, LinkedIn survey post with link, TikTok survey post).
 - Docs: Houseplant Follow-up Interview (15 min) https://claude.ai/artifact/GJZdEprt7jeesouKenBUqg
-- Waiting on: team lead role (he's going for it; answer expected soon); survey responses (unlocks the survey
-  response watcher, ROADMAP.md #1).
 - Privacy: this repo is public. Keep pay figures, bill details and money amounts out of every file here.
 - Cloud sessions: `docs.google.com` is allowed in the "Life Vison" environment so Claude can read the live survey form
   (https://forms.gle/imywAMaeBzHXZFzSA).
