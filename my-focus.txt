@@ -1,7 +1,21 @@
 What I'm working on right now.
 The bot reads this file every morning to pick my task. Update it whenever things change.
-Last updated: 10 Nov 2026
+Last updated: 12 Nov 2026
 Tip: you can also DM the bot "class: ..." and "step done" instead of editing this file.
+
+PRIORITY RIGHT NOW: MONEY (added 12 Nov; overrides everything below until he says otherwise)
+He needs extra income this month. He CAN'T add extra work shifts (school, kids, and Mondays are
+for his grandma), so never suggest more shifts.
+
+THIS WEEK, ONLY THREE THINGS MATTER (give these as the daily task, in this order, until done):
+1. Thu 12 Nov, tonight: photograph the model stickers on his old hardware (flight sim controllers,
+   graphics card, RAM) so it can be priced and listed on eBay and Craigslist. No Facebook.
+2. Fri 13 Nov, on his work break around 2pm: phone Red Rooster Cafe (406-839-2884) to offer a
+   $100 website audit and mention he also does flyers. Then send the written pitch.
+3. When he can: check his bills for payment extensions (a good shift-day item for Sat or Sun).
+Nothing else is a task this week except the Monday homework hour and any Fernly interview.
+
+TEAM LEAD ROLE (12 Nov): he's going for it.
 
 LEFTOVERS FROM THURSDAY 5 NOV (he was tired; server update IS done)
 Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
@@ -15,20 +29,29 @@ Give these as the daily task, one per day, BEFORE the Course 2 plan, until done:
   attach the Slack screen recording). ~5 min, on top of that day's Course 2 work.
 The Course 2 plan below simply slides back by the days these take. Never skip ahead.
 
-WEEKLY RHYTHM (Option C, chosen 7 Nov; overrides older rules below)
-- Mon-Wed: TWO small blocks (business block = TEMPLATE, chosen 7 Nov): (1) the current portfolio template step, 15-20 min; then (2) the next Course 2 item from the finish plan.
-- Thu-Sun (shift days): ONE ~5 min class item only.
+WEEKLY RHYTHM (Option C, chosen 7 Nov; changed 12 Nov; overrides older rules below)
+- Tue/Wed main blocks now go to LOCAL BUSINESS AUDITS and FLYER/POSTER GIGS (changed 12 Nov; was the
+  portfolio template, which is paused). See LOCAL BUSINESS GIGS below for what to give.
+- Thu-Sun (shift days): ONE ~5 min item only. Never more than one, never longer.
 - MONDAY = Grandma day (away ~8:20am-5:40pm), BUT 6:35-7:35am is a 1-hour homework block:
-  give ONE class/Course 2 item that fits in about an hour (no template work on Mondays).
-  Real work blocks are TUESDAY 9:15-11am and WEDNESDAY 9:30-11:15am (template step + Course 2),
-  plus Tue 1-3pm and Wed 12-1:30pm for a design gig or a Fernly interview.
-- Nov 30 goal is now: portfolio file through Step 4 (lowered from Step 6 on 8 Nov) with Fernly's Problem, Research
-  and Process filled in. Full Fernly publish waits for later courses (prototype/test).
+  give ONE class item that fits in about an hour (unchanged 12 Nov). While Course 2 is paused, that is
+  the next REAL RESEARCH item (R1-R7 below). No gig work on Mondays.
+  Real work blocks are TUESDAY 9:15-11am and WEDNESDAY 9:30-11:15am (audits and flyer gigs),
+  plus Tue 1-3pm and Wed 12-1:30pm for a gig or a Fernly interview. Fernly interviews stay as they are:
+  if someone agrees to a chat, the interview gets the afternoon block.
+- Nov 30 goal: Fernly's Problem, Research and Process filled in. The template part of this goal (through
+  Step 4) is off while the template is paused (12 Nov). Full Fernly publish waits for later courses (prototype/test).
 
-DESIGN GIGS (added 8 Nov; plan in the roadmap doc's "Design Gigs" tab)
-- Next shift day: ONE ~5 min task: text or DM 3 people who run a business or side hustle,
-  offering a friends-rate flyer/social post ($25-50). Message is in the roadmap doc.
-- If someone says yes, the gig becomes a Mon-Wed task (one gig at a time), alongside the template step.
+LOCAL BUSINESS GIGS (12 Nov; replaces the 8 Nov "text 3 people" friends-rate plan)
+- The offer: a $100 website audit for a local business, plus flyers and posters.
+- Fri 13 Nov ~2pm (work break): phone Red Rooster Cafe (406-839-2884) with the audit offer, mention
+  flyers, then send the written pitch.
+- Tue 17 Nov: make 2-3 sample flyers in Canva (save them in a Canva folder called "Samples").
+- Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person with the audit + flyer offer.
+- Set up a free Behance profile as a temporary portfolio for the samples (until the Framer site is live).
+  Do this after the samples exist, in a Tue/Wed block.
+- If a business says yes, that job becomes the Tue/Wed task (one job at a time) until it's delivered.
+- Selling old hardware: eBay and Craigslist only. No Facebook.
 
 SURVEY RECRUITING PUSH (moved up 9 Nov: interviews need volunteers first)
 - Tue 10 Nov, 1-3pm block: post the survey in 3 more places (~45 min total):
@@ -41,7 +64,9 @@ SURVEY RECRUITING PUSH (moved up 9 Nov: interviews need volunteers first)
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
 - Shift days (Thu-Sun): one tiny ~5 min task only.
-- Order of priority: 1) Course 2 project, 2) Fernly case study, 3) portfolio template.
+- Order of priority (changed 12 Nov): 1) money: this week's three things, then audits and flyer gigs,
+  2) Course 2 / real research (Monday hour and interviews), 3) Fernly case study.
+  The portfolio template is PAUSED and is not on this list.
 
 1. COURSEWORK (top priority)
 - Coursera: Google UX Design Certificate.
@@ -96,12 +121,14 @@ THEN RESUME COURSE 2 (same order as before, dates to be set when R7 is done)
   Class tasks are simply "the next lesson / module step".
 - Nov 30: Problem, Research, Process sections done. Full publish after later courses.
 
-3. PRODUCT: FIGMA PORTFOLIO TEMPLATE
+3. PRODUCT: FIGMA PORTFOLIO TEMPLATE: PAUSED for a few weeks (12 Nov). Don't suggest template tasks.
+- Step 1 is done. Step 2 is next when it resumes. Alexander will say when.
 - For job-hunting junior UX designers and bootcamp grads.
 - Fixed 9-step build path. The bot tracks the current step (DM "step" to see it).
   Only suggest work on the current step, never later steps. If the pace slips, only the dates move.
 
 4. YOUTUBE SHORTS: back ON (9 Nov, Alexander's call), tied to the template steps only.
+- Paused along with the template (12 Nov). Nothing to record until the template resumes.
 - On template days, add "hit record first (Figma window only)". The recording of each step IS the Short.
 - Editing and posting WAIT until the template is done (Alexander, 10 Nov). Recording still happens every
   template session, so the footage exists later. Never suggest editing or posting; never nag about it.
@@ -123,12 +150,18 @@ Only when check-ins show a tool's unlock is reached, a Mon-Wed task may be
 "Ask Claude to set up <tool>" (5 min to ask). Never suggest a tool before its unlock,
 never two at once, never on a shift day.
 
+6. BOOK: "THE BLOODLINE" (added 12 Nov)
+- Only goal for the next couple of weeks: finish chapter 4.
+- Low pressure. Short sessions or dictation. Never a daily task ahead of money or class items, and
+  never nag about it.
+
 PARKED (do not suggest tasks for these)
 - Night Wild art store (Etsy + Printify). Parked 7 Nov: template comes first. Tablet art files may
   be lost; low-res copies are in Google Drive > My-Art. Don't suggest store tasks until the
   template is selling.
 - Budgeting app case study (idea: YNAB fund-reconciliation pain point). Waits until Fernly ships.
 - Command Hub Lite case study. Waits until Fernly ships.
+- Biweekly zero-based budget template (Google Sheets). Parked 12 Nov: to be built with Claude Code later.
 
 DONE
 - Orbital Bot is built and running. Don't suggest bot work.
