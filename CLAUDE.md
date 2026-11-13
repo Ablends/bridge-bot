@@ -47,7 +47,10 @@
   throttle (model PS28); ASUS ROG Strix RX 580 8GB graphics card (ROG-STRIX-RX580-O8G-GAMING); Sapphire HD 7950 3GB
   graphics card (SKU 11196-16); ASUS M5A97 LE R2.0 motherboard (AM3+); Corsair Vengeance DDR3 8GB kit, 2x4GB 1600MHz
   (CMZ8GX3M2A1600C9B); Cooler Master MasterLiquid Lite 240 cooler (boxed); WD Blue 640GB hard drive (WD6400AAKS; must
-  be wiped before sale). Still needed: does each item work, full-item photos, sold-price check, then listings.
+  be wiped before sale). Also selling a Huion drawing tablet (model not yet known; ask for the sticker photo).
+  His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
+  last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
+  Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
 - Next up: Fri 13 Nov ~2pm break:
   phone Red Rooster Cafe with the audit offer, then send the written pitch. Check bills for payment extensions.
   Tue 17 Nov: 2-3 sample flyers in Canva (folder "Samples"), then a free Behance profile for them.
