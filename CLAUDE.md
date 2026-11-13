@@ -6,30 +6,50 @@
 - New to design and new to programming: explain things in plain language, and say exactly what to click or type.
 - Works long shifts Thu–Sun (only ~5-minute tasks those days). Mon–Wed are the main work days.
 
-## Current priorities (in order, updated 7 Nov 2026)
+## Current priorities (in order, updated 12 Nov 2026)
 1. Keep this bot running (it's live on a Google Cloud e2-micro server, see README).
-2. Weekly rhythm: Mon 6:35-7:35am Course 2 homework (then Grandma's all day); Tue/Wed mornings = template step + Course 2;
-   Tue 1-3pm / Wed 12-1:30pm = design gig or Fernly interview; Thu-Sun shifts = one ~5 min class item.
-   Side income: small design gigs (one at a time), see the roadmap doc's Design Gigs tab.
-3. Figma portfolio template = first income bet (fixed 9-step plan). Nov 30 goal: through Step 4 (realistic pace). YouTube Shorts (updated 10 Nov): record every template session in OBS (Figma window only); editing and posting wait until the template is done. Broken-buttons practice file saved for Step 3.
+2. **Money this month (12 Nov, his top priority).** He needs extra income and can't add work shifts (school, kids,
+   Mondays are for his grandma), so never suggest more shifts. Side income now comes from local business work:
+   a $100 website audit offer plus flyers and posters. Old hardware gets sold on eBay and Craigslist. He is not on
+   Facebook: never suggest it. Dates and details are in my-focus.txt ("LOCAL BUSINESS GIGS").
+3. Weekly rhythm: Mon 6:35-7:35am class homework hour (then Grandma's all day); Tue/Wed mornings = audits and
+   flyer gigs (changed 12 Nov; was the template); Tue 1-3pm / Wed 12-1:30pm = a gig or a Fernly interview;
+   Thu-Sun shifts = ONE ~5 min item, never more.
 4. Coursera Course 2: PAUSED at the value proposition (10 Nov) until real research is done (recruit, 15-min chats,
-   empathy maps, personas, journey maps; see my-focus.txt). The ~Nov 17 finish date will slip. Then Course 3. Fernly moves at the class's pace:
+   empathy maps, personas, journey maps; see my-focus.txt). Then Course 3. Fernly moves at the class's pace:
    Problem, Research and Process by Nov 30; full publish after later courses.
-5. Parked: art store (tablet files may be lost), budgeting app + Command Hub Lite case studies, Jarvis (see ROADMAP.md).
+5. Figma portfolio template: PAUSED for a few weeks (12 Nov). Step 1 is done (fresh file, six pages); Step 2 is next
+   when he says it resumes. Don't suggest template work. YouTube Shorts recording is paused with it (when it resumes:
+   record every template session in OBS, Figma window only; edit and post only after the template is done).
+   Broken-buttons practice file is still saved for Step 3.
+6. Book "The Bloodline" (added 12 Nov): only goal is finishing chapter 4. Low pressure; never nag.
+7. Parked: art store (tablet files may be lost), budgeting app + Command Hub Lite case studies, biweekly zero-based
+   budget template in Google Sheets (to build with Claude Code later), Jarvis (see ROADMAP.md).
 - The big-picture plan: "Orbital Roots — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
   and the Command Hub (https://claude.ai/artifact/5bf2WRi8FG1SwNzsGgvx99). my-focus.txt drives the daily task.
 
-## Where we left off (handoff, 9 Nov 2026)
-- Done: bot upgrades live on the server (one-tap ✅/❌, 8pm check-in, `log`, time buttons, gig category, class:/step done).
-  Survey posted on LinkedIn (7 Nov). Calendar matches the weekly rhythm. Roadmap doc has 8 tabs + a timeline.
-- Not yet done by Alexander: Slack app rename to "Orbital Bot" (api.slack.com) + one server update for the new name;
-  Slack workspace rename to "Orbital Roots"; Google Cloud bill check; reply + DM to the plant-app person who
-  commented on the LinkedIn survey post (drafts were given in chat; keep Fernly/app ideas private).
-- Next up: Tue 10 Nov 9:15am template Step 1; Tue 1-3pm survey recruiting push (TikTok, Instagram Story, texts to 5
-  friends); Tue: Orbital Bot LinkedIn post (drafts/linkedin-bot-post.md); Thu: message 3 people about design gigs.
+## Where we left off (handoff, 12 Nov 2026)
+- Done 10-12 Nov: template Step 1. Survey improved (14 questions now: added feelings, motivation and tools
+  questions; typos fixed). my-focus.txt rewritten twice (research first; then money first). build-status.md
+  written (plain-language summary of everything built). A rough TikTok carousel draft exists in his Canva
+  ("TikTok plant research carousel") for him to rework; his own 4-slide file is separate.
+- Not yet done by Alexander: one server update (`bash deploy/update.sh`) so the bot shows the new "start fresh" step
+  wording; Slack app rename to "Orbital Bot" (api.slack.com); Slack workspace rename to "Orbital Roots";
+  Google Cloud bill check; reply + DM to the plant-app person on the LinkedIn survey post.
+- Unknown (ask him): whether the TikTok, Instagram Story, Discord and Orbital Bot LinkedIn posts went out; how many
+  survey responses are in; whether he DM'd the bot `step done` for Step 1.
+- Next up: Thu 12 Nov night: photograph model stickers on old hardware for eBay/Craigslist. Fri 13 Nov ~2pm break:
+  phone Red Rooster Cafe with the audit offer, then send the written pitch. Check bills for payment extensions.
+  Tue 17 Nov: 2-3 sample flyers in Canva (folder "Samples"), then a free Behance profile for them.
+  Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person.
+- Open question: survey only, or survey plus three 15-minute calls? Claude recommended both; not decided.
 - Drafts: drafts/ (LinkedIn bot post, LinkedIn survey post with link, TikTok survey post).
 - Docs: Houseplant Follow-up Interview (15 min) https://claude.ai/artifact/GJZdEprt7jeesouKenBUqg
-- Waiting on: survey responses (unlocks the survey response watcher, ROADMAP.md #1); team lead role decision.
+- Waiting on: team lead role (he's going for it; answer expected soon); survey responses (unlocks the survey
+  response watcher, ROADMAP.md #1).
+- Privacy: this repo is public. Keep pay figures, bill details and money amounts out of every file here.
+- Cloud sessions: `docs.google.com` is allowed in the "Life Vison" environment so Claude can read the live survey form
+  (https://forms.gle/imywAMaeBzHXZFzSA).
 
 ## How to work with Alexander
 - Tends to start lots of things and not finish them: help finish, and push back on new scope.
