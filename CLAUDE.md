@@ -4,7 +4,8 @@
 - Alexander, who runs a small design-led product business called **Orbital Roots** (renamed from "The Bridge" on 9 Nov 2026;
   the Slack workspace may still show the old name). Public-facing work goes under his own name.
 - New to design and new to programming: explain things in plain language, and say exactly what to click or type.
-- Works long shifts Thu–Sun (only ~5-minute tasks those days). Mon–Wed are the main work days.
+- Works long shifts Thu–Sun (one task of up to ~15 minutes those days; raised from 5 on 12 Nov, his call:
+  the 5-minute limit came from Claude, not from him). Mon–Wed are the main work days.
 
 ## Current priorities (in order, updated 12 Nov 2026)
 1. Keep this bot running (it's live on a Google Cloud e2-micro server, see README).
@@ -14,7 +15,7 @@
    Facebook: never suggest it. Dates and details are in my-focus.txt ("LOCAL BUSINESS GIGS").
 3. Weekly rhythm: Mon 6:35-7:35am class homework hour (then Grandma's all day); Tue/Wed mornings = audits and
    flyer gigs (changed 12 Nov; was the template); Tue 1-3pm / Wed 12-1:30pm = a gig or a Fernly interview;
-   Thu-Sun shifts = ONE ~5 min item, never more.
+   Thu-Sun shifts = ONE item of up to ~15 min, never more.
 4. Coursera Course 2: PAUSED at the value proposition (10 Nov) until real research is done (recruit, 15-min chats,
    empathy maps, personas, journey maps; see my-focus.txt). Then Course 3. Fernly moves at the class's pace:
    Problem, Research and Process by Nov 30; full publish after later courses.
@@ -56,9 +57,9 @@
   His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
   last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
   Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
-- Selling plan (12 Nov, his call: whatever makes money quickest): Sat 14 bills extension check; Sun 15 eBay
-  sold-price check; Tue 17 morning Huion art rescue + specs + wipe (flyers made while the wipe runs); Tue 17
-  afternoon list the Huion, RX 580 and X52. Details in my-focus.txt ("SELLING OLD HARDWARE").
+- Selling plan (12 Nov, his call: whatever makes money quickest): Fri 13/Sat 14 bills extension check; Sat 14
+  photograph + list the RX 580; Sun 15 photograph + list the X52; Tue 17 morning Huion art rescue + specs + wipe
+  (flyers made while the wipe runs); Tue 17 afternoon list the Huion. Details in my-focus.txt ("SELLING OLD HARDWARE").
 - Next up: Fri 13 Nov ~2pm break:
   phone Red Rooster Cafe with the audit offer, then send the written pitch. Check bills for payment extensions.
   Tue 17 Nov: 2-3 sample flyers in Canva (folder "Samples"), then a free Behance profile for them.

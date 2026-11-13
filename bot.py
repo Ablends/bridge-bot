@@ -240,7 +240,7 @@ def send_morning_ping(force=False):
     storage.save_daily_task(day, task)
 
     if is_shift_day:
-        header = f"☀️ Morning! It's {weekday}, a shift day, so just one tiny thing:"
+        header = f"☀️ Morning! It's {weekday}, a shift day, so just one small thing:"
     else:
         header = f"☀️ Morning! It's {weekday}, a progress day. Today's one thing:"
     ping_ts = dm_me(

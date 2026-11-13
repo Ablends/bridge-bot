@@ -46,8 +46,8 @@ def suggest_daily_task(is_shift_day, weekday_name, focus, recent, weekly_goal=No
     """Ask Claude for ONE task for today."""
     if is_shift_day:
         size = (
-            "Today is a WORK SHIFT day (Alexander works 8am-7pm). The task must be tiny: about "
-            "5 minutes, doable on a break or phone if possible."
+            "Today is a WORK SHIFT day (Alexander works 8am-7pm). The task must be small: about "
+            "15 minutes at most, doable on a break or phone if possible."
         )
     else:
         size = (
