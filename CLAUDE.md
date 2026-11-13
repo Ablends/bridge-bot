@@ -34,6 +34,15 @@
 separate handoff document (his call, 12 Nov). When he says "save the handoff", rewrite this section, push it, and
 tell him exactly what was saved.
 
+**Where he works with Claude (agreed 12 Nov; he asked for a clearer system)**
+- Home base = a Claude Code session with THIS repo attached. Anything about the plan, the bot, tasks or decisions
+  happens here, because only here can Claude read and save the notes. The 🕐 timestamp at the top of a reply is his
+  sign that he's in the right place.
+- Any other Claude chat = scratch paper. Fine for quick questions; nothing there is remembered. If something from
+  there matters, he pastes it here and says "save the handoff".
+- One session per work day or topic. Start with "Read CLAUDE.md and my-focus.txt. Start with what's next." and end
+  with "save the handoff".
+
 **Next up, in order (shift days = ONE item of up to ~15 min)**
 - Fri 13 Nov, ~2pm work break: phone Red Rooster Cafe (406-839-2884) with the $100 website audit offer, mention
   flyers, then send the written pitch. The pitch was written in another chat; Claude here has not seen it.
