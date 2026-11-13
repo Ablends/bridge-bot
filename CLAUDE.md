@@ -47,7 +47,9 @@
   throttle (model PS28); ASUS ROG Strix RX 580 8GB graphics card (ROG-STRIX-RX580-O8G-GAMING); Sapphire HD 7950 3GB
   graphics card (SKU 11196-16); ASUS M5A97 LE R2.0 motherboard (AM3+); Corsair Vengeance DDR3 8GB kit, 2x4GB 1600MHz
   (CMZ8GX3M2A1600C9B); Cooler Master MasterLiquid Lite 240 cooler (boxed); WD Blue 640GB hard drive (WD6400AAKS; must
-  be wiped before sale). Also selling a Huion drawing tablet (model not yet known; ask for the sticker photo).
+  be wiped before sale). Also selling the Huion Kamvas Studio 22 (model KS2201), which is a full Windows pen computer, not just a
+  tablet: likely the most valuable item, and it stores files. BEFORE it is sold: look on it for the "lost" tablet
+  art files (art store), copy off anything he wants, sign out of accounts, then reset Windows with "Remove everything".
   His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
   last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
   Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
