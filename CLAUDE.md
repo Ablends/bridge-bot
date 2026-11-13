@@ -40,6 +40,10 @@ tell him exactly what was saved.
   sign that he's in the right place.
 - Any other Claude chat = scratch paper. Fine for quick questions; nothing there is remembered. If something from
   there matters, he pastes it here and says "save the handoff".
+- Voice: he likes talking plans through out loud, and Code has no voice chat for him. So voice planning happens in
+  Chat, and it's fine as long as it ends with a summary he pastes here (as he did on 12 Nov, which worked well).
+  When he pastes one, update the files, show what changed, and treat it as his decision. In Code he can still
+  dictate with the microphone key on his phone keyboard.
 - One session per work day or topic. Start with "Read CLAUDE.md and my-focus.txt. Start with what's next." and end
   with "save the handoff".
 
