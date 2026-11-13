@@ -35,12 +35,13 @@
   ("TikTok plant research carousel") for him to rework; his own 4-slide file is separate.
 - Done 12 Nov (Alexander): Slack app renamed to "Orbital Bot" and workspace renamed to "Orbital Roots";
   Google Cloud bill checked; server update run (`bash deploy/update.sh`) so the bot has the "start fresh" step
-  wording. Confirm the update finished if he hasn't said so. Nothing is left on the old "not yet done" list
-  except the LinkedIn item below.
+  wording (confirmed finished, bot online). Nothing is left on the old "not yet done" list except the LinkedIn
+  item below.
 - LinkedIn reply + DM to the plant-app person on the survey post: discussed in another chat on 12 Nov. Ask whether
   it was sent before bringing it up again; don't re-draft it unprompted.
 - Handoffs between chats: a new chat sees ONLY what is saved in this repo. When he asks to carry something over,
   write it into this section and push it, then tell him exactly what was saved.
+  This section IS the handoff. Don't create a separate handoff document (his call, 12 Nov): one less file to maintain.
 - Unknown (ask him): whether the TikTok, Instagram Story, Discord and Orbital Bot LinkedIn posts went out; how many
   survey responses are in; whether he DM'd the bot `step done` for Step 1.
 - Next up: Thu 12 Nov night: photograph model stickers on old hardware for eBay/Craigslist. Fri 13 Nov ~2pm break:
