@@ -57,6 +57,7 @@
   His answers (12 Nov): everything works as far as he knows (not recently tested, so listings say "working when
   last used", never "tested"); X52 is complete; cooler is new and never used; no processor with the motherboard.
   Listing drafts were given in chat on 12 Nov. Still needed: sold-price check on eBay, full-item photos, then list.
+- Server updated again late 12 Nov, so the bot's 15-minute shift-day wording is live. No update is waiting.
 - Selling plan (12 Nov, his call: whatever makes money quickest): Fri 13/Sat 14 bills extension check; Sat 14
   photograph + list the RX 580; Sun 15 photograph + list the X52; Tue 17 morning Huion art rescue + specs + wipe
   (flyers made while the wipe runs); Tue 17 afternoon list the Huion. Details in my-focus.txt ("SELLING OLD HARDWARE").
