@@ -35,10 +35,9 @@
   ("TikTok plant research carousel") for him to rework; his own 4-slide file is separate.
 - Done 12 Nov (Alexander): Slack app renamed to "Orbital Bot" and workspace renamed to "Orbital Roots";
   Google Cloud bill checked; server update run (`bash deploy/update.sh`) so the bot has the "start fresh" step
-  wording (confirmed finished, bot online). Nothing is left on the old "not yet done" list except the LinkedIn
-  item below.
-- LinkedIn reply + DM to the plant-app person on the survey post: discussed in another chat on 12 Nov. Ask whether
-  it was sent before bringing it up again; don't re-draft it unprompted.
+  wording (confirmed finished, bot online). Nothing is left on the old "not yet done" list.
+- LinkedIn reply to the plant-app person on the survey post: SENT (confirmed 12 Nov). Don't raise it again.
+  If they answer, keep Fernly and app ideas private.
 - Handoffs between chats: a new chat sees ONLY what is saved in this repo. When he asks to carry something over,
   write it into this section and push it, then tell him exactly what was saved.
   This section IS the handoff. Don't create a separate handoff document (his call, 12 Nov): one less file to maintain.
