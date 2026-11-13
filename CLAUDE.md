@@ -43,7 +43,12 @@
   This section IS the handoff. Don't create a separate handoff document (his call, 12 Nov): one less file to maintain.
 - Unknown (ask him): whether the TikTok, Instagram Story, Discord and Orbital Bot LinkedIn posts went out; how many
   survey responses are in; whether he DM'd the bot `step done` for Step 1.
-- Next up: Thu 12 Nov night: photograph model stickers on old hardware for eBay/Craigslist. Fri 13 Nov ~2pm break:
+- Hardware to sell (sticker photos done 12 Nov; identified by Claude from the photos): Saitek X52 flight stick +
+  throttle (model PS28); ASUS ROG Strix RX 580 8GB graphics card (ROG-STRIX-RX580-O8G-GAMING); Sapphire HD 7950 3GB
+  graphics card (SKU 11196-16); ASUS M5A97 LE R2.0 motherboard (AM3+); Corsair Vengeance DDR3 8GB kit, 2x4GB 1600MHz
+  (CMZ8GX3M2A1600C9B); Cooler Master MasterLiquid Lite 240 cooler (boxed); WD Blue 640GB hard drive (WD6400AAKS; must
+  be wiped before sale). Still needed: does each item work, full-item photos, sold-price check, then listings.
+- Next up: Fri 13 Nov ~2pm break:
   phone Red Rooster Cafe with the audit offer, then send the written pitch. Check bills for payment extensions.
   Tue 17 Nov: 2-3 sample flyers in Canva (folder "Samples"), then a free Behance profile for them.
   Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person.
