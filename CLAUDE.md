@@ -48,11 +48,14 @@ tell him exactly what was saved.
   with "save the handoff".
 
 **Next up, in order (shift days = ONE item of up to ~15 min)**
-- Fri 13 Nov, ~2pm work break: phone Red Rooster Cafe (406-839-2884) with the $100 website audit offer, mention
-  flyers, then send the written pitch. The pitch was written in another chat; Claude here has not seen it.
+- Red Rooster Cafe call (406-839-2884; $100 website audit offer, mention flyers, then send the written pitch):
+  NOT done Fri 13 Nov because he got sick at lunch. Carried over to Sat 14 Nov ~2pm break, or the next day he's
+  well. The pitch was written in another chat; Claude here has not seen it.
+- Bot change he asked for on 13 Nov: send ALL of the day's tasks, not one, and follow up on missed ones. Claude
+  gave a plan in chat; check whether he approved it before building.
 - Fri 13 or Sat 14 Nov: check his bills for payment extensions (the only thing that helps with the nearest deadlines;
   nothing sold online pays out within a few days).
-- Sat 14 Nov: photograph the RX 580, check eBay SOLD prices, list it on eBay.
+- Sat 14 Nov: also photograph the RX 580, check eBay SOLD prices, list it on eBay (evening).
 - Sun 15 Nov: the same for the Saitek X52.
 - Mon 16 Nov: 6:35-7:35am homework hour (next real-research item), then Grandma's.
 - Tue 17 Nov, 9:15-11am: Huion: (1) copy his art to Google Drive > My-Art, (2) note the specs, (3) reset Windows
