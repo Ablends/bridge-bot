@@ -99,6 +99,47 @@ def setup():
         checkin_columns = [row["name"] for row in db.execute("PRAGMA table_info(checkins)")]
         if "time_ts" not in checkin_columns:
             db.execute("ALTER TABLE checkins ADD COLUMN time_ts TEXT")
+        # Added later: SEVERAL tasks per day (the old daily_tasks table held only one).
+        # Each task is its own row, with its own ✅ / ❌ messages.
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS tasks (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                day        TEXT,     -- the day it was on the list, '2026-11-03'
+                task       TEXT,
+                status     TEXT,     -- 'sent' (open), 'done', 'skipped' (not today),
+                                     -- 'dropped' (never mind), 'carried' (moved to a later day)
+                origin_day TEXT      -- the FIRST day it was given (same as day unless carried over)
+            )
+        """)
+        # Which Slack messages belong to which task, so a ✅ / ❌ tap on any of them finds it.
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS task_messages (
+                ts      TEXT PRIMARY KEY,  -- Slack ID of the message
+                task_id INTEGER,
+                kind    TEXT               -- 'morning' or 'evening'
+            )
+        """)
+        # One time only: copy the old one-task-a-day history across, so recaps and the log
+        # keep working. The old table is left exactly as it was.
+        already = db.execute("SELECT value FROM settings WHERE name = 'multi_task_start'").fetchone()
+        if not already:
+            for old in db.execute("SELECT * FROM daily_tasks WHERE task IS NOT NULL ORDER BY day").fetchall():
+                cur = db.execute(
+                    "INSERT INTO tasks (day, task, status, origin_day) VALUES (?, ?, ?, ?)",
+                    (old["day"], old["task"], old["status"], old["day"]),
+                )
+                for ts, kind in ((old["ping_ts"], "morning"), (old["nudge_ts"], "evening")):
+                    if ts:
+                        db.execute(
+                            "INSERT OR REPLACE INTO task_messages (ts, task_id, kind) VALUES (?, ?, ?)",
+                            (ts, cur.lastrowid, kind),
+                        )
+            # Tasks missed BEFORE the day before this upgrade stay in the past (no flood of old ones).
+            start = (now_denver().date() - timedelta(days=1)).isoformat()
+            db.execute(
+                "INSERT INTO settings (name, value, updated_at) VALUES ('multi_task_start', ?, ?)",
+                (start, now_denver().date().isoformat()),
+            )
 
 
 def get_setting(name, default=None):
@@ -126,57 +167,106 @@ def recent_checkins(days=7):
     return [dict(r) for r in rows]
 
 
-def save_ping_ts(day, ping_ts):
-    """Remember the Slack ID of the morning ping message."""
+# ---------- Daily tasks (several per day) ----------
+
+OPEN = "sent"                      # on the list, no answer yet
+NOT_FINISHED = ("sent", "skipped")  # these come back tomorrow
+
+
+def add_task(day, task, origin_day=None):
+    """Put a task on a day's list. Returns its id."""
     with connect() as db:
-        db.execute("UPDATE daily_tasks SET ping_ts = ? WHERE day = ?", (ping_ts, day))
+        cur = db.execute(
+            "INSERT INTO tasks (day, task, status, origin_day) VALUES (?, ?, 'sent', ?)",
+            (day, task, origin_day or day),
+        )
+        return cur.lastrowid
 
 
-def save_nudge_ts(day, nudge_ts):
-    """Remember the Slack ID of the evening check-in message."""
+def get_task(task_id):
     with connect() as db:
-        db.execute("UPDATE daily_tasks SET nudge_ts = ? WHERE day = ?", (nudge_ts, day))
-
-
-def find_daily_task_by_ping(ts):
-    """Find the day whose morning ping (or evening check-in) has this Slack message ID."""
-    with connect() as db:
-        row = db.execute(
-            "SELECT * FROM daily_tasks WHERE ping_ts = ? OR nudge_ts = ?", (ts, ts)
-        ).fetchone()
+        row = db.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
     return dict(row) if row else None
 
 
-def save_daily_task(day, task):
+def tasks_for_day(day):
+    """Everything on a day's list, in the order it was sent (carried-over ones first)."""
     with connect() as db:
-        db.execute(
-            "INSERT OR REPLACE INTO daily_tasks (day, task, status) VALUES (?, ?, 'sent')",
-            (day, task),
-        )
-
-
-def get_daily_task(day):
-    with connect() as db:
-        return db.execute("SELECT * FROM daily_tasks WHERE day = ?", (day,)).fetchone()
-
-
-def recent_tasks(limit=7):
-    """The last few suggested tasks, newest first (so the bot doesn't repeat itself)."""
-    with connect() as db:
-        rows = db.execute(
-            "SELECT day, task, status FROM daily_tasks ORDER BY day DESC LIMIT ?", (limit,)
-        ).fetchall()
+        rows = db.execute("SELECT * FROM tasks WHERE day = ? ORDER BY id", (day,)).fetchall()
     return [dict(r) for r in rows]
 
 
-def set_daily_status(day, status):
-    """Mark today's task 'done' or 'skipped' (creates a row if no ping was sent)."""
+def open_tasks(day):
+    """Tasks on a day's list with no ✅ / ❌ yet."""
+    return [t for t in tasks_for_day(day) if t["status"] == OPEN]
+
+
+def set_task_status(task_id, status):
+    with connect() as db:
+        db.execute("UPDATE tasks SET status = ? WHERE id = ?", (status, task_id))
+
+
+def save_task_message(task_id, ts, kind):
+    """Remember that this Slack message ('morning' or 'evening') is about this task."""
     with connect() as db:
         db.execute(
-            "INSERT INTO daily_tasks (day, task, status) VALUES (?, NULL, ?) "
-            "ON CONFLICT(day) DO UPDATE SET status = excluded.status",
-            (day, status),
+            "INSERT OR REPLACE INTO task_messages (ts, task_id, kind) VALUES (?, ?, ?)", (ts, task_id, kind)
         )
+
+
+def find_task_by_message(ts):
+    """Find the task a Slack message is about. Returns (task, kind), or (None, None)."""
+    with connect() as db:
+        row = db.execute("SELECT task_id, kind FROM task_messages WHERE ts = ?", (ts,)).fetchone()
+    if not row:
+        return None, None
+    return get_task(row["task_id"]), row["kind"]
+
+
+def current_copy(task):
+    """If a task was carried over to a later day, the newest copy of it (else the task itself)."""
+    if task["status"] != "carried":
+        return task
+    with connect() as db:
+        row = db.execute(
+            "SELECT * FROM tasks WHERE origin_day = ? AND task = ? AND id > ? AND status != 'carried' "
+            "ORDER BY id DESC LIMIT 1",
+            (task["origin_day"], task["task"], task["id"]),
+        ).fetchone()
+    return dict(row) if row else task
+
+
+def carry_over_to(day):
+    """Move every unfinished task from earlier days onto `day`'s list.
+
+    The old row is marked 'carried' (so it is never carried twice) and a fresh open copy is
+    made for `day`, remembering the first day it was given. Returns the new rows, oldest first.
+    """
+    start, _ = get_setting("multi_task_start", "0000-00-00")
+    with connect() as db:
+        old = db.execute(
+            "SELECT * FROM tasks WHERE day < ? AND day >= ? AND status IN ('sent', 'skipped') ORDER BY origin_day, id",
+            (day, start),
+        ).fetchall()
+        new_ids = []
+        for row in old:
+            db.execute("UPDATE tasks SET status = 'carried' WHERE id = ?", (row["id"],))
+            cur = db.execute(
+                "INSERT INTO tasks (day, task, status, origin_day) VALUES (?, ?, 'sent', ?)",
+                (day, row["task"], row["origin_day"] or row["day"]),
+            )
+            new_ids.append(cur.lastrowid)
+    return [get_task(i) for i in new_ids]
+
+
+def recent_tasks(limit=10):
+    """The last few tasks, newest first (so the bot doesn't repeat itself)."""
+    with connect() as db:
+        rows = db.execute(
+            "SELECT day, task, status FROM tasks WHERE status != 'carried' ORDER BY day DESC, id DESC LIMIT ?",
+            (limit,),
+        ).fetchall()
+    return [dict(r) for r in rows]
 
 
 def add_checkin(minutes, category, summary, original):
@@ -309,13 +399,25 @@ def _week_range(start):
     return start, end
 
 
-def week_daily_tasks(start):
+def week_tasks(start):
+    """Each task that was on a list that week, once, as it stood when the week ended.
+
+    A task carried over from day to day is one task, not several. If it was still unfinished
+    when the week ended (carried into the next week), its status here is 'sent'.
+    """
     start, end = _week_range(start)
     with connect() as db:
         rows = db.execute(
-            "SELECT * FROM daily_tasks WHERE day >= ? AND day < ? ORDER BY day", (start, end)
+            "SELECT * FROM tasks WHERE day >= ? AND day < ? ORDER BY id", (start, end)
         ).fetchall()
-    return [dict(r) for r in rows]
+    last = {}
+    for row in rows:
+        last[(row["origin_day"], row["task"])] = dict(row)  # later rows replace earlier copies
+    tasks = sorted(last.values(), key=lambda t: t["id"])
+    for t in tasks:
+        if t["status"] == "carried":
+            t["status"] = "sent"
+    return tasks
 
 
 def week_decided(start):

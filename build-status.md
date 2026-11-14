@@ -8,7 +8,7 @@ Written Thu 12 Nov 2026. A plain-language summary of what Alexander and Claude h
 
 ## 1. Orbital Bot (the Slack accountability bot)
 
-**What it does:** sends Alexander one task every morning in Slack, lets him check in with one tap, keeps a log of what he did, and posts a weekly recap.
+**What it does:** sends Alexander his task list every morning in Slack (one message per task), lets him check in with one tap per task, brings back anything unfinished the next day, keeps a log of what he did, and posts a weekly recap.
 
 **Finished and working** *(from notes)*
 - Morning task at 7am, chosen from `my-focus.txt`

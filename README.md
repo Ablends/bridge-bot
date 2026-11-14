@@ -1,6 +1,7 @@
 # Orbital Bot
 
-A Slack helper for **The Bridge**. It DMs Alexander one task a day, logs check-ins,
+A Slack helper for **The Bridge**. Every morning it DMs Alexander today's task list (each task with its own ✅ / ❌), brings back
+anything left unfinished the next day, logs check-ins,
 tracks decisions and ideas, and posts a weekly recap. It drafts and suggests; Alexander approves.
 
 **Built so far:** step 1 (DMs) ✅ · step 2 (7am morning ping) ✅ · step 3 (check-ins & hours) ✅ · step 4 (ideas & decisions) ✅ · step 5 (weekly recap) ✅ · step 6 (runs 24/7 on Google Cloud) ✅

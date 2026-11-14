@@ -42,43 +42,68 @@ def ask_claude(instructions, max_tokens=2000):
     return text or None
 
 
-def suggest_daily_task(is_shift_day, weekday_name, focus, recent, weekly_goal=None):
-    """Ask Claude for ONE task for today."""
+class TaskList(BaseModel):
+    tasks: list[str]   # today's tasks, most important first
+
+
+def suggest_daily_tasks(is_shift_day, weekday_name, focus, recent, weekly_goal=None,
+                        max_tasks=1, carried_over=()):
+    """Ask Claude for today's task list: up to `max_tasks` NEW tasks. Returns a list (or None)."""
     if is_shift_day:
         size = (
-            "Today is a WORK SHIFT day (Alexander works 8am-7pm). The task must be small: about "
+            "Today is a WORK SHIFT day (Alexander works 8am-7pm). Each task must be small: about "
             "15 minutes at most, doable on a break or phone if possible."
+        )
+    elif max_tasks > 1:
+        size = (
+            "Today is a PROGRESS day (one of Alexander's main work days). He has a morning work block "
+            "and an afternoon block. Give one task per piece of work the plan has for today, each with "
+            "a clear finish line."
         )
     else:
         size = (
-            "Today is a PROGRESS day (Mon-Wed, Alexander's main work days). Suggest one real "
-            "work block of 60-120 minutes with a clear finish line."
+            "Today is a PROGRESS day, but a short one. Suggest one real piece of work that fits the "
+            "time the plan gives for today, with a clear finish line."
         )
 
     recent_text = "\n".join(f"- {r['day']}: {r['task']} ({r['status']})" for r in recent) or "- none yet"
+    carried_text = "\n".join(f"- {t}" for t in carried_over) or "- none"
+    how_many = "exactly ONE task" if max_tasks == 1 else f"between 1 and {max_tasks} tasks"
 
-    instructions = f"""Suggest ONE task for Alexander for today ({weekday_name}).
+    instructions = f"""Write Alexander's task list for today ({weekday_name}): {how_many}.
 
 {size}
 
-Either coursework OR portfolio/template work counts. Pick whichever moves things forward most,
-and vary it from recent days when it makes sense.
+Only list things his plan actually has for TODAY. Never pad the list to reach {max_tasks}: fewer
+real tasks beat more filler. Follow any dates and "in this order" rules in the plan exactly.
+Put the most important task first.
 
 What Alexander is working on right now:
 {focus}
 
 This week's suggested main goal (lean toward it when it fits): {weekly_goal or "(none set)"}
 
-Recent suggested tasks, newest first. Status "done" = finished; "skipped" or "sent" = NOT done:
+ALREADY on today's list, carried over from earlier days because they weren't finished.
+Do NOT include these or anything that overlaps with them; they are sent separately:
+{carried_text}
+
+Recent tasks, newest first ("done" = finished, "dropped" = he decided against it; don't repeat either):
 {recent_text}
 
-If the newest task above was NOT done, give that same task again today (make it smaller if
-today is a shift day). Otherwise, don't repeat recent tasks.
+Each task: 1-2 short sentences, starting with a verb, including a rough time estimate.
+No greeting, no numbering, no extra commentary."""
 
-Reply with only the task: 1-2 short sentences, starting with a verb, including a rough
-time estimate. No greeting, no list, no extra commentary."""
+    form = ask_claude_form(instructions, TaskList)
+    if not form:
+        return None
+    tasks = [t.strip() for t in form.tasks if t and t.strip()]
+    return tasks[:max_tasks] or None
 
-    return ask_claude(instructions)
+
+def suggest_daily_task(is_shift_day, weekday_name, focus, recent, weekly_goal=None):
+    """One optional bonus task (used by "what's next" when today's list is finished)."""
+    tasks = suggest_daily_tasks(is_shift_day, weekday_name, focus, recent, weekly_goal, max_tasks=1)
+    return tasks[0] if tasks else None
 
 
 # ---------- Step 3: understanding your DMs ----------
@@ -88,19 +113,23 @@ class MessageMeaning(BaseModel):
     is_checkin: bool                 # did you report doing some work?
     minutes: Optional[int]           # how long, ONLY if you said (e.g. "30 min", "2 hours")
     category: Literal["coursework", "portfolio", "template", "gig", "other"]
+    task_number: Optional[int]       # which of today's open tasks this finishes (1, 2, ...), if any
     summary: str                     # short tidy version for the #helm log
     reply: str                       # a short friendly reply to you
 
 
-def understand_message(text, todays_task):
+def understand_message(text, open_tasks):
     """Ask Claude whether a DM is a check-in, and pull out the details."""
     if not os.environ.get("ANTHROPIC_API_KEY"):
         return None
 
+    tasks_text = "\n".join(f"{n}. {t}" for n, t in enumerate(open_tasks, 1)) or "(none open right now)"
+
     instructions = f"""Alexander sent you this DM:
 "{text}"
 
-Today's suggested task was: {todays_task or "(none sent today)"}
+Today's tasks that are still open:
+{tasks_text}
 
 Decide if this is a CHECK-IN, meaning Alexander is reporting work they did (even small, even vague,
 e.g. "did 30 min of module 4", "finished the cover page", "done!" when a task was suggested).
@@ -109,6 +138,9 @@ Fill in:
 - is_checkin: true or false.
 - minutes: how long they worked, converted to minutes, ONLY if they stated a time. Otherwise null.
   Never guess a time.
+- task_number: if this check-in says he FINISHED one of the open tasks listed above, its number.
+  If it's partial progress, about something else, or you're not sure, null. With exactly one
+  open task, "done!" means that task.
 - category: "coursework" (Coursera course), "portfolio" (case studies: Fernly, budgeting app,
   Command Hub Lite), "template" (the Figma portfolio template product), "gig" (a paid design job
   for a client: flyers, social posts, menus), or "other" (planning, business admin, anything else).

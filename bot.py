@@ -1,7 +1,8 @@
 # Orbital Bot — Alexander's helper for The Bridge Slack workspace.
 #
 # STEP 1: connects to Slack and can DM you.
-# STEP 2: every day at 7:00am Denver time, DMs you ONE task for the day.
+# STEP 2: every day at 7:00am Denver time, DMs you today's task list. Each task is its own
+#         message with its own ✅ / ❌. Unfinished tasks come back the next morning.
 # STEP 3: understands check-ins ("did 30 min of module 4"), logs them, posts to #helm,
 #         tracks weekly hours, and answers "what's next", "hours this week", "skip today".
 # STEP 4: "idea: ..." goes to #ideas, tidied. "decision: ..." is logged in #helm; after 3 days
@@ -33,6 +34,9 @@ MY_USER_ID = os.environ["MY_SLACK_USER_ID"]       # your Slack member ID, starts
 MORNING_PING_HOUR = 7    # 7:00am Denver time
 EVENING_CHECKIN_HOUR = 20  # 8:00pm Denver time: "did today's task happen?" (only if no check-in yet)
 SHIFT_DAYS = ["Thursday", "Friday", "Saturday", "Sunday"]
+# How many NEW tasks the morning list may hold. Any day not named here gets 1.
+# Tasks carried over from earlier days are added on top of this.
+MAX_NEW_TASKS = {"Tuesday": 3, "Wednesday": 3}
 
 # HARD RULE: the bot never posts here unless Alexander explicitly asks.
 OFF_LIMITS_CHANNELS = ["design-studio"]
@@ -45,6 +49,8 @@ TIME_REACTIONS = {"one": 15, "two": 30, "three": 60, "four": 120}
 
 YES_REACTIONS = ["white_check_mark", "heavy_check_mark", "ballot_box_with_check", "+1", "thumbsup"]
 NO_REACTIONS = ["x", "negative_squared_cross_mark", "-1", "thumbsdown"]
+DROP_REACTIONS = ["wastebasket"]  # 🗑️ on a task = "never mind, don't bring this back"
+NUMBER_EMOJI = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
 # The fixed build path for the Figma portfolio template. Never reorder or skip.
 # "step done" moves to the next one.
@@ -64,15 +70,17 @@ TEMPLATE_STEPS = [
 COUNTS_AS_DONE = ["coursework", "portfolio", "template"]
 
 HELP_TEXT = """Here's what I understand:
-• Tap ✅ on the morning task when it's done, or ❌ to skip. No typing needed.
+• Every morning I send today's list, one message per task. Tap ✅ under a task when it's done,
+  or ❌ for “not today”. Anything unfinished comes back tomorrow, marked 🔁. Tap 🗑️ to drop one for good.
+• *today*: today's list and where each task stands
   If you haven't checked in by 8pm, I'll ask once. Anything not done is first up the next day.
 • *class: ...*: tell me where you are in class, e.g. “class: on module 4 quiz” (*class* shows it)
 • *step done*: you finished the current portfolio template step, move to the next (*step* shows it)
 • Tell me what you did, in your own words: “did 30 min of module 4”, “finished the cover page”
-• *what's next*: today's task (or a bonus one if you're done)
+• *what's next*: what's still open today (or a bonus task if you're done)
 • *log*: everything you did this week, with times
 • *hours this week*: your logged time since Monday
-• *skip today*: take the day off, no stress
+• *skip today*: take the day off, no stress (today's tasks come back tomorrow)
 • *idea: ...*: tidied up and posted to #ideas
 • *decision: ...*: logged in #helm. Answer by replying in the thread I start
 • *decisions*: list the ones still open
@@ -80,7 +88,7 @@ HELP_TEXT = """Here's what I understand:
 • *goal: ...*: set your own main goal for the week (or *goal* to see it)
 • *recap preview*: DM me a recap of this week so far (not posted anywhere)
 • *post recap*: post last week's recap to #ship-log now
-• *ping me*: send this morning's task again"""
+• *ping me*: send today's open tasks again"""
 
 # Used only if Claude can't be reached, so you still get a task.
 BACKUP_TASKS = {
@@ -204,7 +212,6 @@ def step_done(say):
     finished = TEMPLATE_STEPS[step - 1]
     storage.set_setting("template_step", step + 1)
     storage.add_checkin(None, "template", f"Finished template step {step}: {finished}", "step done")
-    storage.set_daily_status(storage.today(), "done")
     post_to_channel("helm", f"🧱 *Template step {step} of {len(TEMPLATE_STEPS)} done* _(via chat)_: {finished}")
     if step < len(TEMPLATE_STEPS):
         say(f"🧱 Step {step} done! Logged in #helm.\nNext up, *step {step + 1}*: {TEMPLATE_STEPS[step]}")
@@ -221,41 +228,110 @@ def show_step(say):
             "Type “step done” when it's finished.")
 
 
+def is_carried(task):
+    """True if this task first appeared on an earlier day."""
+    return bool(task["origin_day"]) and task["origin_day"] != task["day"]
+
+
+def first_given(task):
+    d = date.fromisoformat(task["origin_day"])
+    return f"{d:%a} {short_date(task['origin_day'])}"  # e.g. "Fri Nov 13"
+
+
+def task_text(task, number=None):
+    """One task as a line of text. Carried-over ones say when they were first given."""
+    label = f"{NUMBER_EMOJI[number - 1]} " if number and number <= len(NUMBER_EMOJI) else "👉 "
+    if is_carried(task):
+        return f"{label}🔁 _Carried over from {first_given(task)}:_ {task['task']}"
+    return f"{label}{task['task']}"
+
+
 def send_morning_ping(force=False):
-    """Pick today's ONE task and DM it. Runs at 7am, or when you type 'ping me'."""
+    """Build today's task list and DM it. Runs at 7am, or re-sends open tasks on 'ping me'."""
     day = storage.today()
-    if storage.get_daily_task(day) and not force:
-        print(f"Morning ping already sent for {day}, skipping.")
+    if storage.tasks_for_day(day):
+        if force:
+            if not send_task_list(day, "morning"):
+                dm_me("Nothing is open on today's list 🙌 Type “what's next” if you want a bonus task.")
+        else:
+            print(f"Morning list already sent for {day}, skipping.")
         return
 
     weekday = storage.now_denver().strftime("%A")
     is_shift_day = weekday in SHIFT_DAYS
 
-    task = brain.suggest_daily_task(
-        is_shift_day, weekday, read_focus(), storage.recent_tasks(), storage.current_goal()
+    # 1. Anything not finished on earlier days comes back first.
+    carried = storage.carry_over_to(day)
+
+    # 2. Today's new tasks, from the plan (up to the day's limit).
+    new_tasks = brain.suggest_daily_tasks(
+        is_shift_day, weekday, read_focus(), storage.recent_tasks(), storage.current_goal(),
+        max_tasks=MAX_NEW_TASKS.get(weekday, 1), carried_over=[t["task"] for t in carried],
     )
-    if not task:
-        task = random.choice(BACKUP_TASKS["shift" if is_shift_day else "progress"])
+    if not new_tasks and not carried:
+        # Claude couldn't be reached and nothing is carried over: still give one task.
+        new_tasks = [random.choice(BACKUP_TASKS["shift" if is_shift_day else "progress"])]
+    for task in new_tasks or []:
+        storage.add_task(day, task)
 
-    storage.save_daily_task(day, task)
+    sent = send_task_list(day, "morning")
+    print(f"Sent morning list for {day}: {sent} task(s), {len(carried)} carried over.")
 
-    if is_shift_day:
-        header = f"☀️ Morning! It's {weekday}, a shift day, so just one small thing:"
+
+def send_task_list(day, kind):
+    """DM every OPEN task on `day`'s list, each as its own message with its own buttons.
+
+    kind is 'morning' or 'evening'. Returns how many tasks were sent.
+    """
+    tasks = storage.open_tasks(day)
+    if not tasks:
+        return 0
+    weekday = date.fromisoformat(day).strftime("%A")
+    carried = [t for t in tasks if is_carried(t)]
+
+    if len(tasks) == 1:
+        # One task: one message, like before.
+        task = tasks[0]
+        if kind == "evening":
+            text = (f"🌙 Did today's task happen?\n\n{task_text(task)}\n\n"
+                    "Tap ✅ if it's done, ❌ if not. No stress either way.")
+        else:
+            size = "a shift day, so just one small thing" if weekday in SHIFT_DAYS else "a progress day. Today's one thing"
+            text = (f"☀️ Morning! It's {weekday}, {size}:\n\n{task_text(task)}\n\n"
+                    "Tap ✅ below when it's done, or ❌ for not today (it comes back tomorrow). "
+                    "Want to log how long it took? Just type it, e.g. “did 30 min”.")
+        if carried:
+            text += "\n🗑️ drops it for good."
+        ts = dm_me(text)
+        storage.save_task_message(task["id"], ts, kind)
+        add_buttons(ts, drop=bool(carried))
+        return 1
+
+    if kind == "evening":
+        header = (f"🌙 {len(tasks)} things from today are still open. "
+                  "Tap ✅ under each one that happened, ❌ if not. No stress either way.")
     else:
-        header = f"☀️ Morning! It's {weekday}, a progress day. Today's one thing:"
-    ping_ts = dm_me(
-        f"{header}\n\n👉 {task}\n\n"
-        "Tap ✅ below when it's done, or ❌ to skip today (no stress). "
-        "Want to log how long it took? Just type it, e.g. “did 30 min”."
-    )
-    storage.save_ping_ts(day, ping_ts)
-    add_buttons(ping_ts)
-    print(f"Sent morning ping for {day}: {task}")
+        day_kind = "a shift day" if weekday in SHIFT_DAYS else "a progress day"
+        header = f"☀️ Morning! It's {weekday}, {day_kind}. Today's list has *{len(tasks)} things*"
+        if carried:
+            header += f" ({len(carried)} carried over)"
+        header += (".\nEach one is its own message below. Tap ✅ under it when it's done, "
+                   "or ❌ for not today (it comes back tomorrow).")
+    if carried:
+        header += " 🗑️ drops a carried-over one for good."
+    if kind == "morning" and len(carried) >= 3:
+        header += "\n_That's a lot carried over. Drop anything that no longer matters._"
+    dm_me(header)
+    for number, task in enumerate(tasks, 1):
+        ts = dm_me(task_text(task, number))
+        storage.save_task_message(task["id"], ts, kind)
+        add_buttons(ts, drop=is_carried(task))
+    return len(tasks)
 
 
-def add_buttons(message_ts):
-    """Add ✅ and ❌ under a message so checking in is one tap."""
-    for emoji in ("white_check_mark", "x"):
+def add_buttons(message_ts, drop=False):
+    """Add ✅ and ❌ (and 🗑️ for carried-over tasks) under a message so checking in is one tap."""
+    for emoji in ("white_check_mark", "x") + (("wastebasket",) if drop else ()):
         try:
             app.client.reactions_add(channel=dm_channel_id(), timestamp=message_ts, name=emoji)
         except SlackApiError as error:
@@ -263,19 +339,11 @@ def add_buttons(message_ts):
 
 
 def send_evening_checkin():
-    """8pm: if today's task has no check-in yet, ask (one tap) whether it happened."""
+    """8pm: ask (one tap each) about any of today's tasks that have no ✅ / ❌ yet."""
     day = storage.today()
-    daily = storage.get_daily_task(day)
-    if not daily or not daily["task"] or daily["status"] != "sent":
-        print(f"Evening check-in not needed for {day}.")
-        return
-    nudge_ts = dm_me(
-        f"🌙 Did today's task happen?\n\n👉 {daily['task']}\n\n"
-        "Tap ✅ if it's done, ❌ if not. No stress either way."
-    )
-    storage.save_nudge_ts(day, nudge_ts)
-    add_buttons(nudge_ts)
-    print(f"Sent evening check-in for {day}.")
+    sent = send_task_list(day, "evening")
+    print(f"Evening check-in for {day}: {sent} open task(s)." if sent
+          else f"Evening check-in not needed for {day}.")
 
 
 _dm_channel = {}
@@ -288,20 +356,21 @@ def dm_channel_id():
     return _dm_channel["id"]
 
 
-def tap_checkin(daily, reaction, message_ts):
-    """Alexander tapped ✅ or ❌ on a morning ping or evening check-in."""
-    evening = message_ts == daily.get("nudge_ts")
+def tap_task(task, reaction, message_ts):
+    """Alexander tapped ✅, ❌ or 🗑️ under a task message."""
+    # A tap on an OLD message of a task that has since been carried over counts for today's copy.
+    task = storage.current_copy(task)
     if reaction in YES_REACTIONS:
-        if daily["status"] == "done":
+        if task["status"] == "done":
             return  # already counted, ignore a second tap
-        storage.set_daily_status(daily["day"], "done")
-        summary = f"Did the daily task: {daily['task']}"
-        checkin_id = storage.add_checkin(None, guess_category(daily["task"]), summary, "(tapped ✅)")
+        storage.set_task_status(task["id"], "done")
+        summary = f"Did the daily task: {task['task']}"
+        checkin_id = storage.add_checkin(None, guess_category(task["task"]), summary, "(tapped ✅)")
         posted = post_to_channel("helm", f"✅ *Check-in* _(one tap)_: {summary}")
         where = "Logged in #helm" if posted else "Saved (but not posted to #helm, see the warning above)"
         ask_ts = dm_me(
-            f"🙌 Nice, marked done. {where}.\n⏱️ How long did it take? Tap one: "
-            "1️⃣ 15 min · 2️⃣ 30 min · 3️⃣ 1 hour · 4️⃣ 2 hours",
+            f"🙌 Nice, marked done. {where}.{list_progress(task['day'])}\n"
+            "⏱️ How long did it take? Tap one: 1️⃣ 15 min · 2️⃣ 30 min · 3️⃣ 1 hour · 4️⃣ 2 hours",
             thread_ts=message_ts,
         )
         storage.save_checkin_time_ts(checkin_id, ask_ts)
@@ -311,13 +380,28 @@ def tap_checkin(daily, reaction, message_ts):
             except SlackApiError as error:
                 print(f"Couldn't add the {emoji} button: {error.response.get('error')}")
     elif reaction in NO_REACTIONS:
-        if daily["status"] != "sent":
-            return  # already done or skipped
-        storage.set_daily_status(daily["day"], "skipped")
-        if evening:
-            dm_me("No problem 👍 It'll be first up tomorrow morning.", thread_ts=message_ts)
-        else:
-            dm_me("Skipped ✅ Rest is part of the plan. It'll be first up tomorrow.", thread_ts=message_ts)
+        if task["status"] != storage.OPEN:
+            return  # already done, skipped or dropped
+        storage.set_task_status(task["id"], "skipped")
+        dm_me("No problem 👍 It'll be back on tomorrow's list.", thread_ts=message_ts)
+    elif reaction in DROP_REACTIONS:
+        if task["status"] not in storage.NOT_FINISHED:
+            return  # already done or dropped
+        storage.set_task_status(task["id"], "dropped")
+        dm_me("🗑️ Dropped. It won't come back.", thread_ts=message_ts)
+
+
+def list_progress(day):
+    """A short note on how today's list stands, e.g. ' 2 of 3 done today.' (empty for a 1-task day)."""
+    if day != storage.today():
+        return ""
+    tasks = [t for t in storage.tasks_for_day(day) if t["status"] != "dropped"]
+    if len(tasks) < 2:
+        return ""
+    done = sum(1 for t in tasks if t["status"] == "done")
+    if done == len(tasks):
+        return " That's everything on today's list 🎉"
+    return f" {done} of {len(tasks)} done today."
 
 
 @app.event("message")
@@ -361,6 +445,8 @@ def respond_to_message(event, say):
         send_morning_ping(force=True)
     elif command in ("whats next", "what next", "next"):
         whats_next(say)
+    elif command in ("today", "tasks", "my tasks", "list", "todays list"):
+        show_today(say)
     elif command in ("log", "my log", "what did i do", "this week", "week log"):
         show_log(say)
     elif command in ("hours this week", "hours", "my hours"):
@@ -430,10 +516,9 @@ def respond_to_message(event, say):
 
 def handle_checkin_or_chat(text, say):
     """Use Claude to decide if this is a check-in. If yes, log it and post to #helm."""
-    today = storage.get_daily_task(storage.today())
-    todays_task = today["task"] if today else None
+    open_today = storage.open_tasks(storage.today())
 
-    meaning = brain.understand_message(text, todays_task)
+    meaning = brain.understand_message(text, [t["task"] for t in open_today])
     if meaning is None:
         say("Hmm, I couldn't reach Claude just now, so I didn't log that. "
             "Try again in a minute? (Type “help” to see what I can do.)")
@@ -444,8 +529,18 @@ def handle_checkin_or_chat(text, say):
         return
 
     storage.add_checkin(meaning.minutes, meaning.category, meaning.summary, text)
-    if meaning.category in COUNTS_AS_DONE:
-        storage.set_daily_status(storage.today(), "done")
+
+    # Did this check-in finish one of today's tasks?
+    finished = None
+    number = meaning.task_number
+    if number and 1 <= number <= len(open_today):
+        finished = open_today[number - 1]
+    elif len(open_today) == 1 and meaning.category in COUNTS_AS_DONE:
+        finished = open_today[0]
+    ticked = ""
+    if finished:
+        storage.set_task_status(finished["id"], "done")
+        ticked = f"\n✅ Ticked off: {finished['task']}{list_progress(finished['day'])}"
 
     total, _ = storage.week_minutes()
     time_part = f" ({nice_time(meaning.minutes)})" if meaning.minutes else ""
@@ -455,20 +550,42 @@ def handle_checkin_or_chat(text, say):
         f"This week so far: {nice_time(total)}",
     )
     where = "Logged in #helm" if posted else "Saved (but not posted to #helm, see the warning above)"
-    say(f"{meaning.reply}\n📒 {where}. This week: *{nice_time(total)}*.")
+    say(f"{meaning.reply}{ticked}\n📒 {where}. This week: *{nice_time(total)}*.")
+
+
+STATUS_ICON = {"sent": "⬜", "done": "✅", "skipped": "⏭️", "dropped": "🗑️"}
+
+
+def show_today(say):
+    """Today's whole list and where each task stands."""
+    tasks = storage.tasks_for_day(storage.today())
+    if not tasks:
+        say("No list yet today. It arrives at 7am, or type “ping me” to get it now.")
+        return
+    lines = ["🗒️ *Today's list*"]
+    for task in tasks:
+        carried = f" _(carried over from {first_given(task)})_" if is_carried(task) else ""
+        lines.append(f"{STATUS_ICON.get(task['status'], '⬜')} {task['task']}{carried}")
+    lines.append("_⬜ open · ✅ done · ⏭️ not today (back tomorrow) · 🗑️ dropped_")
+    say("\n".join(lines))
 
 
 def whats_next(say):
-    today = storage.get_daily_task(storage.today())
-    if today and today["task"] and today["status"] == "sent":
-        say(f"Today's one thing:\n👉 {today['task']}")
+    day = storage.today()
+    open_today = storage.open_tasks(day)
+    if len(open_today) == 1:
+        say(f"Still open today:\n{task_text(open_today[0])}")
+        return
+    if open_today:
+        say(f"Still open today ({len(open_today)}):\n" +
+            "\n".join(task_text(t, n) for n, t in enumerate(open_today, 1)))
         return
 
-    # Today's task is done or skipped (or none was sent): offer an optional bonus.
+    # Nothing open (all done or skipped, or no list was sent): offer an optional bonus.
     weekday = storage.now_denver().strftime("%A")
     bonus = brain.suggest_daily_task(weekday in SHIFT_DAYS, weekday, read_focus(), storage.recent_tasks())
-    if today and today["status"] == "done":
-        intro = "You've already done today's thing 🙌 If you feel like more, here's a bonus:"
+    if any(t["status"] == "done" for t in storage.tasks_for_day(day)):
+        intro = "You've finished today's list 🙌 If you feel like more, here's a bonus:"
     else:
         intro = "Here's a good next step, only if you feel like it:"
     say(f"{intro}\n👉 {bonus or random.choice(BACKUP_TASKS['shift'])}")
@@ -519,12 +636,18 @@ def show_log(say):
 
 
 def skip_today(say):
-    today = storage.get_daily_task(storage.today())
-    if today and today["status"] == "done":
-        say("You already did today's thing ✅ No need to skip. Enjoy the rest of the day!")
+    day = storage.today()
+    open_today = storage.open_tasks(day)
+    if not open_today:
+        if any(t["status"] == "done" for t in storage.tasks_for_day(day)):
+            say("You already finished today's list ✅ No need to skip. Enjoy the rest of the day!")
+        else:
+            say("Nothing is open today ✅ Rest is part of the plan. See you tomorrow morning.")
         return
-    storage.set_daily_status(storage.today(), "skipped")
-    say("Skipped ✅ Rest is part of the plan. See you tomorrow morning.")
+    for task in open_today:
+        storage.set_task_status(task["id"], "skipped")
+    back = "It'll" if len(open_today) == 1 else f"All {len(open_today)} will"
+    say(f"Skipped ✅ Rest is part of the plan. {back} be back on tomorrow's list.")
 
 
 # ---------- Step 4: ideas ----------
@@ -615,16 +738,16 @@ def check_old_decisions():
 
 @app.event("reaction_added")
 def handle_reaction(event):
-    """✅/❌ on a morning ping is a one-tap check-in.
+    """✅/❌/🗑️ under a task message is a one-tap check-in.
     ✅ on a decision suggestion confirms it; ❌ keeps the decision open."""
     if event.get("user") != MY_USER_ID:
         return
     message_ts = event.get("item", {}).get("ts")
     reaction = event.get("reaction", "").split("::")[0]  # ignore skin-tone variations
 
-    daily = storage.find_daily_task_by_ping(message_ts)
-    if daily:
-        tap_checkin(daily, reaction, message_ts)
+    task, _kind = storage.find_task_by_message(message_ts)
+    if task:
+        tap_task(task, reaction, message_ts)
         return
 
     checkin = storage.find_checkin_by_time_ts(message_ts)
@@ -659,21 +782,28 @@ def build_recap(week):
     week_end = (date.fromisoformat(week) + timedelta(days=6)).isoformat()
     total, by_category = storage.week_minutes(week)
     checkins = storage.week_checkins(week)
-    days = storage.week_daily_tasks(week)
+    tasks = storage.week_tasks(week)
     decided = storage.week_decided(week)
     still_open = storage.open_decisions()
     ideas = storage.week_ideas(week)
 
-    done = sum(1 for d in days if d["status"] == "done")
-    skipped = sum(1 for d in days if d["status"] == "skipped")
-    no_checkin = sum(1 for d in days if d["status"] == "sent")
+    done = sum(1 for t in tasks if t["status"] == "done")
+    not_finished = sum(1 for t in tasks if t["status"] in storage.NOT_FINISHED)
+    dropped = sum(1 for t in tasks if t["status"] == "dropped")
+    planned = done + not_finished  # dropped ones don't count against him
+    tasks_text = f"{done} of {planned} done"
+    if not_finished:
+        tasks_text += f" · {not_finished} not finished"
+    if dropped:
+        tasks_text += f" · {dropped} dropped"
     category_text = ", ".join(f"{c} {nice_time(m)}" for c, m in by_category.items() if m)
 
     # Plain facts. Counted by the code, so the numbers are always right.
     facts = "\n".join([
         f"Week: {short_date(week)} to {short_date(week_end)}",
         f"Hours logged: {nice_time(total)} ({category_text or 'none'}) across {len(checkins)} check-ins",
-        f"Daily tasks: {done} done, {skipped} skipped, {no_checkin} with no check-in",
+        f"Tasks: {tasks_text}",
+        "Tasks not finished: " + ("; ".join(t["task"] for t in tasks if t["status"] in storage.NOT_FINISHED) or "none"),
         "Check-ins:",
         *[f"- {c['day']}: {c['summary']}" + (f" ({nice_time(c['minutes'])})" if c["minutes"] else "")
           for c in checkins],
@@ -689,7 +819,7 @@ def build_recap(week):
         f"📦 *Weekly recap: {short_date(week)} – {short_date(week_end)}*",
         f"⏱ *Hours:* {nice_time(total)}" + (f" ({category_text})" if category_text else "")
         + f" · {len(checkins)} check-in(s)",
-        f"📅 *Daily tasks:* {done} done · {skipped} skipped · {no_checkin} no check-in",
+        f"📅 *Tasks:* {tasks_text}",
     ]
     if recap:
         if recap.highlights:
@@ -731,7 +861,7 @@ def post_weekly_recap(force=False):
 
 
 def start_scheduler():
-    """Set up the timers (Denver time): 7am task, 9am decision check, Monday 7:05am recap."""
+    """Set up the timers (Denver time): 7am task list, 8pm check-in, 9am decision check, Monday 7:05am recap."""
     scheduler = BackgroundScheduler(timezone=storage.DENVER)
     scheduler.add_job(
         send_morning_ping,

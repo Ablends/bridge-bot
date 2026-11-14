@@ -51,8 +51,15 @@ tell him exactly what was saved.
 - Red Rooster Cafe call (406-839-2884; $100 website audit offer, mention flyers, then send the written pitch):
   NOT done Fri 13 Nov because he got sick at lunch. Carried over to Sat 14 Nov ~2pm break, or the next day he's
   well. The pitch was written in another chat; Claude here has not seen it.
-- Bot change he asked for on 13 Nov: send ALL of the day's tasks, not one, and follow up on missed ones. Claude
-  gave a plan in chat; check whether he approved it before building.
+- Bot change BUILT 13 Nov (his request, plan approved): the bot now sends today's whole list, one message per task
+  with its own ✅ / ❌. Limits: up to 3 new tasks Tue/Wed, 1 on other days (`MAX_NEW_TASKS` in bot.py). Unfinished
+  tasks come back next morning marked 🔁 until ✅ or 🗑️ (drop); they don't count against the limit. 8pm asks only
+  about open tasks. New command `today`. Monday recap says "X of Y done". Records: new `tasks` and `task_messages`
+  tables in bridge.db; the old `daily_tasks` table is kept untouched. Tested here with stand-ins for Slack and
+  Claude; NOT yet seen live. NEEDS a server update (`bash deploy/update.sh`), then check one morning's messages.
+- Command Hub: he wants the bot to use it as the homepage (raised 13 Nov). The hub is a claude.ai artifact with its
+  own database; the bot on the server can't write to it directly. This is ROADMAP.md #7 (Jarvis), still locked.
+  Claude explained the options in chat; nothing was built. Don't start it without his go-ahead.
 - Fri 13 or Sat 14 Nov: check his bills for payment extensions (the only thing that helps with the nearest deadlines;
   nothing sold online pays out within a few days).
 - Sat 14 Nov: also photograph the RX 580, check eBay SOLD prices, list it on eBay (evening).
@@ -145,7 +152,7 @@ tell him exactly what was saved.
 - `bot.py` (Slack + schedule), `brain.py` (Claude calls), `storage.py` (SQLite `bridge.db`).
 - Updates reach the server when Alexander runs `bash deploy/update.sh` over SSH (README has the steps).
 - The server also runs `git pull` daily at 6:45am Denver time, but that does NOT restart the bot.
-- Orbital Bot is the ONLY source of the daily task. A separate Claude scheduled task
+- Orbital Bot is the ONLY source of the daily task list. A separate Claude scheduled task
   ("Bridge daily check", 6:30am) only answers "Claude:" requests in Slack. Don't give it the task job back.
 - Alexander tells the bot where he is with `class: ...` and `step done` (portfolio template's 9 fixed steps, in `bot.py`).
 - Logging: everything goes in the bot (`log` shows the week). After a work session with Claude, if Alexander asks,
