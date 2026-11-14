@@ -82,8 +82,8 @@ tell him exactly what was saved.
   (new, never used, boxed).
 - WD Blue 640GB hard drive (WD6400AAKS): Claude advised not selling it (low value, needs a proper wipe). Not decided.
 - Everything works "as far as he knows" and is not recently tested: listings say "working when last used", never
-  "tested". Listing titles and descriptions were drafted in chat on 12 Nov and are NOT saved in the repo; write them
-  out again in full when he's ready to list. Prices: check eBay sold listings first; keep amounts out of this repo.
+  "tested". Listing titles and descriptions are saved in drafts/hardware-listings.md (no prices);
+  still write them out in full in chat when he asks. Prices: check eBay sold listings first; keep amounts out of this repo.
 
 **Done this week**
 - 10 Nov: template Step 1 (fresh Figma file, six pages). Survey improved to 14 questions (feelings, motivation and
