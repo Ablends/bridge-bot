@@ -55,8 +55,10 @@ tell him exactly what was saved.
   with its own ✅ / ❌. Limits: up to 3 new tasks Tue/Wed, 1 on other days (`MAX_NEW_TASKS` in bot.py). Unfinished
   tasks come back next morning marked 🔁 until ✅ or 🗑️ (drop); they don't count against the limit. 8pm asks only
   about open tasks. New command `today`. Monday recap says "X of Y done". Records: new `tasks` and `task_messages`
-  tables in bridge.db; the old `daily_tasks` table is kept untouched. Tested here with stand-ins for Slack and
-  Claude; NOT yet seen live. NEEDS a server update (`bash deploy/update.sh`), then check one morning's messages.
+  tables in bridge.db; the old `daily_tasks` table is kept untouched. LIVE since Sat 14 Nov 6:35am. The first live list
+  repeated the carried-over task as the day's new task; fixed and deployed Sat 14 Nov ~9:35pm (new tasks that match
+  a carried-over one are thrown out and the next one asked for). No update is waiting. Worth a look at Sunday's and
+  Tuesday's morning lists to confirm.
 - Command Hub: he wants the bot to use it as the homepage (raised 13 Nov). The hub is a claude.ai artifact with its
   own database; the bot on the server can't write to it directly. This is ROADMAP.md #7 (Jarvis), still locked.
   Claude explained the options in chat; nothing was built. Don't start it without his go-ahead.
