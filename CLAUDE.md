@@ -29,7 +29,7 @@
 - The big-picture plan: "Orbital Roots — Business Roadmap" doc (https://claude.ai/artifact/6ijMsf4deXz5n7gDuSCohL)
   and the Command Hub (https://claude.ai/artifact/5bf2WRi8FG1SwNzsGgvx99). my-focus.txt drives the daily task.
 
-## Where we left off (handoff, saved Thu 12 Nov 2026, ~9:55pm)
+## Where we left off (handoff, saved Sat 14 Nov 2026, ~9:40pm)
 **How handoffs work:** a new chat sees ONLY what is saved in this repo. This section IS the handoff; don't create a
 separate handoff document (his call, 12 Nov). When he says "save the handoff", rewrite this section, push it, and
 tell him exactly what was saved.
@@ -45,27 +45,23 @@ tell him exactly what was saved.
   When he pastes one, update the files, show what changed, and treat it as his decision. In Code he can still
   dictate with the microphone key on his phone keyboard.
 - One session per work day or topic. Start with "Read CLAUDE.md and my-focus.txt. Start with what's next." and end
-  with "save the handoff".
+  with "save the handoff". Long chats burn through his usage fast (14 Nov): keep replies short, and suggest a fresh
+  session once the handoff is saved.
+- Money has its own home: the `/anthropic-skills:money` daily check and his Thursday Envelope page. Never write
+  money figures, bills or pay into this repo. He is also trying Claude's new personal finance section (14 Nov).
+- Private things (his job situation, health, money) are NOT in this repo. If he pastes private context at the start
+  of a chat, use it for that chat and do not save it here.
 
-**Next up, in order (shift days = ONE item of up to ~15 min)**
-- Red Rooster Cafe call (406-839-2884; $100 website audit offer, mention flyers, then send the written pitch):
-  NOT done Fri 13 Nov because he got sick at lunch. Carried over to Sat 14 Nov ~2pm break, or the next day he's
-  well. The pitch was written in another chat; Claude here has not seen it.
-- Bot change BUILT 13 Nov (his request, plan approved): the bot now sends today's whole list, one message per task
-  with its own ✅ / ❌. Limits: up to 3 new tasks Tue/Wed, 1 on other days (`MAX_NEW_TASKS` in bot.py). Unfinished
-  tasks come back next morning marked 🔁 until ✅ or 🗑️ (drop); they don't count against the limit. 8pm asks only
-  about open tasks. New command `today`. Monday recap says "X of Y done". Records: new `tasks` and `task_messages`
-  tables in bridge.db; the old `daily_tasks` table is kept untouched. LIVE since Sat 14 Nov 6:35am. The first live list
-  repeated the carried-over task as the day's new task; fixed and deployed Sat 14 Nov ~9:35pm (new tasks that match
-  a carried-over one are thrown out and the next one asked for). No update is waiting. Worth a look at Sunday's and
-  Tuesday's morning lists to confirm.
-- Command Hub: he wants the bot to use it as the homepage (raised 13 Nov). The hub is a claude.ai artifact with its
-  own database; the bot on the server can't write to it directly. This is ROADMAP.md #7 (Jarvis), still locked.
-  Claude explained the options in chat; nothing was built. Don't start it without his go-ahead.
-- Fri 13 or Sat 14 Nov: check his bills for payment extensions (the only thing that helps with the nearest deadlines;
-  nothing sold online pays out within a few days).
-- Sat 14 Nov: also photograph the RX 580, check eBay SOLD prices, list it on eBay (evening).
-- Sun 15 Nov: the same for the Saitek X52.
+**State of things on Sat 14 Nov**
+- He has been sick since Fri 13 Nov lunchtime. Rest comes first; tasks slide a day at a time without blame.
+- His work situation changed on 14 Nov. The details are private; ask him only if it matters to the task.
+- Nothing from this week's selling or cafe plan has been done yet except the hardware sticker photos (12 Nov).
+
+**Next up, in order (shift days = ONE item of up to ~15 min; all dates slide while he is sick)**
+- Red Rooster Cafe call (406-839-2884): offer the $100 website audit, mention flyers, then send the written pitch.
+  Not done Fri or Sat (sick). The pitch was written in another chat; Claude here has not seen it.
+- Check his bills for payment extensions (the only thing that helps with the nearest deadlines).
+- Photograph the RX 580, check eBay SOLD prices, list it on eBay. Then the same for the Saitek X52.
 - Mon 16 Nov: 6:35-7:35am homework hour (next real-research item), then Grandma's.
 - Tue 17 Nov, 9:15-11am: Huion: (1) copy his art to Google Drive > My-Art, (2) note the specs, (3) reset Windows
   with "Remove everything". Make 2-3 sample flyers in Canva (folder "Samples") while the reset runs.
@@ -73,6 +69,20 @@ tell him exactly what was saved.
   smaller items. Then a free Behance profile for the flyer samples when there's a block for it.
 - Wed 18 Nov: visit Hog Wild Cafe and Cajun Phatty's in person with the audit + flyer offer.
 - After that: one listing per shift day (motherboard + memory bundle, HD 7950, cooler).
+- Orbital Bot LinkedIn post: text updated 14 Nov in drafts/linkedin-bot-post.md; he asked for the steps that day.
+  Not confirmed posted.
+
+**The bot (changed 13-14 Nov)**
+- It now sends today's whole list, one message per task with its own ✅ / ❌. Limits: up to 3 new tasks Tue/Wed,
+  1 on other days (`MAX_NEW_TASKS` in bot.py). Unfinished tasks come back next morning marked 🔁 until ✅ or 🗑️
+  (drop); they don't count against the limit. 8pm asks only about open tasks. Command `today` shows the list.
+  Monday recap says "X of Y done". Records: `tasks` and `task_messages` tables in bridge.db (on the server only,
+  not backed up; he was told, no backup built). The old `daily_tasks` table is kept untouched.
+- LIVE since Sat 14 Nov 6:35am. The first live list repeated the carried-over task as the day's new task; fixed and
+  deployed Sat 14 Nov ~9:35pm. No update is waiting. Check Sunday's and Tuesday's morning lists look right.
+- Command Hub: he wants the bot to use it as the homepage (raised 13 Nov). The hub is a claude.ai artifact with its
+  own database; the bot on the server can't write to it directly. This is ROADMAP.md #7 (Jarvis), still locked.
+  Nothing was built. Don't start it without his go-ahead.
 
 **Hardware being sold (eBay and Craigslist only; never Facebook)**
 - Huion Kamvas Studio 22 (KS2201): a full Windows pen computer, likely the most valuable item. Powers on, pen works;
@@ -108,13 +118,12 @@ tell him exactly what was saved.
 - Sell or keep the WD hard drive?
 
 **Waiting on**
-- Team lead role: he's going for it; answer expected soon.
 - Survey responses (unlocks the survey response watcher, ROADMAP.md #1).
 
-**How he's doing (12 Nov)**
-- Felt stalled on 11 Nov and under money pressure; on 12 Nov he cut the plan down himself and asked whether he was
-  "crazy for trying to do all of this at once". He isn't; he's overloaded and fixing it. Keep each day to its one
-  item, push back when new things get added, and don't keep him up late on shift days.
+**How he's doing (14 Nov)**
+- A hard week: sick, under money pressure, and feeling lost in how much was discussed. On 12 Nov he cut the plan
+  down himself. Keep each day to its list, keep replies short and plain, push back when new things get added, and
+  don't keep him up late on shift days.
 
 **Reference**
 - Drafts: drafts/ (LinkedIn bot post, LinkedIn survey post with link, TikTok survey post).
