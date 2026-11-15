@@ -248,8 +248,13 @@ def carry_over_to(day):
             "SELECT * FROM tasks WHERE day < ? AND day >= ? AND status IN ('sent', 'skipped') ORDER BY origin_day, id",
             (day, start),
         ).fetchall()
-        new_ids = []
+        new_ids, seen = [], set()
         for row in old:
+            if row["task"] in seen:
+                # The same task was on the old list twice: bring it back only once.
+                db.execute("UPDATE tasks SET status = 'dropped' WHERE id = ?", (row["id"],))
+                continue
+            seen.add(row["task"])
             db.execute("UPDATE tasks SET status = 'carried' WHERE id = ?", (row["id"],))
             cur = db.execute(
                 "INSERT INTO tasks (day, task, status, origin_day) VALUES (?, ?, 'sent', ?)",

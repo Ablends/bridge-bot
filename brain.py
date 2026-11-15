@@ -84,7 +84,8 @@ What Alexander is working on right now:
 This week's suggested main goal (lean toward it when it fits): {weekly_goal or "(none set)"}
 
 ALREADY on today's list, carried over from earlier days because they weren't finished.
-Do NOT include these or anything that overlaps with them; they are sent separately:
+They are sent to him separately, so NEVER repeat one of these, even if the plan names it for
+today. Give the NEXT thing in the plan instead:
 {carried_text}
 
 Recent tasks, newest first ("done" = finished, "dropped" = he decided against it; don't repeat either):

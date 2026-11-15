@@ -13,6 +13,7 @@ import os
 import random
 import re
 from datetime import date, timedelta
+from difflib import SequenceMatcher
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -246,6 +247,15 @@ def task_text(task, number=None):
     return f"{label}{task['task']}"
 
 
+def same_task(a, b):
+    """True if two task texts are the same job, even if worded a little differently."""
+    clean = lambda t: re.sub(r"[^a-z0-9 ]", "", (t or "").lower()).split()
+    a, b = clean(a), clean(b)
+    if not a or not b:
+        return False
+    return SequenceMatcher(None, a, b).ratio() >= 0.75
+
+
 def send_morning_ping(force=False):
     """Build today's task list and DM it. Runs at 7am, or re-sends open tasks on 'ping me'."""
     day = storage.today()
@@ -264,10 +274,26 @@ def send_morning_ping(force=False):
     carried = storage.carry_over_to(day)
 
     # 2. Today's new tasks, from the plan (up to the day's limit).
-    new_tasks = brain.suggest_daily_tasks(
-        is_shift_day, weekday, read_focus(), storage.recent_tasks(), storage.current_goal(),
-        max_tasks=MAX_NEW_TASKS.get(weekday, 1), carried_over=[t["task"] for t in carried],
-    )
+    carried_texts = [t["task"] for t in carried]
+    limit = MAX_NEW_TASKS.get(weekday, 1)
+
+    def fresh_tasks(avoid):
+        """Ask for today's new tasks, then throw out any that repeat a carried-over one."""
+        suggested = brain.suggest_daily_tasks(
+            is_shift_day, weekday, read_focus(), storage.recent_tasks(), storage.current_goal(),
+            max_tasks=limit, carried_over=avoid,
+        ) or []
+        kept = []
+        for task in suggested:
+            if not any(same_task(task, other) for other in carried_texts + kept):
+                kept.append(task)
+        return suggested, kept
+
+    suggested, new_tasks = fresh_tasks(carried_texts)
+    if suggested and not new_tasks:
+        # Everything it offered was already on the list. Ask once more, more firmly.
+        print("Morning list: suggestions repeated carried-over tasks, asking again.")
+        _, new_tasks = fresh_tasks(carried_texts + [f"(do not suggest this again) {t}" for t in suggested])
     if not new_tasks and not carried:
         # Claude couldn't be reached and nothing is carried over: still give one task.
         new_tasks = [random.choice(BACKUP_TASKS["shift" if is_shift_day else "progress"])]
