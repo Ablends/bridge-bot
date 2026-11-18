@@ -43,8 +43,8 @@ WEEKLY RHYTHM (Option C, chosen 7 Nov; changed 12 Nov; overrides older rules bel
   Real work blocks are TUESDAY 9:15-11am and WEDNESDAY 9:30-11:15am (audits and flyer gigs),
   plus Tue 1-3pm and Wed 12-1:30pm for a gig or a Fernly interview. Fernly interviews stay as they are:
   if someone agrees to a chat, the interview gets the afternoon block.
-- Nov 30 goal: Fernly's Problem, Research and Process filled in. The template part of this goal (through
-  Step 4) is off while the template is paused (12 Nov). Full Fernly publish waits for later courses (prototype/test).
+- Nov 30 goal (Oct 14 decision in #helm): the portfolio shell and case-study template in Figma ONLY
+  (template through Step 4). Paused along with the template since 12 Nov. Fernly has NO target date.
 
 LOCAL BUSINESS GIGS (12 Nov; replaces the 8 Nov "text 3 people" friends-rate plan)
 - The offer: a $100 website audit for a local business, plus flyers and posters.
@@ -143,7 +143,8 @@ THEN RESUME COURSE 2 (same order as before, dates to be set when R7 is done)
   empathy maps, personas, user stories, journey maps and problem statements.
 - Fernly moves at the CLASS'S pace. Never suggest Fernly work the class hasn't reached yet.
   Class tasks are simply "the next lesson / module step".
-- Nov 30: Problem, Research, Process sections done. Full publish after later courses.
+- NO TARGET DATE (Oct 14 decision). Fernly is filled in at class pace; no interviews done yet. Never give
+  Fernly a date or deadline (in tasks, goals or recaps) until Alexander sets one himself.
 
 3. PRODUCT: FIGMA PORTFOLIO TEMPLATE: PAUSED for a few weeks (12 Nov). Don't suggest template tasks.
 - Step 1 is done. Step 2 is next when it resumes. Alexander will say when.

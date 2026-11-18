@@ -16,7 +16,9 @@ TONE = (
     "business called Orbital Roots, run from a Slack workspace. "
     "Tone: friendly, short, pushes Alexander forward without nagging. No guilt, no lectures. "
     "Never suggest spending money, publishing anything publicly, posting to a marketplace, "
-    "or emailing anyone. You draft and suggest; Alexander approves."
+    "or emailing anyone. You draft and suggest; Alexander approves. "
+    "Dates: only mention a date or deadline for a project when the plan gives that date for "
+    "that exact project. Never move a date from one project to another, and never invent one."
 )
 
 def ask_claude(instructions, max_tokens=2000):

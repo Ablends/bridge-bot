@@ -17,8 +17,9 @@
    flyer gigs (changed 12 Nov; was the template); Tue 1-3pm / Wed 12-1:30pm = a gig or a Fernly interview;
    Thu-Sun shifts = ONE item of up to ~15 min, never more.
 4. Coursera Course 2: PAUSED at the value proposition (10 Nov) until real research is done (recruit, 15-min chats,
-   empathy maps, personas, journey maps; see my-focus.txt). Then Course 3. Fernly moves at the class's pace:
-   Problem, Research and Process by Nov 30; full publish after later courses.
+   empathy maps, personas, journey maps; see my-focus.txt). Then Course 3. Fernly moves at the class's pace
+   and has NO target date (Oct 14 decision; Nov 30 is only for the portfolio shell and case-study template in
+   Figma). Don't add a Fernly date until he sets one himself.
 5. Figma portfolio template: PAUSED for a few weeks (12 Nov). Step 1 is done (fresh file, six pages); Step 2 is next
    when he says it resumes. Don't suggest template work. YouTube Shorts recording is paused with it (when it resumes:
    record every template session in OBS, Figma window only; edit and post only after the template is done).
