@@ -163,6 +163,8 @@ tell him exactly what was saved.
 ## About this repo
 - `bot.py` (Slack + schedule), `brain.py` (Claude calls), `storage.py` (SQLite `bridge.db`).
 - Updates reach the server when Alexander runs `bash deploy/update.sh` over SSH (README has the steps).
+- Whenever you save a bot update, add a WAITING line under "SERVER UPDATE WAITING" in my-focus.txt so the bot
+  puts it on his list; remove the line when he says the update is run (his rule, 19 Nov).
 - The server also runs `git pull` daily at 6:45am Denver time, but that does NOT restart the bot.
 - Orbital Bot is the ONLY source of the daily task list. A separate Claude scheduled task
   ("Bridge daily check", 6:30am) only answers "Claude:" requests in Slack. Don't give it the task job back.

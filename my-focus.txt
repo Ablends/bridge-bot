@@ -85,6 +85,13 @@ SURVEY RECRUITING PUSH (moved up 9 Nov: interviews need volunteers first)
 - Optional later: r/SampleSize on Reddit (allows surveys), local plant Facebook groups (ask the admin first).
 - Each time a response with contact details arrives: DM the bot "got a survey response".
 
+SERVER UPDATE WAITING (rule added 19 Nov; Alexander's call)
+When a line below says WAITING, give it as a ~5 min item on the next day's list (any day, shift days too;
+on a shift day it IS the one item unless something more urgent is already planned). The steps: Google Cloud
+> Compute Engine > VM instances > SSH on bridge-bot > type: cd ~/bridge-bot && bash deploy/update.sh
+Claude adds the WAITING line whenever it saves a bot update, and removes it once he says it's run.
+- WAITING (since 18 Nov): Fernly date fix. After the update, also run: .venv/bin/python deploy/fix-fernly-recaps.py
+
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
 - Shift days (Thu-Sun): one task of up to ~15 min only.
@@ -189,4 +196,4 @@ PARKED (do not suggest tasks for these)
 - Biweekly zero-based budget template (Google Sheets). Parked 12 Nov: to be built with Claude Code later.
 
 DONE
-- Orbital Bot is built and running. Don't suggest bot work.
+- Orbital Bot is built and running. Don't suggest bot work, except a SERVER UPDATE WAITING item (above).
