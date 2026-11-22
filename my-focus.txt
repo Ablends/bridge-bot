@@ -90,7 +90,7 @@ When a line below says WAITING, give it as a ~5 min item on the next day's list 
 on a shift day it IS the one item unless something more urgent is already planned). The steps: Google Cloud
 > Compute Engine > VM instances > SSH on bridge-bot > type: cd ~/bridge-bot && bash deploy/update.sh
 Claude adds the WAITING line whenever it saves a bot update, and removes it once he says it's run.
-- WAITING (since 18 Nov): Fernly date fix. After the update, also run: .venv/bin/python deploy/fix-fernly-recaps.py
+- Nothing waiting (Fernly date fix run on the server, Nov 2026).
 
 RULES FOR PICKING MY TASK
 - Finish things before starting new ones. Never suggest starting something marked PARKED.
