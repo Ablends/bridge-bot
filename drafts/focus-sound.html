@@ -3,10 +3,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one centered column like a small hardware unit: dial on top, controls below. Single dark "night studio" look by choice. */
+/* Layout: one centered column like a small hardware unit: dial on top, controls, then "your brain" test results. Single dark "night studio" look by choice. */
 :root{
   --bg:#0e1424; --panel:#161f36; --line:#26314f; --fg:#e8ecf6; --muted:#97a2bf;
-  --accent:#f2b45a; --accent-soft:rgba(242,180,90,.16); --calm:#7fc8c0;
+  --accent:#f2b45a; --accent-soft:rgba(242,180,90,.16); --calm:#7fc8c0; --calm-soft:rgba(127,200,192,.14);
   --display:"Outfit",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
   color-scheme:dark;
 }
@@ -15,6 +15,7 @@ body{font-family:var(--body);font-size:15px;line-height:1.5;padding-left:max(16p
 .wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
 header h1{font-family:var(--display);font-weight:500;font-size:1.9rem;margin:0;letter-spacing:-.01em;text-wrap:balance}
 header p{margin:4px 0 0;color:var(--muted)}
+h2{font-family:var(--display);font-weight:500;font-size:1.3rem;margin:0}
 .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin:0 0 8px}
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .mode{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -22,10 +23,11 @@ header p{margin:4px 0 0;color:var(--muted)}
 .mode span{color:var(--muted);font-size:.82rem}
 .mode code{font-family:var(--mono);font-size:.75rem;color:var(--accent)}
 .mode[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.mode:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mode:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible,.rate button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .dial{display:grid;place-items:center;position:relative;padding:8px 0}
 canvas{width:240px;height:240px;max-width:100%}
 .readout{position:absolute;text-align:center;pointer-events:none}
+.phase{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--calm);min-height:1.2em}
 .time{font-family:var(--mono);font-size:2.6rem;font-variant-numeric:tabular-nums;font-weight:500}
 .hz{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .row{display:flex;gap:10px;flex-wrap:wrap}
@@ -33,14 +35,35 @@ canvas{width:240px;height:240px;max-width:100%}
 .primary{background:var(--accent);color:#1a1405}
 .ghost{border:1px solid var(--line);color:var(--fg)}
 .drift{border:1px solid var(--calm);color:var(--calm)}
+.small{flex:0 0 auto;padding:8px 14px;font-size:.85rem}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
 .field label{font-size:.85rem;color:var(--muted)}
 select{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit}
 input[type=range]{accent-color:var(--accent);width:100%}
-.check{display:flex;gap:8px;align-items:center;font-size:.9rem}
-.note{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:.9rem}
+.check input{margin-top:4px;accent-color:var(--accent)}
 .status{min-height:1.4em;color:var(--calm);font-size:.9rem;text-align:center}
+.rating{border:1px solid var(--accent);background:var(--accent-soft);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.rating p{margin:0}
+.rate{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.rate button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;padding:12px 0;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-family:var(--mono);font-size:1.2rem}
+.rate button:hover{border-color:var(--accent)}
+.scale{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted)}
+.brain{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:14px}
+.brain>p{margin:0;color:var(--muted)}
+.pick{border-radius:14px;padding:14px 16px;background:var(--calm-soft);border:1px solid var(--calm);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.pick div{flex:1 1 220px;min-width:0}
+.pick small{display:block;color:var(--muted)}
+.pick b{font-family:var(--display);font-weight:500;font-size:1.1rem}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding:6px 4px;border-bottom:1px solid var(--line)}
+td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.best td:first-child{color:var(--accent)}
+.tablewrap{overflow-x:auto}
+.dots{letter-spacing:2px;color:var(--accent);font-family:var(--mono)}
+.note{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin:0}
 @media (max-width:420px){.modes,.grid2{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -48,7 +71,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
 <div class="wrap">
   <header>
     <h1>Focus Sound Room</h1>
-    <p>Pick a mode, put on headphones, press Start.</p>
+    <p>Pick a mode, put on headphones, press Start. Rate each session, and the page learns what works for your brain.</p>
   </header>
 
   <section>
@@ -59,11 +82,21 @@ input[type=range]{accent-color:var(--accent);width:100%}
   <div class="dial">
     <canvas id="ring" width="480" height="480" aria-hidden="true"></canvas>
     <div class="readout">
+      <div class="phase" id="phase"></div>
       <div class="time" id="time">25:00</div>
-      <div class="hz" id="hz">200 Hz L · 215 Hz R → 15 Hz</div>
+      <div class="hz" id="hz">192.5 Hz L · 207.5 Hz R → 15 Hz</div>
     </div>
   </div>
   <div class="status" id="status" role="status"></div>
+
+  <div class="rating" id="rating" hidden>
+    <p><b>How focused were you?</b> One tap. This is how the page learns your brain.</p>
+    <div class="rate" id="rate">
+      <button data-r="1">1</button><button data-r="2">2</button><button data-r="3">3</button><button data-r="4">4</button><button data-r="5">5</button>
+    </div>
+    <div class="scale"><span>1 = scattered</span><span>5 = locked in</span></div>
+    <button class="btn ghost small" id="skip">Skip this one</button>
+  </div>
 
   <div class="row">
     <button class="btn primary" id="start">Start</button>
@@ -87,7 +120,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
         <option value="brown" selected>Brown (deep, like a fan)</option>
         <option value="pink">Pink (soft rain)</option>
         <option value="white">White (hiss)</option>
-        <option value="off">Off</option>
+        <option value="off">Off (silence)</option>
       </select>
     </div>
     <div class="field">
@@ -99,9 +132,26 @@ input[type=range]{accent-color:var(--accent);width:100%}
       <input type="range" id="noiseVol" min="0" max="100" value="45">
     </div>
   </section>
-  <label class="check"><input type="checkbox" id="phones" checked> I'm wearing headphones (turn off to use pulsing tones that work on speakers)</label>
+  <label class="check"><input type="checkbox" id="phones" checked> I'm wearing headphones (untick to use pulsing tones that work on speakers)</label>
+  <label class="check"><input type="checkbox" id="warmup"> 5-minute warm-up: play the sound for 5 minutes before the timer starts (in studies, listening <i>before</i> the task worked better)</label>
 
-  <p class="note">"I drifted" plays 60 seconds of slow, calm sound with a breathing ring, then puts you back in your mode. Drifts this session: <b id="drifts">0</b>. Keep the volume low. The research on beats is mixed: use it if it helps you, skip it if it doesn't. Not for anyone with seizure conditions.</p>
+  <section class="brain">
+    <h2>Your brain's results</h2>
+    <p>Effects are small and differ from person to person, so the page tests six setups on you, three sessions each. Two of them are "controls" (no tone, and silence), so you can see whether the beats or the noise really help.</p>
+    <div class="pick" id="pick">
+      <div><small id="pickLabel">Next to test</small><b id="pickName">Focus + brown noise</b><small id="pickWhy"></small></div>
+      <button class="btn primary small" id="usePick">Use this setup</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Setup</th><th>Done</th><th>Focus</th><th>Drifts / 10 min</th></tr></thead>
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+    <p class="note" id="saveNote">Loading your saved sessions…</p>
+  </section>
+
+  <p class="note">"I drifted" plays 60 seconds of slow, calm sound with a breathing ring, then returns you to your mode, and counts the drift. Keep the volume low. The research is mixed: use what your own results show, skip what they don't. Not for anyone with seizure conditions.</p>
 </div>
 
 <script>
@@ -109,32 +159,110 @@ const MODES = {
   focus: {name:"Focus", desc:"Steady work, emails, homework", beat:15, carrier:200, band:"beta"},
   deep:  {name:"Deep work", desc:"Hard thinking, writing, design", beat:40, carrier:220, band:"gamma"},
   calm:  {name:"Calm", desc:"Stressed or wired, settle down", beat:10, carrier:180, band:"alpha"},
-  reset: {name:"Wind down", desc:"After a shift, before sleep", beat:6, carrier:160, band:"theta"}
+  reset: {name:"Wind down", desc:"After a shift, before sleep", beat:6, carrier:160, band:"theta"},
+  none:  {name:"Noise only", desc:"No tone. A test to compare against", beat:0, carrier:0, band:"control"}
 };
+const NOISE_NAMES = {brown:"brown noise", pink:"pink noise", white:"white noise", off:"silence"};
+// The six setups tested on him. Order = the order to try them.
+const PLAN = [
+  {mode:"focus", noise:"brown"},
+  {mode:"none",  noise:"brown"},
+  {mode:"deep",  noise:"brown"},
+  {mode:"focus", noise:"off"},
+  {mode:"none",  noise:"off"},
+  {mode:"calm",  noise:"pink"}
+];
+const PER_SETUP = 3;
 const RESET = {beat:8, carrier:170};
+const $ = id => document.getElementById(id);
+const setupName = (m,n) => (m==="none" ? (n==="off" ? "Silence (nothing)" : "No tone + "+NOISE_NAMES[n]) : MODES[m].name+" + "+NOISE_NAMES[n]);
+
 let mode = "focus";
 try{ mode = localStorage.getItem("fsr-mode") || "focus"; }catch(e){}
 if(!MODES[mode]) mode="focus";
 
-const $ = id => document.getElementById(id);
 const modesEl = $("modes");
 for(const [k,m] of Object.entries(MODES)){
   const b=document.createElement("button");
   b.className="mode"; b.dataset.k=k;
-  b.innerHTML=`<b>${m.name}</b><span>${m.desc}</span><code>${m.beat} Hz ${m.band}</code>`;
+  b.innerHTML=`<b>${m.name}</b><span>${m.desc}</span><code>${m.beat ? m.beat+" Hz "+m.band : "control"}</code>`;
   b.onclick=()=>setMode(k);
   modesEl.appendChild(b);
 }
 
-let ctx, master, toneBus, noiseBus, toneNodes=[], noiseSrc, running=false, endAt=0, timerId, drifting=false, driftEnd=0, drifts=0;
+/* ---------- saved sessions: shared store if available, this browser otherwise ---------- */
+let sessions = [], store = null;
+function loadLocal(){ try{ sessions = JSON.parse(localStorage.getItem("fsr-sessions")||"[]"); }catch(e){ sessions=[]; } }
+function saveLocal(){ try{ localStorage.setItem("fsr-sessions", JSON.stringify(sessions)); }catch(e){} }
+loadLocal(); renderResults();
+$("saveNote").textContent = "Saving in this browser only for now.";
+(async()=>{
+  try{
+    const db = await window.claude?.use?.("db");
+    if(!db){ $("saveNote").textContent="Saved in this browser only (sign in to claude.ai to save to your account)."; return; }
+    store = db.collection("sessions");
+    const timer = setTimeout(()=>{ $("saveNote").textContent="Couldn't reach your saved sessions. New ones save in this browser."; },10000);
+    store.orderBy("at","asc").onSnapshot(snap=>{
+      clearTimeout(timer);
+      sessions = snap.docs.map(d=>d.data());
+      renderResults();
+      $("saveNote").textContent = sessions.length ? "Saved to your account. Claude can read these to help tune the sounds." : "No sessions yet. Finish one and rate it to start learning.";
+    }, ()=>{ clearTimeout(timer); store=null; loadLocal(); renderResults(); $("saveNote").textContent="Couldn't reach your saved sessions. New ones save in this browser."; });
+  }catch(e){}
+})();
+async function recordSession(rec){
+  if(store){ try{ await store.add(rec); return; }catch(e){} }
+  sessions.push(rec); saveLocal(); renderResults();
+}
+
+function stats(){
+  return PLAN.map(p=>{
+    const s = sessions.filter(x=>x.mode===p.mode && x.noise===p.noise && typeof x.rating==="number");
+    const n=s.length;
+    const avg = n ? s.reduce((a,x)=>a+x.rating,0)/n : null;
+    const mins = s.reduce((a,x)=>a+(x.minutesDone||0),0);
+    const dr = s.reduce((a,x)=>a+(x.drifts||0),0);
+    return {...p, n, avg, driftRate: mins ? dr/mins*10 : null};
+  });
+}
+function pickSetup(st){
+  const untested = st.find(x=>x.n<PER_SETUP);
+  if(untested) return {s:untested, label:"Next to test", why:`Session ${untested.n+1} of ${PER_SETUP} for this setup.`};
+  const best = [...st].sort((a,b)=> (b.avg-a.avg) || ((a.driftRate??99)-(b.driftRate??99)))[0];
+  const ctrl = st.find(x=>x.mode==="none"&&x.noise==="off");
+  let why = `Highest focus rating so far (${best.avg.toFixed(1)} out of 5).`;
+  if(best.mode==="none") why += " Your brain seems to do fine without the tones.";
+  else if(ctrl && best.avg - ctrl.avg < 0.5) why += " Only a little better than silence, so the sound may matter less for you.";
+  return {s:best, label:"Your best setup", why};
+}
+let current = PLAN[0];
+function renderResults(){
+  const st = stats(), p = pickSetup(st);
+  current = p.s;
+  $("pickLabel").textContent = p.label;
+  $("pickName").textContent = setupName(p.s.mode,p.s.noise);
+  $("pickWhy").textContent = p.why;
+  const allDone = st.every(x=>x.n>=PER_SETUP);
+  const tb=$("results"); tb.textContent="";
+  st.forEach(x=>{
+    const tr=document.createElement("tr");
+    if(allDone && x===p.s) tr.className="best";
+    const cells=[setupName(x.mode,x.noise), "●".repeat(Math.min(x.n,PER_SETUP))+"○".repeat(Math.max(0,PER_SETUP-x.n)), x.avg==null?"—":x.avg.toFixed(1), x.driftRate==null?"—":x.driftRate.toFixed(1)];
+    cells.forEach((c,i)=>{ const td=document.createElement("td"); td.textContent=c; if(i===1) td.className="dots"; if(i>1) td.className="num"; tr.appendChild(td); });
+    tb.appendChild(tr);
+  });
+}
+$("usePick").onclick=()=>{ setMode(current.mode); $("noise").value=current.noise; if(running) buildNoise(); $("status").textContent="Setup loaded: "+setupName(current.mode,current.noise)+". Press Start."; };
+
+/* ---------- audio ---------- */
+let ctx, master, toneBus, noiseBus, toneNodes=[], noiseSrc, running=false, warming=false, startAt=0, endAt=0, timerId, drifting=false, driftEnd=0, drifts=0, pending=null;
 
 function paintModes(){
   modesEl.querySelectorAll(".mode").forEach(b=>b.setAttribute("aria-pressed", b.dataset.k===mode));
-  const m=MODES[mode];
-  showHz(m.beat,m.carrier);
+  showHz(MODES[mode].beat,MODES[mode].carrier);
 }
 function showHz(beat,carrier){
-  $("hz").textContent = $("phones").checked
+  $("hz").textContent = !beat ? "no tone" : $("phones").checked
     ? `${carrier-beat/2} Hz L · ${carrier+beat/2} Hz R → ${beat} Hz`
     : `${carrier} Hz tone pulsing ${beat}×/sec`;
 }
@@ -143,7 +271,6 @@ function setMode(k){
   paintModes();
   if(running && !drifting) buildTone(MODES[k].beat, MODES[k].carrier);
 }
-
 function makeNoise(type){
   const len=ctx.sampleRate*6, buf=ctx.createBuffer(2,len,ctx.sampleRate);
   for(let c=0;c<2;c++){
@@ -155,7 +282,6 @@ function makeNoise(type){
       else if(type==="brown"){ last=(last+0.02*w)/1.02; d[i]=last*3.2; }
       else { b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.1;b6=w*.115926; }
     }
-    // crossfade the loop edges so there is no click
     const f=Math.floor(ctx.sampleRate*.05);
     for(let i=0;i<f;i++){ const t=i/f; d[i]=d[i]*t+d[len-f+i]*(1-t); }
   }
@@ -169,11 +295,11 @@ function buildNoise(){
   noiseSrc.connect(noiseBus); noiseSrc.start();
 }
 function buildTone(beat,carrier){
-  const now=ctx.currentTime;
-  const old=toneNodes; toneNodes=[];
+  const now=ctx.currentTime, old=toneNodes; toneNodes=[];
   const g=ctx.createGain(); g.gain.value=0; g.connect(toneBus);
   g.gain.setTargetAtTime(1,now,0.8);
-  if($("phones").checked){
+  if(!beat){ /* control: no tone */ }
+  else if($("phones").checked){
     [[-1,carrier-beat/2],[1,carrier+beat/2]].forEach(([pan,f])=>{
       const o=ctx.createOscillator(); o.frequency.value=f;
       const p=ctx.createStereoPanner(); p.pan.value=pan;
@@ -205,7 +331,6 @@ function chime(){
     o.connect(g).connect(ctx.destination); o.start(t+i*.35); o.stop(t+i*.35+2.4);
   });
 }
-
 let wake=null;
 async function holdScreen(on){
   try{ if(on && navigator.wakeLock) wake=await navigator.wakeLock.request("screen"); else if(wake){ await wake.release(); wake=null; } }catch(e){}
@@ -220,58 +345,83 @@ async function start(){
   }
   await ctx.resume();
   if(running) return;
-  running=true; drifting=false;
+  $("rating").hidden=true; pending=null;
+  running=true; drifting=false; drifts=0;
   master.gain.cancelScheduledValues(ctx.currentTime);
   master.gain.setValueAtTime(0,ctx.currentTime); master.gain.setTargetAtTime(1,ctx.currentTime,1);
   setVolumes(); buildNoise(); buildTone(MODES[mode].beat,MODES[mode].carrier);
-  endAt=Date.now()+$("minutes").value*60000;
-  $("start").textContent="Running"; $("status").textContent="";
+  warming = $("warmup").checked;
+  const now=Date.now();
+  if(warming){ endAt=now+5*60000; $("phase").textContent="Warm-up"; $("status").textContent="Warm-up: settle in, get your task ready."; }
+  else beginWork(now);
+  $("start").textContent="Running";
   holdScreen(true);
   clearInterval(timerId); timerId=setInterval(tick,250); tick();
 }
+function beginWork(now){
+  warming=false; startAt=now; endAt=now+$("minutes").value*60000;
+  $("phase").textContent="Working"; $("status").textContent="";
+}
 function stop(done){
   if(!running) return;
+  const workedMin = (!warming && startAt) ? Math.min((Date.now()-startAt)/60000, +$("minutes").value) : 0;
   running=false; drifting=false; clearInterval(timerId);
   master.gain.setTargetAtTime(0,ctx.currentTime,0.8);
   setTimeout(()=>{ if(!running){ toneNodes.forEach(o=>{try{o.stop()}catch(e){}}); toneNodes=[]; if(noiseSrc){try{noiseSrc.stop()}catch(e){} noiseSrc=null;} } },4000);
-  $("start").textContent="Start";
-  $("status").textContent = done ? "Session done. Stand up, stretch, drink some water." : "";
-  if(done) chime();
+  $("start").textContent="Start"; $("phase").textContent="";
   $("time").textContent=fmt($("minutes").value*60000);
   holdScreen(false);
+  if(done) chime();
+  if(workedMin>=5){
+    pending={at:new Date().toISOString(), mode, noise:$("noise").value, headphones:$("phones").checked, warmup:$("warmup").checked,
+             minutesPlanned:+$("minutes").value, minutesDone:Math.round(workedMin*10)/10, drifts, finished:!!done,
+             toneVolume:+$("toneVol").value, noiseVolume:+$("noiseVol").value};
+    $("rating").hidden=false;
+    $("status").textContent = done ? "Session done. Rate it, then stand up and stretch." : "Stopped early. Rate it anyway, it still counts.";
+  } else {
+    $("status").textContent = workedMin>0 ? "Under 5 minutes, so this one isn't counted." : "";
+  }
+  startAt=0;
 }
+$("rate").onclick=e=>{
+  const r=e.target.closest("button"); if(!r||!pending) return;
+  pending.rating=+r.dataset.r; recordSession(pending); pending=null;
+  $("rating").hidden=true; $("status").textContent="Saved. Thanks.";
+};
+$("skip").onclick=()=>{ pending=null; $("rating").hidden=true; $("status").textContent="Skipped."; };
+
 function drift(){
   if(!running){ $("status").textContent="Press Start first."; return; }
-  drifting=true; driftEnd=Date.now()+60000; drifts++; $("drifts").textContent=drifts;
+  drifting=true; driftEnd=Date.now()+60000; if(!warming) drifts++;
   buildTone(RESET.beat,RESET.carrier);
   $("status").textContent="Breathe with the ring. In as it grows, out as it shrinks.";
 }
 function fmt(ms){ const s=Math.max(0,Math.ceil(ms/1000)); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
 function tick(){
-  const left=endAt-Date.now();
-  $("time").textContent=fmt(left);
-  if(drifting && Date.now()>=driftEnd){
+  const now=Date.now();
+  if(warming && now>=endAt){ beginWork(now); chime(); }
+  $("time").textContent=fmt(endAt-now);
+  if(drifting && now>=driftEnd){
     drifting=false; buildTone(MODES[mode].beat,MODES[mode].carrier);
     $("status").textContent="Back to "+MODES[mode].name+". One thing at a time.";
   }
-  if(left<=0) stop(true);
+  if(!warming && now>=endAt) stop(true);
 }
 
-// ring: slow progress arc; during "I drifted" it breathes (4s in, 6s out)
 const cv=$("ring"), g2=cv.getContext("2d");
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function draw(){
   const W=cv.width, c=W/2; g2.clearRect(0,0,W,W);
-  const total=$("minutes").value*60000;
+  const total = warming ? 5*60000 : $("minutes").value*60000;
   const frac = running ? 1-Math.max(0,endAt-Date.now())/total : 0;
   g2.lineWidth=10; g2.lineCap="round";
   g2.strokeStyle=css("--line"); g2.beginPath(); g2.arc(c,c,200,0,Math.PI*2); g2.stroke();
-  g2.strokeStyle=css("--accent"); g2.beginPath(); g2.arc(c,c,200,-Math.PI/2,-Math.PI/2+Math.PI*2*frac); g2.stroke();
+  g2.strokeStyle=css(warming?"--calm":"--accent"); g2.beginPath(); g2.arc(c,c,200,-Math.PI/2,-Math.PI/2+Math.PI*2*frac); g2.stroke();
   if(drifting){
     const t=(Date.now()%10000)/1000;
     const k = t<4 ? t/4 : 1-(t-4)/6;
     const r=110+60*(0.5-0.5*Math.cos(Math.PI*k));
-    g2.fillStyle="rgba(127,200,192,.12)"; g2.strokeStyle=css("--calm"); g2.lineWidth=3;
+    g2.fillStyle=css("--calm-soft"); g2.strokeStyle=css("--calm"); g2.lineWidth=3;
     g2.beginPath(); g2.arc(c,c,r,0,Math.PI*2); g2.fill(); g2.stroke();
   }
   requestAnimationFrame(draw);
