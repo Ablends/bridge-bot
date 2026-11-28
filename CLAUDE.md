@@ -11,7 +11,7 @@
 1. Keep this bot running (it's live on a Google Cloud e2-micro server, see README).
 2. **Money this month (12 Nov, his top priority).** He needs extra income and can't add work shifts (school, kids,
    Mondays are for his grandma), so never suggest more shifts. Side income now comes from local business work:
-   a $100 website audit offer plus flyers and posters. Old hardware gets sold on eBay and Craigslist. He is not on
+   a $100 website audit offer plus flyers and posters. Hardware selling is PAUSED (28 Nov, his call; see below). He is not on
    Facebook: never suggest it. Dates and details are in my-focus.txt ("LOCAL BUSINESS GIGS").
 3. Weekly rhythm: Mon 6:35-7:35am class homework hour (then Grandma's all day); Tue/Wed mornings = audits and
    flyer gigs (changed 12 Nov; was the template); Tue 1-3pm / Wed 12-1:30pm = a gig or a Fernly interview;
@@ -53,14 +53,9 @@ tell him exactly what was saved.
 **Next up, in order (shift days Thu-Sun = ONE item of up to ~15 min; none of these confirmed done yet)**
 - Red Rooster Cafe call (406-839-2884): offer the $100 website audit, mention flyers, then send the written pitch
   (written in another chat; Claude here hasn't seen it).
-- Photograph the RX 580, check eBay SOLD prices, list it. Then the same for the Saitek X52.
 - Mon 23 Nov: 6:35-7:35am homework hour (next real-research item, R1 recruiting), then Grandma's.
-- Huion (was Tue 17 Nov; ask whether done): (1) copy art to Google Drive > My-Art, (2) note specs, (3) reset Windows
-  with "Remove everything"; 2-3 sample flyers in Canva (folder "Samples") while it resets. Then photograph and list
-  it (eBay boxed and insured, plus Craigslist) and photograph the smaller items.
+- 2-3 sample flyers in Canva (folder "Samples"), then a Behance profile once samples exist.
 - In-person visits to Hog Wild Cafe and Cajun Phatty's (was Wed 18 Nov; ask whether done).
-- After that: one listing per shift day (motherboard + memory bundle, HD 7950, cooler). Behance profile once
-  samples exist.
 
 **Done 15-21 Nov**
 - Instagram: Orbital Bot post PUBLISHED (16 Nov), with a two-tone icon made in his Canva (navy gear, white robot;
@@ -83,7 +78,9 @@ tell him exactly what was saved.
   unless he runs `git pull` or `deploy/update.sh` himself.
 - Command Hub as homepage = ROADMAP.md #7 (Jarvis), still locked. Don't start it without his go-ahead.
 
-**Hardware being sold (eBay and Craigslist only; never Facebook)**
+**Hardware: selling PAUSED 28 Nov (his call). Don't suggest any selling, photo or listing tasks until he unpauses.**
+- He wants to keep a drawing tablet: maybe the Huion, maybe later a smaller pen display that plugs into his PC.
+  Undecided. When selling resumes: eBay and Craigslist only, never Facebook.
 - Huion Kamvas Studio 22 (KS2201): full Windows pen computer, likely the most valuable item; has pen, adapter, stand,
   original box. Art rescue MUST come before the wipe. Selling because it's too heavy and bulky.
 - ASUS ROG Strix RX 580 8GB (ROG-STRIX-RX580-O8G-GAMING); Saitek X52 stick + throttle (PS28), complete;
