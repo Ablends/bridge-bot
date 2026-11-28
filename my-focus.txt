@@ -192,6 +192,8 @@ PARKED (do not suggest tasks for these)
 - Budgeting app case study (idea: YNAB fund-reconciliation pain point). Waits until Fernly ships.
 - Command Hub Lite case study. Waits until Fernly ships.
 - Biweekly zero-based budget template (Google Sheets). Parked 12 Nov: to be built with Claude Code later.
+- Brainwave/sound focus app (idea 28 Nov). Parked: maybe a later case study after Fernly ships. His personal
+  focus tool already exists: https://claude.ai/artifact/L3ff5uezGKWSriet4AViZi (use it, don't build more).
 
 DONE
 - Orbital Bot is built and running. Don't suggest bot work, except a SERVER UPDATE WAITING item (above).
